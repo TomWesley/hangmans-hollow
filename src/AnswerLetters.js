@@ -3,15 +3,27 @@ import AnswerLetter from './AnswerLetter'
 import { useState, useEffect } from 'react'
 import puzzle from './puzzle'
 import Letter from './Letter'
+
 var victoryFlagger = false
 
+const getLocalStorageLetters = () => {
+  let puzzleLetters = localStorage.getItem('puzzleLetters')
+  if (puzzleLetters) {
+    return JSON.parse(localStorage.getItem('puzzleLetters'))
+  } else {
+    return puzzle
+  }
+}
+
 const AnswerLetters = (u) => {
-  const [puzzleLetters, setPuzzleLetters] = useState(puzzle)
+  const [puzzleLetters, setPuzzleLetters] = useState(getLocalStorageLetters())
   //const result = jsonObject.filter((puzzle) => puzzle.name == 'David')
 
   useEffect(() => {
     victoryFlagger = true
+    localStorage.setItem('puzzleLetters', JSON.stringify(puzzleLetters))
   })
+
   const changeHover = (index, newValue) => {
     // setLetters({ ...letters, onHover: 'true' })
     console.log(index, newValue)

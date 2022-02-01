@@ -4,25 +4,48 @@ import { useState, useEffect } from 'react'
 import data from './data'
 import AnswerLetters from './AnswerLetters'
 import puz from './puzzle'
+//Possibly do a gamestate to hang on to the scores, phase of the game, etc.
 
-const preselected = {
-  status: false,
-  value: '',
-  key: '',
+const getLocalStorageLetters = () => {
+  let letters = localStorage.getItem('letters')
+  if (letters) {
+    return JSON.parse(localStorage.getItem('letters'))
+  } else {
+    return data
+  }
 }
+// const preselected = {
+//   status: false,
+//   value: '',
+//   key: '',
+// }
+const getLocalStoragePreselected = () => {
+  let preselected = localStorage.getItem('preselected')
+  if (preselected) {
+    return JSON.parse(localStorage.getItem('preselected'))
+  } else {
+    return {
+      status: false,
+      value: '',
+      key: '',
+    }
+  }
+}
+
 var score = 0
 var scoreInc = 0
 
 const Letters = () => {
-  const [letters, setLetters] = useState(data)
-  const [usedLetters, setUsedLetters] = useState(['T', 'C', 'D'])
-  // useEffect(() => {
-  //   puz.map((puzLetter) => {
-  //     if (usedLetters.usedLetters.indexOf(puzLetter.name) > -1) {
-  //       puzLetter.isHidden = false
-  //     }
-  //   })
-  // })
+  const [letters, setLetters] = useState(getLocalStorageLetters())
+  const [usedLetters, setUsedLetters] = useState([])
+  const [preselected, setPreselected] = useState(getLocalStoragePreselected())
+
+  useEffect(() => {
+    localStorage.setItem('letters', JSON.stringify(letters))
+  }, [letters])
+  useEffect(() => {
+    localStorage.setItem('preselected', JSON.stringify(preselected))
+  })
   const scoreChange = (i) => {
     scoreInc = 1
     puz.map((puzLetter) => {
@@ -33,26 +56,7 @@ const Letters = () => {
     })
     score = score + scoreInc
   }
-  // useEffect(() => {
-  //   ;<h2>HERE</h2>
-  // })
-  // const scoreChange = () => {
-  //   return (
-  //     <div>
-  //       {puz.map((puzLetter, index) => {
-  //         if (usedLetters.usedLetters.indexOf(answerLetter.name) > -1) {
-  //           answerLetter.isHidden = false
-  //         }
-  //         return (
-  //           <div key={answerLetter.id}>
-  //             <AnswerLetter key={answerLetter.id} {...answerLetter} />
-  //             {/* <h3>{u}</h3> */}
-  //           </div>
-  //         )
-  //       })}
-  //     </div>
-  //   )
-  // }
+
   const changeUsed = (index, newValue) => {
     scoreChange(index)
 
@@ -60,9 +64,10 @@ const Letters = () => {
     setUsedLetters([...usedLetters, newArray[index].name])
     newArray[index].isUsed = true
     newArray[index].isHovered = false
-    preselected.status = false
-    preselected.value = ''
-    preselected.key = ''
+    setPreselected({ value: '', status: false, key: '' })
+    // preselected.status = false
+    // preselected.value = ''
+    // preselected.key = ''
     setLetters(newArray)
   }
   const changeHover = (index, newValue) => {
@@ -72,16 +77,18 @@ const Letters = () => {
     if (newValue == false) {
       if (preselected.status == true) {
         newArray[preselected.key].isHovered = false
-        preselected.status = false
+        setPreselected({ ...preselected, status: false })
+        // preselected.status = false
       }
     }
     if (newValue == true) {
       if (preselected.status == true) {
         newArray[preselected.key].isHovered = false
       }
-      preselected.status = true
-      preselected.value = newArray[index].name
-      preselected.key = index
+      setPreselected({ value: newArray[index].name, status: true, key: index })
+      // preselected.status = true
+      // preselected.value = newArray[index].name
+      // preselected.key = index
     }
     setLetters(newArray)
     // setMessage('hello world')
