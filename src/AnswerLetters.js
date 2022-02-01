@@ -41,7 +41,7 @@ const AnswerLetters = (u) => {
           } else {
             victoryFlagger = false
           }
-          if (victoryFlagger == false) {
+          if (victoryFlagger === false) {
             return (
               <div key={answerLetter.id}>
                 <AnswerLetter key={answerLetter.id} {...answerLetter} />

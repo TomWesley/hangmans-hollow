@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 
 const AnswerLetter = ({ id, name, isHidden }) => {
-  const space = ' '
+  // const space = ' '
   if (isHidden) {
     return (
       <article>
         {/* <button className='btn' onClick={App.changeData}> */}
-        <h3 className='puzzleLetter'>?</h3>
+        <h3 className='puzzleLetterHidden'>?</h3>
       </article>
     )
   } else {

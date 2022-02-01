@@ -4,8 +4,17 @@ import { useState, useEffect } from 'react'
 import data from './data'
 import AnswerLetters from './AnswerLetters'
 import puz from './puzzle'
+import gameState from './gameState'
 //Possibly do a gamestate to hang on to the scores, phase of the game, etc.
 
+const getLocalStorageGameState = () => {
+  let gameStateCurrent = localStorage.getItem('gameStateCurrent')
+  if (gameStateCurrent) {
+    return JSON.parse(localStorage.getItem('gameStateCurrent'))
+  } else {
+    return gameState
+  }
+}
 const getLocalStorageLetters = () => {
   let letters = localStorage.getItem('letters')
   if (letters) {
@@ -32,10 +41,13 @@ const getLocalStoragePreselected = () => {
   }
 }
 
-var score = 0
+// var score = 0
 var scoreInc = 0
 
 const Letters = () => {
+  const [gameStateCurrent, setGameStateCurrent] = useState(
+    getLocalStorageGameState()
+  )
   const [letters, setLetters] = useState(getLocalStorageLetters())
   const [usedLetters, setUsedLetters] = useState([])
   const [preselected, setPreselected] = useState(getLocalStoragePreselected())
@@ -45,16 +57,19 @@ const Letters = () => {
   }, [letters])
   useEffect(() => {
     localStorage.setItem('preselected', JSON.stringify(preselected))
+    localStorage.setItem('gameStateCurrent', JSON.stringify(gameStateCurrent))
   })
   const scoreChange = (i) => {
     scoreInc = 1
     puz.map((puzLetter) => {
-      if (puzLetter.name == letters[i].name) {
+      if (puzLetter.name === letters[i].name) {
         // if (usedLetters.usedLetters.indexOf(letters[i].name) > -1) {
         scoreInc = 0
       }
     })
-    score = score + scoreInc
+    var s = gameStateCurrent.score + scoreInc
+    setGameStateCurrent({ ...gameStateCurrent, score: s })
+    //score = score + scoreInc
   }
 
   const changeUsed = (index, newValue) => {
@@ -74,15 +89,15 @@ const Letters = () => {
     console.log(index, newValue)
     const newArray = [...letters]
     newArray[index].isHovered = newValue
-    if (newValue == false) {
-      if (preselected.status == true) {
+    if (newValue === false) {
+      if (preselected.status === true) {
         newArray[preselected.key].isHovered = false
         setPreselected({ ...preselected, status: false })
         // preselected.status = false
       }
     }
-    if (newValue == true) {
-      if (preselected.status == true) {
+    if (newValue === true) {
+      if (preselected.status === true) {
         newArray[preselected.key].isHovered = false
       }
       setPreselected({ value: newArray[index].name, status: true, key: index })
@@ -97,7 +112,7 @@ const Letters = () => {
     <section>
       <AnswerLetters u={usedLetters} />
       <div className='container'>
-        <h3>Number Of Misses: {score}</h3>
+        <h3>Number Of Misses: {gameStateCurrent.score}</h3>
       </div>
       <div>
         {preselected.status ? (
@@ -113,7 +128,6 @@ const Letters = () => {
           <button className='confirm'>Select A Letter</button>
         )}
       </div>
-
       <div className='nav-links'>
         {letters.map((letter, index) => {
           if (letter.isHovered) {
@@ -137,7 +151,7 @@ const Letters = () => {
               </div>
             )
           } else {
-            if (letter.isUsed == false) {
+            if (letter.isUsed === false) {
               return (
                 <div key={letter.id}>
                   <button
