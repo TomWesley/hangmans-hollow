@@ -60,7 +60,7 @@ const Letters = () => {
     localStorage.setItem('gameStateCurrent', JSON.stringify(gameStateCurrent))
   })
   const scoreChange = (i) => {
-    scoreInc = 1
+    scoreInc = -1
     puz.map((puzLetter) => {
       if (puzLetter.name === letters[i].name) {
         // if (usedLetters.usedLetters.indexOf(letters[i].name) > -1) {
@@ -69,6 +69,37 @@ const Letters = () => {
     })
     var s = gameStateCurrent.score + scoreInc
     setGameStateCurrent({ ...gameStateCurrent, score: s })
+    if (gameStateCurrent.score === 0) {
+      setGameStateCurrent({ ...gameStateCurrent, status: 'defeated' })
+      // setUsedLetters([
+      //   'A',
+      //   'B',
+      //   'C',
+      //   'D',
+      //   'E',
+      //   'F',
+      //   'G',
+      //   'H',
+      //   'I',
+      //   'J',
+      //   'K',
+      //   'L',
+      //   'M',
+      //   'N',
+      //   'O',
+      //   'P',
+      //   'Q',
+      //   'R',
+      //   'S',
+      //   'T',
+      //   'U',
+      //   'V',
+      //   'W',
+      //   'X',
+      //   'Y',
+      //   'Z',
+      // ])
+    }
     //score = score + scoreInc
   }
 
@@ -80,9 +111,6 @@ const Letters = () => {
     newArray[index].isUsed = true
     newArray[index].isHovered = false
     setPreselected({ value: '', status: false, key: '' })
-    // preselected.status = false
-    // preselected.value = ''
-    // preselected.key = ''
     setLetters(newArray)
   }
   const changeHover = (index, newValue) => {

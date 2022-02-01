@@ -25,7 +25,7 @@ export default [
     isHidden: true,
   },
   {
-    id: 5,
+    id: 6,
     name: 'S',
     isHidden: true,
   },

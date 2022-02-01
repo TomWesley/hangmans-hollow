@@ -16,6 +16,8 @@ function App() {
     <main>
       <div>
         <h1>Hangman's Hollow</h1>
+      </div>
+      <div>
         <section>
           <Letters />
         </section>
