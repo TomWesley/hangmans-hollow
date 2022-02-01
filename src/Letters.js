@@ -129,63 +129,47 @@ const Letters = () => {
         newArray[preselected.key].isHovered = false
       }
       setPreselected({ value: newArray[index].name, status: true, key: index })
-      // preselected.status = true
-      // preselected.value = newArray[index].name
-      // preselected.key = index
     }
     setLetters(newArray)
     // setMessage('hello world')
   }
-  return (
-    <section>
-      <AnswerLetters u={usedLetters} />
-      <div className='container'>
-        <h3>Number Of Misses: {gameStateCurrent.score}</h3>
-      </div>
-      <div>
-        {preselected.status ? (
-          <button
-            className='confirm'
-            onClick={() => {
-              changeUsed(preselected.key, true)
-            }}
-          >
-            Confirm Guess: {preselected.value}
-          </button>
-        ) : (
-          <button className='confirm'>Select A Letter</button>
-        )}
-      </div>
-      <div className='nav-links'>
-        {letters.map((letter, index) => {
-          if (letter.isHovered) {
-            // const result = ExampleButton()
-            return (
-              <div key={letter.id}>
-                {/* <button
+  if (gameStateCurrent.score > 0) {
+    return (
+      <section>
+        <AnswerLetters u={usedLetters} />
+        <div className='container'>
+          <h3>Number Of Misses: {gameStateCurrent.score}</h3>
+        </div>
+        <div>
+          {preselected.status ? (
+            <button
+              className='confirm'
+              onClick={() => {
+                changeUsed(preselected.key, true)
+              }}
+            >
+              Confirm Guess: {preselected.value}
+            </button>
+          ) : (
+            <button className='confirm'>Select A Letter</button>
+          )}
+        </div>
+        <div className='nav-links'>
+          {letters.map((letter, index) => {
+            if (letter.isHovered) {
+              // const result = ExampleButton()
+              return (
+                <div key={letter.id}>
+                  {/* <button
                   className='btntwo'
                   onClick={() => {
                     changeHover(index, false)
                   }}
                 > */}
-                <button
-                  className='btntwo'
-                  onClick={() => {
-                    changeHover(index, false)
-                  }}
-                >
-                  <Letter key={letter.id} {...letter}></Letter>
-                </button>
-              </div>
-            )
-          } else {
-            if (letter.isUsed === false) {
-              return (
-                <div key={letter.id}>
                   <button
-                    className='btn'
+                    className='btntwo'
                     onClick={() => {
-                      changeHover(index, true)
+                      changeHover(index, false)
                     }}
                   >
                     <Letter key={letter.id} {...letter}></Letter>
@@ -193,19 +177,105 @@ const Letters = () => {
                 </div>
               )
             } else {
+              if (letter.isUsed === false) {
+                return (
+                  <div key={letter.id}>
+                    <button
+                      className='btn'
+                      onClick={() => {
+                        changeHover(index, true)
+                      }}
+                    >
+                      <Letter key={letter.id} {...letter}></Letter>
+                    </button>
+                  </div>
+                )
+              } else {
+                return (
+                  <div key={letter.id}>
+                    <button className='btnUsed'>
+                      <Letter key={letter.id} {...letter}></Letter>
+                    </button>
+                  </div>
+                )
+              }
+            }
+          })}
+        </div>
+      </section>
+    )
+  } else {
+    return (
+      <section>
+        <AnswerLetters u={usedLetters} />
+        <div className='container'>
+          <h3>Game Over</h3>
+        </div>
+        <div>
+          {preselected.status ? (
+            <button
+              className='confirm'
+              onClick={() => {
+                changeUsed(preselected.key, true)
+              }}
+            >
+              Confirm Guess: {preselected.value}
+            </button>
+          ) : (
+            <button className='confirm'>Select A Letter</button>
+          )}
+        </div>
+        <div className='nav-links'>
+          {letters.map((letter, index) => {
+            if (letter.isHovered) {
+              // const result = ExampleButton()
               return (
                 <div key={letter.id}>
-                  <button className='btnUsed'>
+                  {/* <button
+                  className='btntwo'
+                  onClick={() => {
+                    changeHover(index, false)
+                  }}
+                > */}
+                  <button
+                    className='btntwo'
+                    onClick={() => {
+                      changeHover(index, false)
+                    }}
+                  >
                     <Letter key={letter.id} {...letter}></Letter>
                   </button>
                 </div>
               )
+            } else {
+              if (letter.isUsed === false) {
+                return (
+                  <div key={letter.id}>
+                    <button
+                      className='btn'
+                      onClick={() => {
+                        changeHover(index, true)
+                      }}
+                    >
+                      <Letter key={letter.id} {...letter}></Letter>
+                    </button>
+                  </div>
+                )
+              } else {
+                return (
+                  <div key={letter.id}>
+                    <button className='btnUsed'>
+                      <Letter key={letter.id} {...letter}></Letter>
+                    </button>
+                  </div>
+                )
+              }
             }
-          }
-        })}
-      </div>
-    </section>
-  )
+          })}
+        </div>
+      </section>
+    )
+  }
 }
 
 export default Letters
