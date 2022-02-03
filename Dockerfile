@@ -1,12 +1,12 @@
 # Stage 0 - Build Frontend Assets
-FROM node:14.19.0-alpine as build
+FROM node:12.16.3-alpine as build
 
 WORKDIR /app
 COPY package*.json ./
-# RUN apt-get update && apt-get install -y curl
-# RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-# RUN apt-get update && apt-get install -y nodejs
+
 RUN npm install
+RUN npm fund
+RUN npm audit fix
 COPY . .
 RUN npm run build
 
