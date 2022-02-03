@@ -212,9 +212,9 @@ const Letters = () => {
     return (
       <section>
         <div>
-          <button className='btn' onClick={resetGame}>
+          {/* <button className='btn' onClick={resetGame}>
             Debug Reset Game
-          </button>
+          </button> */}
         </div>
         <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         <div className='container'>
@@ -234,7 +234,7 @@ const Letters = () => {
             <button className='select'>Select A Letter</button>
           )}
         </div>
-        <div className='nav-links'>
+        <div className='letterlist'>
           {letters.map((letter, index) => {
             if (letter.isHovered) {
               // const result = ExampleButton()
@@ -291,7 +291,7 @@ const Letters = () => {
           </h3>
         </div>
 
-        <div className='nav-links'>
+        <div className='letterlist'>
           {letters.map((letter, index) => {
             if (letter.isHovered) {
               // const result = ExampleButton()
@@ -332,7 +332,7 @@ const Letters = () => {
           </h3>
         </div>
 
-        <div className='nav-links'>
+        <div className='letterlist'>
           {letters.map((letter, index) => {
             if (letter.isHovered) {
               // const result = ExampleButton()
