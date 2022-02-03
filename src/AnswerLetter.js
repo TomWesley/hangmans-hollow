@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 
-const AnswerLetter = ({ id, name, isHidden }) => {
-  // const space = ' '
+const AnswerLetter = ({ st, id, name, isHidden }) => {
   if (isHidden) {
     return (
       <article>
@@ -11,12 +10,21 @@ const AnswerLetter = ({ id, name, isHidden }) => {
       </article>
     )
   } else {
-    return (
-      <div>
-        {/* <button className='btn' onClick={App.changeData}> */}
-        <h3 className='puzzleLetter'>{name}</h3>
-      </div>
-    )
+    if (st == 'victory') {
+      return (
+        <div>
+          {/* <button className='btn' onClick={App.changeData}> */}
+          <h3 className='puzzleLetter'>{name}</h3>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          {/* <button className='btn' onClick={App.changeData}> */}
+          <h3 className='puzzleLetter'>{name}</h3>
+        </div>
+      )
+    }
   }
 }
 

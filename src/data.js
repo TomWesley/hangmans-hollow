@@ -101,4 +101,58 @@ export default [
     isUsed: false,
     isHovered: false,
   },
+  {
+    id: 18,
+    name: 'R',
+    isUsed: false,
+    isHovered: false,
+  },
+  {
+    id: 19,
+    name: 'S',
+    isUsed: false,
+    isHovered: false,
+  },
+  {
+    id: 20,
+    name: 'T',
+    isUsed: false,
+    isHovered: false,
+  },
+  {
+    id: 21,
+    name: 'U',
+    isUsed: false,
+    isHovered: false,
+  },
+  {
+    id: 22,
+    name: 'V',
+    isUsed: false,
+    isHovered: false,
+  },
+  {
+    id: 23,
+    name: 'W',
+    isUsed: false,
+    isHovered: false,
+  },
+  {
+    id: 24,
+    name: 'X',
+    isUsed: false,
+    isHovered: false,
+  },
+  {
+    id: 25,
+    name: 'Y',
+    isUsed: false,
+    isHovered: false,
+  },
+  {
+    id: 26,
+    name: 'Z',
+    isUsed: false,
+    isHovered: false,
+  },
 ]

@@ -15,45 +15,54 @@ const getLocalStorageLetters = () => {
   }
 }
 
-const AnswerLetters = (u) => {
+const AnswerLetters = (props) => {
+  const u = props.u
+  var fa = false
+  if (props.s === 'victory') {
+    fa = true
+  }
   const [puzzleLetters, setPuzzleLetters] = useState(getLocalStorageLetters())
   //const result = jsonObject.filter((puzzle) => puzzle.name == 'David')
 
   useEffect(() => {
-    victoryFlagger = true
     localStorage.setItem('puzzleLetters', JSON.stringify(puzzleLetters))
   })
 
-  const changeHover = (index, newValue) => {
+  const hideLetter = (index) => {
     // setLetters({ ...letters, onHover: 'true' })
-    console.log(index, newValue)
-    const newArray = [...puzzleLetters]
-    newArray[index].isHovered = newValue
+    const newArray = puzzleLetters
+    newArray[index].isHidden = false
     setPuzzleLetters(newArray)
-    // setMessage('hello world')
   }
   return (
     <section>
-      <div className='puzzle'>
+      <div className={`puzzle ${fa ? 'victory' : ''}`}>
         {puzzleLetters.map((answerLetter, index) => {
-          if (u.u.indexOf(answerLetter.name) > -1) {
+          if (u.indexOf(answerLetter.name) > -1) {
+            // hideLetter(answerLetter.id)
             answerLetter.isHidden = false
           } else {
-            victoryFlagger = false
+            //answerLetter.isHidden = true
           }
-          if (victoryFlagger === false) {
+
+          if (props.s === 'solving') {
             return (
               <div key={answerLetter.id}>
-                <AnswerLetter key={answerLetter.id} {...answerLetter} />
-                {/* <h3>{u}</h3> */}
+                <AnswerLetter
+                  st={props.s}
+                  key={answerLetter.id}
+                  {...answerLetter}
+                />
               </div>
             )
           } else {
             return (
               <div key={answerLetter.id}>
-                <AnswerLetter key={answerLetter.id} {...answerLetter} />
-                {/* <h3>{u}</h3> */}
-                <h3>VICTORY</h3>
+                <AnswerLetter
+                  st={props.s}
+                  key={answerLetter.id}
+                  {...answerLetter}
+                />
               </div>
             )
           }

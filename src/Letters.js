@@ -7,6 +7,14 @@ import puz from './puzzle'
 import gameState from './gameState'
 //Possibly do a gamestate to hang on to the scores, phase of the game, etc.
 
+const getLocalStorageUsedLetters = () => {
+  let usedLetters = localStorage.getItem('usedLetters')
+  if (usedLetters) {
+    return JSON.parse(localStorage.getItem('usedLetters'))
+  } else {
+    return []
+  }
+}
 const getLocalStorageGameState = () => {
   let gameStateCurrent = localStorage.getItem('gameStateCurrent')
   if (gameStateCurrent) {
@@ -23,11 +31,7 @@ const getLocalStorageLetters = () => {
     return data
   }
 }
-// const preselected = {
-//   status: false,
-//   value: '',
-//   key: '',
-// }
+
 const getLocalStoragePreselected = () => {
   let preselected = localStorage.getItem('preselected')
   if (preselected) {
@@ -41,7 +45,6 @@ const getLocalStoragePreselected = () => {
   }
 }
 
-// var score = 0
 var scoreInc = 0
 
 const Letters = () => {
@@ -49,7 +52,7 @@ const Letters = () => {
     getLocalStorageGameState()
   )
   const [letters, setLetters] = useState(getLocalStorageLetters())
-  const [usedLetters, setUsedLetters] = useState([])
+  const [usedLetters, setUsedLetters] = useState(getLocalStorageUsedLetters())
   const [preselected, setPreselected] = useState(getLocalStoragePreselected())
 
   useEffect(() => {
@@ -57,7 +60,59 @@ const Letters = () => {
   }, [letters])
   useEffect(() => {
     localStorage.setItem('preselected', JSON.stringify(preselected))
+    localStorage.setItem('usedLetters', JSON.stringify(usedLetters))
     localStorage.setItem('gameStateCurrent', JSON.stringify(gameStateCurrent))
+    const puzLength = puz.length
+    var victoryTracker = 0
+    if (gameStateCurrent.status === 'solving') {
+      if (gameStateCurrent.score === 0) {
+        setGameStateCurrent({ ...gameStateCurrent, status: 'defeat' })
+        setUsedLetters([
+          'A',
+          'B',
+          'C',
+          'D',
+          'E',
+          'F',
+          'G',
+          'H',
+          'I',
+          'J',
+          'K',
+          'L',
+          'M',
+          'N',
+          'O',
+          'P',
+          'Q',
+          'R',
+          'S',
+          'T',
+          'U',
+          'V',
+          'W',
+          'X',
+          'Y',
+          'Z',
+        ])
+        console.log(usedLetters)
+      }
+    }
+    if (gameStateCurrent.status === 'solving') {
+      {
+        puz.map((l, index) => {
+          if (usedLetters.indexOf(l.name) > -1) {
+            victoryTracker = victoryTracker + 1
+          } else {
+            console.log(l.name, usedLetters)
+          }
+        })
+      }
+      console.log(victoryTracker)
+      if (victoryTracker === puz.length) {
+        setGameStateCurrent({ ...gameStateCurrent, status: 'victory' })
+      }
+    }
   })
   const scoreChange = (i) => {
     scoreInc = -1
@@ -69,38 +124,45 @@ const Letters = () => {
     })
     var s = gameStateCurrent.score + scoreInc
     setGameStateCurrent({ ...gameStateCurrent, score: s })
-    if (gameStateCurrent.score === 0) {
-      setGameStateCurrent({ ...gameStateCurrent, status: 'defeated' })
-      // setUsedLetters([
-      //   'A',
-      //   'B',
-      //   'C',
-      //   'D',
-      //   'E',
-      //   'F',
-      //   'G',
-      //   'H',
-      //   'I',
-      //   'J',
-      //   'K',
-      //   'L',
-      //   'M',
-      //   'N',
-      //   'O',
-      //   'P',
-      //   'Q',
-      //   'R',
-      //   'S',
-      //   'T',
-      //   'U',
-      //   'V',
-      //   'W',
-      //   'X',
-      //   'Y',
-      //   'Z',
-      // ])
-    }
+    // if (gameStateCurrent.score === 0) {
+    //   setGameStateCurrent({ ...gameStateCurrent, status: 'defeated' })
+    //   setUsedLetters([
+    //     'A',
+    //     'B',
+    //     'C',
+    //     'D',
+    //     'E',
+    //     'F',
+    //     'G',
+    //     'H',
+    //     'I',
+    //     'J',
+    //     'K',
+    //     'L',
+    //     'M',
+    //     'N',
+    //     'O',
+    //     'P',
+    //     'Q',
+    //     'R',
+    //     'S',
+    //     'T',
+    //     'U',
+    //     'V',
+    //     'W',
+    //     'X',
+    //     'Y',
+    //     'Z',
+    //   ])
+    // }
     //score = score + scoreInc
+  }
+
+  const resetGame = () => {
+    localStorage.clear()
+    letters.map((letters) => (letters.isUsed = false))
+    setGameStateCurrent({ ...gameStateCurrent, score: 8 })
+    setUsedLetters([])
   }
 
   const changeUsed = (index, newValue) => {
@@ -112,9 +174,23 @@ const Letters = () => {
     newArray[index].isHovered = false
     setPreselected({ value: '', status: false, key: '' })
     setLetters(newArray)
+    // const puzLength = puz.length
+    // var victoryTracker = 0
+    // {
+    //   puz.map((l, index) => {
+    //     if (usedLetters.indexOf(l.name) > -1) {
+    //       victoryTracker = victoryTracker + 1
+    //     } else {
+    //       console.log(l.name, usedLetters)
+    //     }
+    //   })
+    // }
+    // console.log(victoryTracker)
+    // if (victoryTracker === puz.length) {
+    //   setGameStateCurrent({ ...gameStateCurrent, status: 'victory' })
+    // }
   }
   const changeHover = (index, newValue) => {
-    console.log(index, newValue)
     const newArray = [...letters]
     newArray[index].isHovered = newValue
     if (newValue === false) {
@@ -133,12 +209,17 @@ const Letters = () => {
     setLetters(newArray)
     // setMessage('hello world')
   }
-  if (gameStateCurrent.score > 0) {
+  if (gameStateCurrent.status == 'solving') {
     return (
       <section>
-        <AnswerLetters u={usedLetters} />
+        <div>
+          <button className='btn' onClick={resetGame}>
+            Debug Reset Game
+          </button>
+        </div>
+        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         <div className='container'>
-          <h3>Number Of Misses: {gameStateCurrent.score}</h3>
+          <h3>Number Of Misses Remaining: {gameStateCurrent.score}</h3>
         </div>
         <div>
           {preselected.status ? (
@@ -151,7 +232,7 @@ const Letters = () => {
               Confirm Guess: {preselected.value}
             </button>
           ) : (
-            <button className='confirm'>Select A Letter</button>
+            <button className='select'>Select A Letter</button>
           )}
         </div>
         <div className='nav-links'>
@@ -160,12 +241,6 @@ const Letters = () => {
               // const result = ExampleButton()
               return (
                 <div key={letter.id}>
-                  {/* <button
-                  className='btntwo'
-                  onClick={() => {
-                    changeHover(index, false)
-                  }}
-                > */}
                   <button
                     className='btntwo'
                     onClick={() => {
@@ -204,39 +279,25 @@ const Letters = () => {
         </div>
       </section>
     )
-  } else {
+  } else if (gameStateCurrent.status === 'victory') {
     return (
       <section>
-        <AnswerLetters u={usedLetters} />
-        <div className='container'>
-          <h3>Game Over</h3>
-        </div>
         <div>
-          {preselected.status ? (
-            <button
-              className='confirm'
-              onClick={() => {
-                changeUsed(preselected.key, true)
-              }}
-            >
-              Confirm Guess: {preselected.value}
-            </button>
-          ) : (
-            <button className='confirm'>Select A Letter</button>
-          )}
+          <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         </div>
+        <div className='container'>
+          <h3>
+            Congratulations - You won with {gameStateCurrent.score} letters to
+            spare
+          </h3>
+        </div>
+
         <div className='nav-links'>
           {letters.map((letter, index) => {
             if (letter.isHovered) {
               // const result = ExampleButton()
               return (
                 <div key={letter.id}>
-                  {/* <button
-                  className='btntwo'
-                  onClick={() => {
-                    changeHover(index, false)
-                  }}
-                > */}
                   <button
                     className='btntwo'
                     onClick={() => {
@@ -248,28 +309,54 @@ const Letters = () => {
                 </div>
               )
             } else {
-              if (letter.isUsed === false) {
-                return (
-                  <div key={letter.id}>
-                    <button
-                      className='btn'
-                      onClick={() => {
-                        changeHover(index, true)
-                      }}
-                    >
-                      <Letter key={letter.id} {...letter}></Letter>
-                    </button>
-                  </div>
-                )
-              } else {
-                return (
-                  <div key={letter.id}>
-                    <button className='btnUsed'>
-                      <Letter key={letter.id} {...letter}></Letter>
-                    </button>
-                  </div>
-                )
-              }
+              return (
+                <div key={letter.id}>
+                  <button className='btnUsed'>
+                    <Letter key={letter.id} {...letter}></Letter>
+                  </button>
+                </div>
+              )
+            }
+          })}
+        </div>
+      </section>
+    )
+  } else {
+    return (
+      <section>
+        <div className='defeat'>
+          <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
+        </div>
+        <div className='container'>
+          <h3>
+            Sorry, You Missed Today's Puzzle. Come back to the Hollow Tomorrow.
+          </h3>
+        </div>
+
+        <div className='nav-links'>
+          {letters.map((letter, index) => {
+            if (letter.isHovered) {
+              // const result = ExampleButton()
+              return (
+                <div key={letter.id}>
+                  <button
+                    className='btntwo'
+                    onClick={() => {
+                      changeHover(index, false)
+                    }}
+                  >
+                    <Letter key={letter.id} {...letter}></Letter>
+                  </button>
+                </div>
+              )
+            } else {
+              return (
+                <div key={letter.id}>
+                  <button className='btnUsed'>
+                    <Letter key={letter.id} {...letter}></Letter>
+                  </button>
+                </div>
+              )
             }
           })}
         </div>
