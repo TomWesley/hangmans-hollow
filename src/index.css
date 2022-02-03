@@ -330,7 +330,7 @@ p {
   padding-right: 1rem;
   padding-top: 1rem;
   padding-left: 1rem;
-  box-shadow: 0 1rem 2rem 0 rgba(0, 0, 0, 0.75);
+  box-shadow: 0.1rem 0.5rem 1rem 0rem rgba(0, 0, 0, 0.75);
   transition: 0.3s;
   font-size: 7rem;
 }
@@ -353,11 +353,11 @@ p {
 
 .select {
   /* display: grid; */
-  font-size: 3rem;
+  font-size: 2rem;
   text-align: center;
-  border-radius: 25px;
-  padding: 20px;
-  border: 2px solid black;
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 0.1rem solid black;
 
   margin: 0;
   position: relative;
@@ -371,11 +371,11 @@ p {
 }
 .confirm {
   /* display: grid; */
-  font-size: 3rem;
+  font-size: 2rem;
   text-align: center;
-  border-radius: 25px;
-  padding: 20px;
-  border: 2px solid black;
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 0.1rem solid black;
   box-shadow: 0 0 30px 15px #fff, /* inner white */ 0 0 50px 30px #f0f,
     /* middle magenta */ 0 0 70px 45px #0ff; /* outer cyan */
   /* grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); */
@@ -436,12 +436,19 @@ p {
   cursor: pointer;
 }
 
-@media (min-width: 399px) {
+@media (max-width: 550px) {
   .puzzleLetterHidden {
     width: 4rem;
     height: 5rem;
-    font-size: 3rem;
-    padding: 1rem;
+    font-size: 3.5rem;
+    padding: 0rem;
+  }
+  .puzzleLetter {
+    text-align: center;
+    width: 4rem;
+    height: 5rem;
+    font-size: 3.5rem;
+    padding: 0rem;
   }
   .puzzle {
     margin: 0.5rem;
