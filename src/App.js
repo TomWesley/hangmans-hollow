@@ -15,7 +15,7 @@ function App() {
   return (
     <main>
       <div>
-        <h1>Hangman's Hollow</h1>
+        <h1>Hangman's Hollow -s</h1>
       </div>
       <div>
         <section>
