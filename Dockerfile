@@ -2,12 +2,14 @@
 FROM node:12.16.3-alpine as build
 
 WORKDIR /app
-COPY . .
+COPY package*.json ./
 RUN npm --verbose install
+COPY . .
+RUN npm run build
 # RUN npm fund
 # RUN npm audit fix
 
-RUN npm run build
+
 
 # Stage 1 - Serve Frontend Assets
 FROM fholzer/nginx-brotli:v1.12.2
