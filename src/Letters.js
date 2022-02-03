@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react'
 import data from './data'
 import AnswerLetters from './AnswerLetters'
 import puz from './puzzle'
-import gameState from './gameState'
-//Possibly do a gamestate to hang on to the scores, phase of the game, etc.
+import gamestate from './gamestate'
 
 const getLocalStorageUsedLetters = () => {
   let usedLetters = localStorage.getItem('usedLetters')
@@ -20,7 +19,7 @@ const getLocalStorageGameState = () => {
   if (gameStateCurrent) {
     return JSON.parse(localStorage.getItem('gameStateCurrent'))
   } else {
-    return gameState
+    return gamestate
   }
 }
 const getLocalStorageLetters = () => {

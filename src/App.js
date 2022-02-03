@@ -1,7 +1,4 @@
 import React from 'react'
-
-import p5 from 'p5'
-import { render } from '@testing-library/react'
 import Letters from './Letters'
 import data from './data'
 import { useState } from 'react'
