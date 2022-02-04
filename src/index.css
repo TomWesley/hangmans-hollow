@@ -94,8 +94,7 @@ main {
 }
 
 h2,
-h3,
-h4 {
+h3 {
   letter-spacing: var(--spacing);
   text-transform: capitalize;
   line-height: 1.25;
@@ -119,7 +118,10 @@ h3 {
   font-size: 1.25rem;
 }
 h4 {
-  font-size: 0.875rem;
+  color: black;
+  text-align: center;
+  margin: 0rem;
+  font-size: 1.5rem;
 }
 p {
   margin-bottom: 1.25rem;
@@ -136,28 +138,31 @@ p {
     font-size: 1.75rem;
   }
   h4 {
-    font-size: 1rem;
+    font-size: 2rem;
   }
   body {
     font-size: 1rem;
   }
 
   h2,
-  h3,
-  h4 {
+  h3 {
     line-height: 1;
   }
 }
 /*  global classes */
 
 /* section */
-
+.defeatwords {
+  margin: 2rem;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073,
+    0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+}
 .container {
   width: 90vw;
   margin: 0 auto;
   text-align: center;
-  padding-bottom: 50px;
-  margin-top: 5rem;
+  padding: 3rem;
+  align-content: center;
 }
 .btntwo {
   width: 4rem;
@@ -178,7 +183,7 @@ p {
   cursor: pointer;
   transition: var(--transition);
   position: relative;
-  padding: 10px;
+  padding: 0.5rem;
   padding-bottom: 0px;
 }
 .btnUsed {
@@ -189,6 +194,7 @@ p {
   background: rgb(123, 125, 123);
   color: var(--clr-white);
   /* padding: 0.25rem 0.75rem; */
+
   border-radius: var(--radius);
   border-color: black;
   text-transform: capitalize;
@@ -201,20 +207,20 @@ p {
   cursor: pointer;
   transition: var(--transition);
   position: relative;
-  padding: 12px;
+  padding: 0.5rem;
   padding-bottom: 0px;
 }
 
 .btn {
-  font-family: Bevan;
+  font-family: Optima;
   width: 4rem;
   height: 5rem;
   display: inline-block;
   background: black;
   color: var(--clr-white);
   /* padding: 0.25rem 0.75rem; */
-  padding: 12px;
-  padding-bottom: 0px;
+  padding: 0.5rem;
+
   border-radius: var(--radius);
   border-color: black;
   text-transform: capitalize;
@@ -236,12 +242,12 @@ p {
 
 .victory {
   /* height: 100%; */
+
   align-self: center;
   max-width: 54rem;
   min-width: 54rem;
   min-height: 10rem;
   max-height: 10rem;
-
   margin: 0 auto;
   margin-bottom: 4rem;
   display: grid;
@@ -262,9 +268,7 @@ p {
 .item {
   padding: 1rem 2rem;
 }
-.item h4 {
-  margin-bottom: 0;
-}
+
 .item p {
   margin-bottom: 0;
 }
@@ -307,11 +311,12 @@ p {
   text-align: center;
   background-color: rgb(142, 218, 230);
   text-decoration: underline;
+  text-decoration-color: black;
   padding-bottom: 10rem;
   padding-right: 1rem;
   padding-top: 1rem;
   padding-left: 1rem;
-  box-shadow: 0 1.5rem 2rem 0 rgba(0, 0, 0, 0.75);
+  box-shadow: 0.1rem 0.5rem 1rem 0rem rgba(0, 0, 0, 0.75);
   transition: 0.3s;
   font-size: 7rem;
 }
@@ -321,6 +326,7 @@ p {
   border: 0.15rem solid black;
   width: 9rem;
   height: 10rem;
+  color: black;
   color: transparent;
   text-align: center;
   background-color: white;
@@ -376,8 +382,8 @@ p {
   border-radius: 1rem;
   padding: 1rem;
   border: 0.1rem solid black;
-  box-shadow: 0 0 30px 15px #fff, /* inner white */ 0 0 50px 30px #f0f,
-    /* middle magenta */ 0 0 70px 45px #0ff; /* outer cyan */
+  box-shadow: 0 0 1rem 0.5rem #fff, /* inner white */ 0 0 2rem 1rem #f0f,
+    /* middle magenta */ 0 0 2rem 1.5rem #0ff; /* outer cyan */
   /* grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); */
   margin: 0;
   position: relative;
@@ -391,9 +397,6 @@ p {
   color: black;
 }
 
-.users h4 {
-  margin-bottom: 0.15rem;
-}
 .users a {
   color: var(--clr-grey-5);
   text-transform: capitalize;
@@ -421,9 +424,6 @@ p {
   height: 15rem;
   object-fit: cover;
 }
-.product h4 {
-  margin-top: 1rem;
-}
 
 .product button {
   margin-bottom: 1rem;
@@ -434,6 +434,12 @@ p {
   padding: 0.25rem 0.5rem;
   text-transform: capitalize;
   cursor: pointer;
+}
+.victorywords {
+  font-size: 3rem;
+  margin: 2.5rem;
+  text-shadow: 0 0 10px cyan, 0 0 20px white, 0 0 30px cyan, 0 0 40px #e60073,
+    0 0 50px magenta, 0 0 60px cyan, 0 0 70px magenta;
 }
 
 @media (max-width: 550px) {
@@ -452,15 +458,23 @@ p {
   }
   .puzzle {
     margin: 0.5rem;
+    max-height: 5rem;
+    min-height: 5rem;
+    background: black;
+    max-width: 24rem;
+    min-width: 24rem;
   }
   .btn {
     width: 3rem;
+    height: 3.75rem;
   }
   .btntwo {
     width: 3rem;
+    height: 3.75rem;
   }
   .btnUsed {
     width: 3rem;
+    height: 3.75rem;
   }
   h1 {
     height: 3rem;

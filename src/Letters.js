@@ -218,7 +218,7 @@ const Letters = () => {
         </div>
         <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         <div className='container'>
-          <h3>Number Of Misses Remaining: {gameStateCurrent.score}</h3>
+          <h4>Number Of Misses Remaining: {gameStateCurrent.score}</h4>
         </div>
         <div>
           {preselected.status ? (
@@ -284,11 +284,11 @@ const Letters = () => {
         <div>
           <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         </div>
-        <div className='container'>
-          <h3>
+        <div className='container' className='victorywords'>
+          <h4>
             Congratulations - You won with {gameStateCurrent.score} letters to
             spare
-          </h3>
+          </h4>
         </div>
 
         <div className='letterlist'>
@@ -326,10 +326,10 @@ const Letters = () => {
         <div className='defeat'>
           <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         </div>
-        <div className='container'>
-          <h3>
+        <div className='container' className='defeatwords'>
+          <h4>
             Sorry, You Missed Today's Puzzle. Come back to the Hollow Tomorrow.
-          </h3>
+          </h4>
         </div>
 
         <div className='letterlist'>
