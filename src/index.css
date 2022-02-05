@@ -186,7 +186,14 @@ p {
   padding: 0.5rem;
   padding-bottom: 0px;
 }
+.btnscenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .btnUsed {
+  align-self: center;
+
   font-family: Bevan;
   width: 4rem;
   height: 5rem;
@@ -253,8 +260,7 @@ p {
   display: grid;
   column-gap: 0px;
   grid-template-columns: repeat(6, 0fr);
-  box-shadow: 0 0 30px 15px #fff, /* inner white */ 0 0 50px 30px #f0f,
-    /* middle magenta */ 0 0 70px 45px #0ff; /* outer cyan */
+  box-shadow: 0 0 30px 15px #fff, 0 0 50px 30px #f0f, 0 0 70px 45px #0ff;
 }
 
 .item button,
@@ -290,9 +296,9 @@ p {
 }
 
 .letterlist {
-  max-width: 40rem;
-  align-self: center;
-  margin: 0 auto;
+  /* max-width: 40rem; */
+  align-content: center;
+
   margin-bottom: 4rem;
   margin-top: 4rem;
   display: grid;
@@ -342,6 +348,8 @@ p {
 }
 
 .puzzle {
+  padding-top: 1rem;
+  align-content: center;
   background-color: transparent;
 
   align-self: center;
@@ -354,7 +362,7 @@ p {
   margin-bottom: 4rem;
   display: grid;
   column-gap: 0rem;
-  grid-template-columns: repeat(6, 0fr);
+  grid-template-columns: repeat(7, 0fr);
 }
 
 .select {
@@ -444,23 +452,25 @@ p {
 
 @media (max-width: 550px) {
   .puzzleLetterHidden {
-    width: 4rem;
+    text-align: center;
+    width: 3.4rem;
     height: 5rem;
     font-size: 3.5rem;
     padding: 0rem;
   }
   .puzzleLetter {
     text-align: center;
-    width: 4rem;
+    width: 3.4rem;
     height: 5rem;
     font-size: 3.5rem;
     padding: 0rem;
   }
   .puzzle {
-    margin: 0.5rem;
-    max-height: 5rem;
-    min-height: 5rem;
-    background: black;
+    /* margin: 0.5rem; */
+
+    max-height: 4rem;
+    min-height: 4rem;
+    background: transparent;
     max-width: 24rem;
     min-width: 24rem;
   }

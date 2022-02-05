@@ -1,6 +1,5 @@
 import React from 'react'
 import Letters from './Letters'
-import data from './data'
 import { useState } from 'react'
 import AnswerLetters from './AnswerLetters'
 //import UseStateBasics from './tutorial/1-useState/setup/2-useState-basics'

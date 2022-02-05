@@ -5,7 +5,7 @@ import data from './data'
 import AnswerLetters from './AnswerLetters'
 import puz from './puzzle'
 import gamestate from './gamestate'
-
+const versionTrigger = 1
 const getLocalStorageUsedLetters = () => {
   let usedLetters = localStorage.getItem('usedLetters')
   if (usedLetters) {
@@ -239,7 +239,7 @@ const Letters = () => {
             if (letter.isHovered) {
               // const result = ExampleButton()
               return (
-                <div key={letter.id}>
+                <div key={letter.id} className='btnscenter'>
                   <button
                     className='btntwo'
                     onClick={() => {
@@ -253,7 +253,7 @@ const Letters = () => {
             } else {
               if (letter.isUsed === false) {
                 return (
-                  <div key={letter.id}>
+                  <div key={letter.id} className='btnscenter'>
                     <button
                       className='btn'
                       onClick={() => {
@@ -266,7 +266,7 @@ const Letters = () => {
                 )
               } else {
                 return (
-                  <div key={letter.id}>
+                  <div key={letter.id} className='btnscenter'>
                     <button className='btnUsed'>
                       <Letter key={letter.id} {...letter}></Letter>
                     </button>
@@ -296,7 +296,7 @@ const Letters = () => {
             if (letter.isHovered) {
               // const result = ExampleButton()
               return (
-                <div key={letter.id}>
+                <div key={letter.id} className='btnscenter'>
                   <button
                     className='btntwo'
                     onClick={() => {
@@ -309,7 +309,7 @@ const Letters = () => {
               )
             } else {
               return (
-                <div key={letter.id}>
+                <div key={letter.id} className='btnscenter'>
                   <button className='btnUsed'>
                     <Letter key={letter.id} {...letter}></Letter>
                   </button>
@@ -335,9 +335,8 @@ const Letters = () => {
         <div className='letterlist'>
           {letters.map((letter, index) => {
             if (letter.isHovered) {
-              // const result = ExampleButton()
               return (
-                <div key={letter.id}>
+                <div key={letter.id} className='btnscenter'>
                   <button
                     className='btntwo'
                     onClick={() => {
@@ -350,7 +349,7 @@ const Letters = () => {
               )
             } else {
               return (
-                <div key={letter.id}>
+                <div key={letter.id} className='btnscenter'>
                   <button className='btnUsed'>
                     <Letter key={letter.id} {...letter}></Letter>
                   </button>

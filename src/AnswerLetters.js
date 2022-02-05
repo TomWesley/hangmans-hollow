@@ -23,6 +23,10 @@ const AnswerLetters = (props) => {
   }
   const [puzzleLetters, setPuzzleLetters] = useState(getLocalStorageLetters())
   //const result = jsonObject.filter((puzzle) => puzzle.name == 'David')
+  if (puzzleLetters[0].name != 'K') {
+    localStorage.clear()
+    window.location.reload(true)
+  }
 
   useEffect(() => {
     localStorage.setItem('puzzleLetters', JSON.stringify(puzzleLetters))
