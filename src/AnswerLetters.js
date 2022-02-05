@@ -6,7 +6,7 @@ import Letter from './Letter'
 
 var victoryFlagger = false
 
-const getLocalStorageLetters = () => {
+const getLocalStoragePuzzleLetters = () => {
   let puzzleLetters = localStorage.getItem('puzzleLetters')
   if (puzzleLetters) {
     return JSON.parse(localStorage.getItem('puzzleLetters'))
@@ -21,17 +21,10 @@ const AnswerLetters = (props) => {
   if (props.s === 'victory') {
     fa = true
   }
-  const [puzzleLetters, setPuzzleLetters] = useState(getLocalStorageLetters())
+  const [puzzleLetters, setPuzzleLetters] = useState(
+    getLocalStoragePuzzleLetters()
+  )
   //const result = jsonObject.filter((puzzle) => puzzle.name == 'David')
-  if (puzzleLetters[0].name != 'K') {
-    localStorage.removeItem('preselected')
-    localStorage.removeItem('letters')
-    localStorage.removeItem('gameStateCurrent')
-    localStorage.removeItem('usedLetters')
-    localStorage.removeItem('puzzleLetters')
-
-    window.location.reload(true)
-  }
 
   useEffect(() => {
     localStorage.setItem('puzzleLetters', JSON.stringify(puzzleLetters))
