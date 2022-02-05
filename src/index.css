@@ -187,6 +187,8 @@ p {
   padding-bottom: 0px;
 }
 .btnscenter {
+  height: 11vh;
+  /* width: 4rem; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -301,7 +303,9 @@ p {
 
   margin-bottom: 4rem;
   margin-top: 4rem;
+
   display: grid;
+
   grid-template-columns: repeat(6, 10fr);
 }
 .nav-links a {
@@ -475,16 +479,16 @@ p {
     min-width: 24rem;
   }
   .btn {
-    width: 3rem;
-    height: 3.75rem;
+    width: 12vw;
+    height: 14.5vw;
   }
   .btntwo {
-    width: 3rem;
-    height: 3.75rem;
+    width: 12vw;
+    height: 14.5vw;
   }
   .btnUsed {
-    width: 3rem;
-    height: 3.75rem;
+    width: 12vw;
+    height: 14.5vw;
   }
   h1 {
     height: 3rem;
