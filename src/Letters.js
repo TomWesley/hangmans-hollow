@@ -5,6 +5,7 @@ import data from './data'
 import AnswerLetters from './AnswerLetters'
 import puz from './puzzle'
 import gamestate from './gamestate'
+import gameState from './gamestate'
 const versionTrigger = 1
 const getLocalStorageUsedLetters = () => {
   let usedLetters = localStorage.getItem('usedLetters')

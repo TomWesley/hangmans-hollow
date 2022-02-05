@@ -24,7 +24,12 @@ const AnswerLetters = (props) => {
   const [puzzleLetters, setPuzzleLetters] = useState(getLocalStorageLetters())
   //const result = jsonObject.filter((puzzle) => puzzle.name == 'David')
   if (puzzleLetters[0].name != 'K') {
-    localStorage.clear()
+    localStorage.removeItem('preselected')
+    localStorage.removeItem('letters')
+    localStorage.removeItem('gameStateCurrent')
+    localStorage.removeItem('usedLetters')
+    localStorage.removeItem('puzzleLetters')
+
     window.location.reload(true)
   }
 
