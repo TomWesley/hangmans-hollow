@@ -5,6 +5,7 @@ Variables
 */
 
 :root {
+  --letter-count: 7;
   /* dark shades of primary color*/
   --clr-primary-1: hsl(205, 86%, 17%);
   --clr-primary-2: hsl(205, 77%, 27%);
@@ -167,7 +168,7 @@ p {
 .btntwo {
   width: 4rem;
   height: 5rem;
-  font-family: Bevan;
+  font-family: Optima;
   display: inline-block;
   background: rgb(251, 252, 251);
   color: black;
@@ -196,7 +197,7 @@ p {
 .btnUsed {
   align-self: center;
 
-  font-family: Bevan;
+  font-family: Optima;
   width: 4rem;
   height: 5rem;
   display: inline-block;

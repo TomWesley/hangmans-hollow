@@ -5,7 +5,16 @@ import data from './data'
 import AnswerLetters from './AnswerLetters'
 import puz from './puzzle'
 import gamestate from './gamestate'
-import gameState from './gamestate'
+import firebase from './firebase'
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+} from 'firebase/firestore/lite'
+
+const db = getFirestore(firebase)
 const versionTrigger = 1
 const getLocalStorageUsedLetters = () => {
   let usedLetters = localStorage.getItem('usedLetters')
@@ -47,6 +56,17 @@ const getLocalStoragePreselected = () => {
 
 var scoreInc = 0
 
+async function getUsers(db) {
+  const ref = collection(db, 'users')
+  const userSnapshot = await getDocs(ref)
+  await setDoc(doc(db, 'users', 'userinfo'), {
+    name: 'Jackson',
+    averagescore: 8,
+  })
+  console.log('Firebase', userSnapshot)
+  return 5
+}
+
 const Letters = () => {
   const [gameStateCurrent, setGameStateCurrent] = useState(
     getLocalStorageGameState()
@@ -55,10 +75,13 @@ const Letters = () => {
   const [usedLetters, setUsedLetters] = useState(getLocalStorageUsedLetters())
   const [preselected, setPreselected] = useState(getLocalStoragePreselected())
 
+  //Firebase Incoming
+
   useEffect(() => {
     localStorage.setItem('letters', JSON.stringify(letters))
   }, [letters])
   useEffect(() => {
+    const numb = getUsers(db)
     localStorage.setItem('preselected', JSON.stringify(preselected))
     localStorage.setItem('usedLetters', JSON.stringify(usedLetters))
     localStorage.setItem('gameStateCurrent', JSON.stringify(gameStateCurrent))
