@@ -8,7 +8,7 @@ import AnswerLetters from './AnswerLetters'
 
 let p = localStorage.getItem('puzzleLetters')
 if (p) {
-  if (JSON.parse(p)[0].name != 'P') {
+  if (JSON.parse(p)[0].name != 'C') {
     localStorage.removeItem('preselected')
     localStorage.removeItem('letters')
     localStorage.removeItem('gameStateCurrent')
@@ -18,9 +18,6 @@ if (p) {
   }
 }
 function App() {
-  // useState
-
-  //const letters = data
   return (
     <main>
       <div>
@@ -30,11 +27,6 @@ function App() {
         <section>
           <Letters />
         </section>
-        {/* {data.map((temp) => {
-        return <h2 key={temp.id}>{String(temp.isHovered)}</h2>
-      })} */}
-        {/* <Setup /> */}
-        {/* <Final /> */}
       </div>
     </main>
   )

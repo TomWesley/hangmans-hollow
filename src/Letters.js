@@ -9,7 +9,7 @@ import firebase from './firebase'
 import {
   getFirestore,
   collection,
-  getDocs,
+  getDoc,
   doc,
   setDoc,
 } from 'firebase/firestore/lite'
@@ -58,12 +58,12 @@ var scoreInc = 0
 
 async function getUsers(db) {
   const ref = collection(db, 'users')
-  const userSnapshot = await getDocs(ref)
+  const userSnapshot = await getDoc(ref)
   await setDoc(doc(db, 'users', 'userinfo'), {
     name: 'Jackson',
     averagescore: 8,
   })
-  console.log('Firebase', userSnapshot)
+  console.log('Firebase', userSnapshot.data())
   return 5
 }
 
@@ -147,38 +147,6 @@ const Letters = () => {
     })
     var s = gameStateCurrent.score + scoreInc
     setGameStateCurrent({ ...gameStateCurrent, score: s })
-    // if (gameStateCurrent.score === 0) {
-    //   setGameStateCurrent({ ...gameStateCurrent, status: 'defeated' })
-    //   setUsedLetters([
-    //     'A',
-    //     'B',
-    //     'C',
-    //     'D',
-    //     'E',
-    //     'F',
-    //     'G',
-    //     'H',
-    //     'I',
-    //     'J',
-    //     'K',
-    //     'L',
-    //     'M',
-    //     'N',
-    //     'O',
-    //     'P',
-    //     'Q',
-    //     'R',
-    //     'S',
-    //     'T',
-    //     'U',
-    //     'V',
-    //     'W',
-    //     'X',
-    //     'Y',
-    //     'Z',
-    //   ])
-    // }
-    //score = score + scoreInc
   }
 
   const resetGame = () => {
@@ -232,14 +200,14 @@ const Letters = () => {
     setLetters(newArray)
     // setMessage('hello world')
   }
-  if (gameStateCurrent.status == 'solving') {
+  if (gameStateCurrent.status === 'solving') {
     return (
       <section>
-        <div>
-          {/* <button className='btn' onClick={resetGame}>
+        {/* <div>
+          <button className='btn' onClick={resetGame}>
             Debug Reset Game
-          </button> */}
-        </div>
+          </button>
+        </div> */}
         <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         <div className='container'>
           <h4>Number Of Misses Remaining: {gameStateCurrent.score}</h4>
