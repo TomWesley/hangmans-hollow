@@ -90,35 +90,35 @@ const Letters = () => {
     if (gameStateCurrent.status === 'solving') {
       if (gameStateCurrent.score === 0) {
         setGameStateCurrent({ ...gameStateCurrent, status: 'defeat' })
-        setUsedLetters([
-          'A',
-          'B',
-          'C',
-          'D',
-          'E',
-          'F',
-          'G',
-          'H',
-          'I',
-          'J',
-          'K',
-          'L',
-          'M',
-          'N',
-          'O',
-          'P',
-          'Q',
-          'R',
-          'S',
-          'T',
-          'U',
-          'V',
-          'W',
-          'X',
-          'Y',
-          'Z',
-        ])
-        console.log(usedLetters)
+        //   setUsedLetters([
+        //     'A',
+        //     'B',
+        //     'C',
+        //     'D',
+        //     'E',
+        //     'F',
+        //     'G',
+        //     'H',
+        //     'I',
+        //     'J',
+        //     'K',
+        //     'L',
+        //     'M',
+        //     'N',
+        //     'O',
+        //     'P',
+        //     'Q',
+        //     'R',
+        //     'S',
+        //     'T',
+        //     'U',
+        //     'V',
+        //     'W',
+        //     'X',
+        //     'Y',
+        //     'Z',
+        //   ])
+        //   console.log(usedLetters)
       }
     }
     if (gameStateCurrent.status === 'solving') {
@@ -198,8 +198,8 @@ const Letters = () => {
       setPreselected({ value: newArray[index].name, status: true, key: index })
     }
     setLetters(newArray)
-    // setMessage('hello world')
   }
+
   if (gameStateCurrent.status === 'solving') {
     return (
       <section>
@@ -281,33 +281,21 @@ const Letters = () => {
             Congratulations - You won with {gameStateCurrent.score} letters to
             spare
           </h4>
+          {/* Add in the used letters */}
         </div>
-
+        <div>
+          <h3>Your Guesses In Order:</h3>
+        </div>
         <div className='letterlist'>
-          {letters.map((letter, index) => {
-            if (letter.isHovered) {
-              // const result = ExampleButton()
-              return (
-                <div key={letter.id} className='btnscenter'>
-                  <button
-                    className='btntwo'
-                    onClick={() => {
-                      changeHover(index, false)
-                    }}
-                  >
-                    <Letter key={letter.id} {...letter}></Letter>
-                  </button>
-                </div>
-              )
-            } else {
-              return (
-                <div key={letter.id} className='btnscenter'>
-                  <button className='btnUsed'>
-                    <Letter key={letter.id} {...letter}></Letter>
-                  </button>
-                </div>
-              )
-            }
+          {usedLetters.map((letter, index) => {
+            return (
+              <div key={index} className='btnscenter'>
+                <button className='btnUsed'>
+                  <h2>{letter}</h2>
+                  {/* <Letter key={index} {...letter}></Letter> */}
+                </button>
+              </div>
+            )
           })}
         </div>
       </section>
@@ -323,31 +311,19 @@ const Letters = () => {
             Sorry, You Missed Today's Puzzle. Come back to the Hollow Tomorrow.
           </h4>
         </div>
-
+        <div>
+          <h3>Your Guesses In Order:</h3>
+        </div>
         <div className='letterlist'>
-          {letters.map((letter, index) => {
-            if (letter.isHovered) {
-              return (
-                <div key={letter.id} className='btnscenter'>
-                  <button
-                    className='btntwo'
-                    onClick={() => {
-                      changeHover(index, false)
-                    }}
-                  >
-                    <Letter key={letter.id} {...letter}></Letter>
-                  </button>
-                </div>
-              )
-            } else {
-              return (
-                <div key={letter.id} className='btnscenter'>
-                  <button className='btnUsed'>
-                    <Letter key={letter.id} {...letter}></Letter>
-                  </button>
-                </div>
-              )
-            }
+          {usedLetters.map((letter, index) => {
+            return (
+              <div key={index} className='btnscenter'>
+                <button className='btnUsed'>
+                  <h2>{letter}</h2>
+                  {/* <Letter key={index} {...letter}></Letter> */}
+                </button>
+              </div>
+            )
           })}
         </div>
       </section>

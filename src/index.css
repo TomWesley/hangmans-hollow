@@ -5,7 +5,9 @@ Variables
 */
 
 :root {
-  --letter-count: 7;
+  --letter-size: 10.5vw;
+  --letter-sizeh: 10.5vw;
+  --font-size: 10.5vw;
   /* dark shades of primary color*/
   --clr-primary-1: hsl(205, 86%, 17%);
   --clr-primary-2: hsl(205, 77%, 27%);
@@ -53,7 +55,6 @@ Variables
   --clr-orange-8: hsl(13, 74%, 33%);
   --clr-orange-9: hsl(13, 73%, 25%);
   --clr-orange-10: hsl(13, 73%, 16%);
-  background-image: linear-gradient(red, orange);
 }
 /*
 =============== 
@@ -68,10 +69,20 @@ Global Styles
   padding: 0;
   box-sizing: border-box;
 }
-html,
+html {
+  max-width: 100%;
+  min-width: 100%;
+  max-height: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
 body {
   max-width: 100%;
+  min-width: 100%;
+  max-height: 100%;
+  min-height: 100%;
   overflow-x: hidden;
+  background-image: linear-gradient(red, orange);
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
@@ -121,7 +132,8 @@ h3 {
 h4 {
   color: black;
   text-align: center;
-  margin: 0rem;
+  margin-top: 10vh;
+  margin-bottom: 4vh;
   font-size: 1.5rem;
 }
 p {
@@ -162,13 +174,13 @@ p {
   width: 90vw;
   margin: 0 auto;
   text-align: center;
-  padding: 1vw;
-  padding-bottom: 5vw;
+  padding: 0vw;
+  padding-bottom: 0vw;
   align-content: center;
 }
 .btntwo {
-  width: 12vw;
-  height: 14.5vw;
+  width: 7vw;
+  height: 14.5vh;
   font-family: Optima;
   display: inline-block;
   background: rgb(251, 252, 251);
@@ -200,8 +212,8 @@ p {
   align-self: center;
 
   font-family: Optima;
-  width: 12vw;
-  height: 14.5vw;
+  width: 7vw;
+  height: 14.5vh;
   display: inline-block;
   background: rgb(123, 125, 123);
   color: var(--clr-white);
@@ -212,10 +224,8 @@ p {
   text-transform: capitalize;
   font-size: 1rem;
   letter-spacing: var(--spacing);
-  margin-top: 1rem;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  margin-bottom: 1rem;
+  margin: 0vw;
+
   cursor: pointer;
   transition: var(--transition);
   position: relative;
@@ -225,8 +235,8 @@ p {
 
 .btn {
   font-family: Optima;
-  width: 12vw;
-  height: 14.5vw;
+  width: 7vw;
+  height: 14.5vh;
   display: inline-block;
   background: black;
   color: var(--clr-white);
@@ -303,13 +313,15 @@ p {
 .letterlist {
   /* max-width: 40rem; */
   align-content: center;
-
+  /* max-width: 90vw;
+  min-width: 90vw; */
+  row-gap: 10vh;
   margin-bottom: 4rem;
-  margin-top: 4rem;
-
+  margin-top: 4vh;
+  /* column-gap: 1vw;
+  column-width: 1vw; */
   display: grid;
-
-  grid-template-columns: repeat(6, 10fr);
+  grid-template-columns: repeat(9, 10fr);
 }
 .nav-links a {
   color: var(--clr-grey-5);
@@ -317,70 +329,70 @@ p {
 .puzzleLetter {
   font-family: Arial, Helvetica, sans-serif;
   border: 0.15rem solid black;
-  width: 9rem;
-  /* width: 100%; */
-  height: 10rem;
+  width: 10vw;
+  height: 22vh;
   color: black;
   text-align: center;
   background-color: rgb(142, 218, 230);
   text-decoration: underline;
   text-decoration-color: black;
-  padding-bottom: 10rem;
+  padding: 1vw;
+  /* padding-bottom: 10rem;
   padding-right: 1rem;
   padding-top: 1rem;
-  padding-left: 1rem;
+  padding-left: 1rem; */
   box-shadow: 0.1rem 0.5rem 1rem 0rem rgba(0, 0, 0, 0.75);
   transition: 0.3s;
-  font-size: 7rem;
+  font-size: 8vw;
 }
 
 .puzzleLetterHidden {
   font-family: Arial, Helvetica, sans-serif;
   border: 0.15rem solid black;
-  width: 9rem;
-  height: 10rem;
+  width: 10vw;
+  height: 22vh;
   color: black;
   color: transparent;
   text-align: center;
   background-color: white;
   text-decoration: underline;
   text-decoration-color: black;
-  padding-bottom: 10rem;
-  padding-right: 1rem;
-  padding-top: 1rem;
-  padding-left: 1rem;
+  padding: 1vw;
   box-shadow: 0.1rem 0.5rem 1rem 0rem rgba(0, 0, 0, 0.75);
   transition: 0.3s;
-  font-size: 7rem;
+  font-size: 8vw;
 }
 
 .puzzle {
-  padding-top: 1rem;
+  padding-top: 0vw;
   align-content: center;
   background-color: transparent;
 
   align-self: center;
-  max-width: 54rem;
-  min-width: 54rem;
-  min-height: 10rem;
-  max-height: 10rem;
+  max-width: 70vw;
+  min-width: 70vw;
+  min-height: 20vh;
+  max-height: 20vh;
 
   margin: 0 auto;
-  margin-bottom: 4rem;
+  /* margin-bottom: 4rem; */
   display: grid;
   column-gap: 0rem;
-  grid-template-columns: repeat(7, 0fr);
+  grid-template-columns: repeat(8, 0fr);
 }
 
 .select {
   /* display: grid; */
-  font-size: 2rem;
-  text-align: center;
+  width: 50vw;
+  height: 13vh;
+  font-size: 4vh;
+  align-content: center;
+  align-self: center;
   border-radius: 1rem;
   padding: 1rem;
   border: 0.1rem solid black;
 
-  margin: 0;
+  /* margin: 10vh; */
   position: relative;
   top: 50%;
   left: 50%;
@@ -392,7 +404,9 @@ p {
 }
 .confirm {
   /* display: grid; */
-  font-size: 2rem;
+  width: 50vw;
+  height: 13vh;
+  font-size: 4vh;
   text-align: center;
   border-radius: 1rem;
   padding: 1rem;
@@ -460,23 +474,23 @@ p {
 @media (max-width: 550px) {
   .puzzleLetterHidden {
     text-align: center;
-    width: 12vw;
-    height: 18vw;
-    font-size: 12vw;
+    width: var(--letter-size);
+    height: 17vw;
+    font-size: var(--font-size);
     padding: 0vw;
   }
   .puzzleLetter {
     text-align: center;
-    width: 12vw;
-    height: 18vw;
-    font-size: 12vw;
+    width: var(--letter-size);
+    height: 17vw;
+    font-size: var(--font-size);
     padding: 0vw;
   }
   .puzzle {
     /* margin: 0.5rem; */
 
-    max-height: 4rem;
-    min-height: 4rem;
+    max-height: 14vw;
+    min-height: 14vw;
     background: transparent;
     max-width: 84vw;
     min-width: 84vw;
@@ -497,5 +511,9 @@ p {
     height: 10vw;
     padding: 0vw;
     font-size: 7vw;
+  }
+  .letterlist {
+    row-gap: 0vh;
+    grid-template-columns: repeat(6, 10fr);
   }
 }
