@@ -8,7 +8,7 @@ import AnswerLetters from './AnswerLetters'
 
 let p = localStorage.getItem('puzzleLetters')
 if (p) {
-  if (JSON.parse(p)[0].name != 'G') {
+  if (JSON.parse(p)[0].name != 'D') {
     localStorage.removeItem('preselected')
     localStorage.removeItem('letters')
     localStorage.removeItem('gameStateCurrent')
@@ -17,7 +17,19 @@ if (p) {
     window.location.reload(true)
   }
 }
+
+const getLocalStorageUsername = () => {
+  let userName = localStorage.getItem('userName')
+  if (userName) {
+    return JSON.parse(localStorage.getItem('userName'))
+  } else {
+    return ''
+  }
+}
+
 function App() {
+  const [userName, setUserName] = useState(getLocalStorageUsername())
+  //Set username if you don't have one in local storage.
   return (
     <main>
       <div>

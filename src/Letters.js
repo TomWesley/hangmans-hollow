@@ -9,7 +9,7 @@ import firebase from './firebase'
 import {
   getFirestore,
   collection,
-  getDoc,
+  getDocs,
   doc,
   setDoc,
 } from 'firebase/firestore/lite'
@@ -58,12 +58,17 @@ var scoreInc = 0
 
 async function getUsers(db) {
   const ref = collection(db, 'users')
-  const userSnapshot = await getDoc(ref)
-  await setDoc(doc(db, 'users', 'userinfo'), {
-    name: 'Jackson',
-    averagescore: 8,
+
+  const userSnapshot = await getDocs(ref)
+  userSnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, ' => ', doc.data())
   })
-  console.log('Firebase', userSnapshot.data())
+  // await setDoc(doc(db, 'users', 'userinfo'), {
+  //   name: 'Jackson',
+  //   averagescore: 8,
+  // })
+
   return 5
 }
 
@@ -71,6 +76,7 @@ const Letters = () => {
   const [gameStateCurrent, setGameStateCurrent] = useState(
     getLocalStorageGameState()
   )
+  const [finalChosenLetters, setfinalChosenLetters] = useState([])
   const [letters, setLetters] = useState(getLocalStorageLetters())
   const [usedLetters, setUsedLetters] = useState(getLocalStorageUsedLetters())
   const [preselected, setPreselected] = useState(getLocalStoragePreselected())
@@ -89,35 +95,36 @@ const Letters = () => {
     var victoryTracker = 0
     if (gameStateCurrent.status === 'solving') {
       if (gameStateCurrent.score === 0) {
+        setfinalChosenLetters(usedLetters)
         setGameStateCurrent({ ...gameStateCurrent, status: 'defeat' })
-        //   setUsedLetters([
-        //     'A',
-        //     'B',
-        //     'C',
-        //     'D',
-        //     'E',
-        //     'F',
-        //     'G',
-        //     'H',
-        //     'I',
-        //     'J',
-        //     'K',
-        //     'L',
-        //     'M',
-        //     'N',
-        //     'O',
-        //     'P',
-        //     'Q',
-        //     'R',
-        //     'S',
-        //     'T',
-        //     'U',
-        //     'V',
-        //     'W',
-        //     'X',
-        //     'Y',
-        //     'Z',
-        //   ])
+        setUsedLetters([
+          'A',
+          'B',
+          'C',
+          'D',
+          'E',
+          'F',
+          'G',
+          'H',
+          'I',
+          'J',
+          'K',
+          'L',
+          'M',
+          'N',
+          'O',
+          'P',
+          'Q',
+          'R',
+          'S',
+          'T',
+          'U',
+          'V',
+          'W',
+          'X',
+          'Y',
+          'Z',
+        ])
         //   console.log(usedLetters)
       }
     }
@@ -287,7 +294,7 @@ const Letters = () => {
           <h3>Your Guesses In Order:</h3>
         </div>
         <div className='letterlist'>
-          {usedLetters.map((letter, index) => {
+          {finalChosenLetters.map((letter, index) => {
             return (
               <div key={index} className='btnscenter'>
                 <button className='btnUsed'>
@@ -315,7 +322,7 @@ const Letters = () => {
           <h3>Your Guesses In Order:</h3>
         </div>
         <div className='letterlist'>
-          {usedLetters.map((letter, index) => {
+          {finalChosenLetters.map((letter, index) => {
             return (
               <div key={index} className='btnscenter'>
                 <button className='btnUsed'>

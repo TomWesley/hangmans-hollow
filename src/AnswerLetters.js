@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react'
 import puzzle from './puzzle'
 import Letter from './Letter'
 
-var victoryFlagger = false
-
 const getLocalStoragePuzzleLetters = () => {
   let puzzleLetters = localStorage.getItem('puzzleLetters')
   if (puzzleLetters) {
