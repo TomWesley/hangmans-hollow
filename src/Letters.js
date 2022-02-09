@@ -140,6 +140,7 @@ const Letters = () => {
       }
       console.log(victoryTracker)
       if (victoryTracker === puz.length) {
+        setfinalChosenLetters(usedLetters)
         setGameStateCurrent({ ...gameStateCurrent, status: 'victory' })
       }
     }
@@ -172,21 +173,6 @@ const Letters = () => {
     newArray[index].isHovered = false
     setPreselected({ value: '', status: false, key: '' })
     setLetters(newArray)
-    // const puzLength = puz.length
-    // var victoryTracker = 0
-    // {
-    //   puz.map((l, index) => {
-    //     if (usedLetters.indexOf(l.name) > -1) {
-    //       victoryTracker = victoryTracker + 1
-    //     } else {
-    //       console.log(l.name, usedLetters)
-    //     }
-    //   })
-    // }
-    // console.log(victoryTracker)
-    // if (victoryTracker === puz.length) {
-    //   setGameStateCurrent({ ...gameStateCurrent, status: 'victory' })
-    // }
   }
   const changeHover = (index, newValue) => {
     const newArray = [...letters]
