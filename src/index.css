@@ -477,14 +477,14 @@ p {
   .puzzleLetterHidden {
     text-align: center;
     width: var(--letter-size);
-    height: 17vw;
+    height: 17.5vw;
     font-size: var(--font-size);
     padding: 0vw;
   }
   .puzzleLetter {
     text-align: center;
     width: var(--letter-size);
-    height: 17vw;
+    height: 17.5vw;
     font-size: var(--font-size);
     padding: 0vw;
   }

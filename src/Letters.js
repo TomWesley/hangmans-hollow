@@ -32,6 +32,15 @@ const getLocalStorageGameState = () => {
     return gamestate
   }
 }
+const getLocalStorageFinalChosenLetters = () => {
+  let finalChosenLetters = localStorage.getItem('finalChosenLetters')
+  if (finalChosenLetters) {
+    return JSON.parse(localStorage.getItem('finalChosenLetters'))
+  } else {
+    return []
+  }
+}
+
 const getLocalStorageLetters = () => {
   let letters = localStorage.getItem('letters')
   if (letters) {
@@ -76,7 +85,9 @@ const Letters = () => {
   const [gameStateCurrent, setGameStateCurrent] = useState(
     getLocalStorageGameState()
   )
-  const [finalChosenLetters, setfinalChosenLetters] = useState([])
+  const [finalChosenLetters, setfinalChosenLetters] = useState(
+    getLocalStorageFinalChosenLetters
+  )
   const [letters, setLetters] = useState(getLocalStorageLetters())
   const [usedLetters, setUsedLetters] = useState(getLocalStorageUsedLetters())
   const [preselected, setPreselected] = useState(getLocalStoragePreselected())
@@ -88,6 +99,10 @@ const Letters = () => {
   }, [letters])
   useEffect(() => {
     const numb = getUsers(db)
+    localStorage.setItem(
+      'finalChosenLetters',
+      JSON.stringify(finalChosenLetters)
+    )
     localStorage.setItem('preselected', JSON.stringify(preselected))
     localStorage.setItem('usedLetters', JSON.stringify(usedLetters))
     localStorage.setItem('gameStateCurrent', JSON.stringify(gameStateCurrent))
