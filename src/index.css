@@ -5,7 +5,7 @@ Variables
 */
 
 :root {
-  --letter-size: 10.5vw;
+  --letter-size: 12vw;
   --letter-sizeh: 10.5vw;
   --font-size: 10.5vw;
   /* dark shades of primary color*/
@@ -385,13 +385,14 @@ p {
 
 .select {
   /* display: grid; */
-  width: 50vw;
-  height: 13vh;
-  font-size: 4vh;
+  width: 40vw;
+  height: 12vh;
+  font-size: 3vh;
   align-content: center;
   align-self: center;
   border-radius: 1rem;
   padding: 1rem;
+  margin-bottom: 3vw;
   border: 0.1rem solid black;
 
   /* margin: 10vh; */
@@ -406,9 +407,9 @@ p {
 }
 .confirm {
   /* display: grid; */
-  width: 50vw;
-  height: 13vh;
-  font-size: 4vh;
+  width: 40vw;
+  height: 12vh;
+  font-size: 3vh;
   text-align: center;
   border-radius: 1rem;
   padding: 1rem;
@@ -416,7 +417,7 @@ p {
   box-shadow: 0 0 1rem 0.5rem #fff, /* inner white */ 0 0 2rem 1rem #f0f,
     /* middle magenta */ 0 0 2rem 1.5rem #0ff; /* outer cyan */
   /* grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); */
-  margin: 0;
+  margin-bottom: 3vw;
   position: relative;
   top: 50%;
   left: 50%;

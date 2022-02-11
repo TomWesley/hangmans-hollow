@@ -7,11 +7,15 @@ import puz from './puzzle'
 import gamestate from './gamestate'
 import firebase from './firebase'
 import {
+  query,
+  orderBy,
+  limit,
   getFirestore,
   collection,
   getDocs,
   doc,
   setDoc,
+  writeBatch,
 } from 'firebase/firestore/lite'
 
 const db = getFirestore(firebase)
@@ -70,13 +74,12 @@ async function getUsers(db) {
 
   const userSnapshot = await getDocs(ref)
   userSnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
     console.log(doc.id, ' => ', doc.data())
   })
-  // await setDoc(doc(db, 'users', 'userinfo'), {
-  //   name: 'Jackson',
-  //   averagescore: 8,
-  // })
+  await setDoc(doc(db, 'users', 'userinfo'), {
+    name: 'Jackson',
+    averagescore: 9,
+  })
 
   return 5
 }
@@ -93,12 +96,25 @@ const Letters = () => {
   const [preselected, setPreselected] = useState(getLocalStoragePreselected())
 
   //Firebase Incoming
-
+  async function writeToDatabase() {
+    await setDoc(doc(db, 'users', 'Tom'), {
+      name: 'Thomas',
+      score: gameStateCurrent.score,
+      country: 'USA',
+    })
+    const refer = collection(db, 'users')
+    const q = query(refer, orderBy('score'), limit(1))
+    const querySnapshot = await getDocs(q)
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, ' => ', doc.data())
+    })
+  }
   useEffect(() => {
     localStorage.setItem('letters', JSON.stringify(letters))
   }, [letters])
   useEffect(() => {
-    const numb = getUsers(db)
+    // const numb = getUsers(db)
     localStorage.setItem(
       'finalChosenLetters',
       JSON.stringify(finalChosenLetters)
@@ -153,10 +169,11 @@ const Letters = () => {
           }
         })
       }
-      console.log(victoryTracker)
+
       if (victoryTracker === puz.length) {
         setfinalChosenLetters(usedLetters)
         setGameStateCurrent({ ...gameStateCurrent, status: 'victory' })
+        //writeToDatabase()
       }
     }
   })
