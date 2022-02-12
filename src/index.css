@@ -172,9 +172,16 @@ p {
   text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073,
     0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
 }
+.alias {
+  margin-left: 25vw;
+  font-size: 8vw;
+  text-shadow: 0 0 10px cyan, 0 0 20px white, 0 0 30px cyan, 0 0 40px #e60073,
+    0 0 50px magenta, 0 0 60px cyan, 0 0 70px magenta;
+}
 .container {
-  width: 90vw;
-  margin: 0 auto;
+  width: 80vw;
+  font-size: 8vw;
+  margin: 10vw;
   text-align: center;
   padding: 0vw;
   padding-bottom: 0vw;
@@ -233,6 +240,27 @@ p {
   position: relative;
   padding: 0.5rem;
   padding-bottom: 0px;
+}
+.enter {
+  font-family: Optima;
+  width: 13vw;
+  height: 5vh;
+  /* display: inline-block; */
+  background: black;
+  color: var(--clr-white);
+  /* padding: 0.25rem 0.75rem; */
+
+  border-radius: var(--radius);
+  border-color: black;
+  text-transform: capitalize;
+  font-size: 3vw;
+  text-align: center;
+  letter-spacing: var(--spacing);
+
+  margin-left: 10vw;
+
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .btn {
@@ -433,7 +461,14 @@ p {
   color: var(--clr-grey-5);
   text-transform: capitalize;
 }
-
+input {
+  color: black;
+  font-size: 6vh;
+  height: 15vw;
+  width: 50vw;
+  margin-top: 10vw;
+  margin-left: 10vw;
+}
 .products {
   margin: 4rem 0;
   display: grid;
