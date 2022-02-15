@@ -8,7 +8,7 @@ import AnswerLetters from './AnswerLetters'
 
 let p = localStorage.getItem('puzzleLetters')
 if (p) {
-  if (JSON.parse(p)[0].name != 'C') {
+  if (JSON.parse(p)[0].name != 'B') {
     localStorage.removeItem('preselected')
     localStorage.removeItem('letters')
     localStorage.removeItem('gameStateCurrent')
