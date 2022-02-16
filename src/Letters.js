@@ -98,6 +98,7 @@ const Letters = () => {
 
   //Firebase Incoming
   async function writeToDatabase() {
+    //switch Tom to the local storage
     await setDoc(doc(db, 'users', 'Tom'), {
       name: JSON.parse(localStorage.getItem('userName')),
       score: increment(gameStateCurrent.score),
