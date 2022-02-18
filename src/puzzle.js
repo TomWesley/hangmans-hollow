@@ -1,17 +1,17 @@
 export default [
   {
     id: 1,
-    name: 'F',
+    name: 'W',
     isHidden: true,
   },
   {
     id: 2,
-    name: 'L',
+    name: 'A',
     isHidden: true,
   },
   {
     id: 3,
-    name: 'U',
+    name: 'F',
     isHidden: true,
   },
   {
@@ -21,12 +21,12 @@ export default [
   },
   {
     id: 5,
-    name: 'F',
+    name: 'L',
     isHidden: true,
   },
   {
     id: 6,
-    name: 'Y',
+    name: 'E',
     isHidden: true,
   },
 ]

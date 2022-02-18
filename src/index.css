@@ -6,7 +6,7 @@ Variables
 
 :root {
   --letter-size: 14vw;
-  --letter-sizeh: 10.5vw;
+  --letter-sizeh: 8vw;
   --font-size: 10.5vw;
   /* dark shades of primary color*/
   --clr-primary-1: hsl(205, 86%, 17%);
@@ -399,8 +399,8 @@ p {
   background-color: transparent;
 
   align-self: center;
-  max-width: 70vw;
-  min-width: 70vw;
+  max-width: 60vw;
+  min-width: 60vw;
   min-height: 20vh;
   max-height: 20vh;
 
@@ -513,22 +513,22 @@ input {
   .puzzleLetterHidden {
     text-align: center;
     width: var(--letter-size);
-    height: 17.5vw;
+    height: 15.5vw;
     font-size: var(--font-size);
     padding: 0vw;
   }
   .puzzleLetter {
     text-align: center;
     width: var(--letter-size);
-    height: 17.5vw;
+    height: 15.5vw;
     font-size: var(--font-size);
     padding: 0vw;
   }
   .puzzle {
     /* margin: 0.5rem; */
 
-    max-height: 14vw;
-    min-height: 14vw;
+    max-height: 12vw;
+    min-height: 12vw;
     background: transparent;
     max-width: 84vw;
     min-width: 84vw;
