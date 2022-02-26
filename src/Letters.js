@@ -17,6 +17,7 @@ import {
   setDoc,
   writeBatch,
   increment,
+  updateDoc,
 } from 'firebase/firestore/lite'
 
 const db = getFirestore(firebase)
@@ -98,8 +99,7 @@ const Letters = () => {
 
   //Firebase Incoming
   async function writeToDatabase() {
-    //switch Tom to the local storage
-    await setDoc(doc(db, 'users', 'Tom'), {
+    await updateDoc(doc(db, 'users', localStorage.getItem('userName')), {
       name: JSON.parse(localStorage.getItem('userName')),
       score: increment(gameStateCurrent.score),
       numberOfGames: increment(1),
@@ -175,7 +175,7 @@ const Letters = () => {
       if (victoryTracker === puz.length) {
         setfinalChosenLetters(usedLetters)
         setGameStateCurrent({ ...gameStateCurrent, status: 'victory' })
-        // writeToDatabase()
+        writeToDatabase()
       }
     }
   })
