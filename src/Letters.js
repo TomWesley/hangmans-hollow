@@ -18,6 +18,8 @@ import {
   writeBatch,
   increment,
   updateDoc,
+  addDoc,
+  getDoc,
 } from 'firebase/firestore/lite'
 
 const db = getFirestore(firebase)
@@ -71,25 +73,11 @@ const getLocalStoragePreselected = () => {
 
 var scoreInc = 0
 
-async function getUsers(db) {
-  const ref = collection(db, 'users')
-
-  const userSnapshot = await getDocs(ref)
-  userSnapshot.forEach((doc) => {
-    console.log(doc.id, ' => ', doc.data())
-  })
-  await setDoc(doc(db, 'users', 'userinfo'), {
-    name: 'Jackson',
-    averagescore: 9,
-  })
-
-  return 5
-}
-
 const Letters = () => {
   const [gameStateCurrent, setGameStateCurrent] = useState(
     getLocalStorageGameState()
   )
+  const [localStats, setLocalStats] = useState({ av: 0, pct: 0 })
   const [finalChosenLetters, setfinalChosenLetters] = useState(
     getLocalStorageFinalChosenLetters
   )
@@ -98,25 +86,63 @@ const Letters = () => {
   const [preselected, setPreselected] = useState(getLocalStoragePreselected())
 
   //Firebase Incoming
-  async function writeToDatabase() {
-    await updateDoc(doc(db, 'users', localStorage.getItem('userName')), {
-      name: JSON.parse(localStorage.getItem('userName')),
-      score: increment(gameStateCurrent.score),
-      numberOfGames: increment(1),
-    })
+  async function writeToDatabase(s) {
+    var trueScore = 8 - gameStateCurrent.score
+    var didWin = 0
+
+    if (s === 'victory') {
+      didWin = 1
+    }
+    const docRef = doc(db, 'users', localStorage.getItem('userName'))
+    const docSnap = await getDoc(docRef)
+    console.log(docSnap)
+    if (docSnap.exists()) {
+      var avg =
+        (docSnap.data().score + trueScore) / (docSnap.data().numberOfGames + 1)
+      var winPct =
+        (100 * (docSnap.data().victories + didWin)) /
+        (docSnap.data().numberOfGames + 1)
+      avg = avg.toFixed(2)
+      winPct = winPct.toFixed(2)
+      await updateDoc(doc(db, 'users', localStorage.getItem('userName')), {
+        name: JSON.parse(localStorage.getItem('userName')),
+        score: increment(trueScore),
+        numberOfGames: increment(1),
+        averageScore: avg,
+        victories: increment(didWin),
+        winningPercentage: winPct,
+      })
+      setLocalStats({
+        pct: winPct,
+        av: avg,
+      })
+    } else {
+      await setDoc(doc(db, 'users', localStorage.getItem('userName')), {
+        name: JSON.parse(localStorage.getItem('userName')),
+        score: increment(trueScore),
+        numberOfGames: increment(1),
+        averageScore: trueScore,
+        victories: didWin,
+        winningPercentage: didWin,
+      })
+      setLocalStats({
+        pct: didWin,
+        av: trueScore,
+      })
+    }
+
     const refer = collection(db, 'users')
     const q = query(refer, orderBy('score'), limit(1))
     const querySnapshot = await getDocs(q)
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, ' => ', doc.data())
+      // console.log(doc.id, ' => ', doc.data())
     })
   }
   useEffect(() => {
     localStorage.setItem('letters', JSON.stringify(letters))
   }, [letters])
   useEffect(() => {
-    // const numb = getUsers(db)
     localStorage.setItem(
       'finalChosenLetters',
       JSON.stringify(finalChosenLetters)
@@ -130,6 +156,8 @@ const Letters = () => {
       if (gameStateCurrent.score === 0) {
         setfinalChosenLetters(usedLetters)
         setGameStateCurrent({ ...gameStateCurrent, status: 'defeat' })
+        writeToDatabase('defeat')
+        handleClick()
         setUsedLetters([
           'A',
           'B',
@@ -158,7 +186,6 @@ const Letters = () => {
           'Y',
           'Z',
         ])
-        //   console.log(usedLetters)
       }
     }
     if (gameStateCurrent.status === 'solving') {
@@ -175,7 +202,10 @@ const Letters = () => {
       if (victoryTracker === puz.length) {
         setfinalChosenLetters(usedLetters)
         setGameStateCurrent({ ...gameStateCurrent, status: 'victory' })
-        writeToDatabase()
+
+        writeToDatabase('victory')
+
+        handleClick()
       }
     }
   })
@@ -196,6 +226,14 @@ const Letters = () => {
     letters.map((letters) => (letters.isUsed = false))
     setGameStateCurrent({ ...gameStateCurrent, score: 8 })
     setUsedLetters([])
+  }
+  function handleClick() {
+    // const modal = document.querySelector('.modal')
+    // const closeBtn = document.querySelector('.close')
+    // // modal.style.display = 'block'
+    // closeBtn.addEventListener('click', () => {
+    //   modal.style.display = 'none'
+    // })
   }
 
   const changeUsed = (index, newValue) => {
@@ -300,6 +338,12 @@ const Letters = () => {
   } else if (gameStateCurrent.status === 'victory') {
     return (
       <section>
+        {/* <div class='modal'>
+          <div class='modal_content'>
+            <span class='close'>&times;</span>
+            <p>I'm A Pop Up!!!</p>
+          </div>
+        </div> */}
         <div>
           <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         </div>
@@ -307,6 +351,10 @@ const Letters = () => {
           <h4>
             Congratulations - You won with {gameStateCurrent.score} letters to
             spare
+          </h4>
+          <h4>
+            Your Average # of Misses per game is {localStats.av} and your
+            winning percentage is {localStats.pct}%
           </h4>
           {/* Add in the used letters */}
         </div>
@@ -336,6 +384,10 @@ const Letters = () => {
         <div className='container' className='defeatwords'>
           <h4>
             Sorry, You Missed Today's Puzzle. Come back to the Hollow Tomorrow.
+          </h4>
+          <h4>
+            Your Average # of Misses per game is {localStats.av} and your
+            winning percentage is {localStats.pct}%
           </h4>
         </div>
         <div>

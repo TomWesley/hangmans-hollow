@@ -125,6 +125,7 @@ h1 {
   text-align: center; */
   text-align: center;
   width: 85vw;
+  height: 30vw;
 }
 h2 {
   font-size: 2rem;
@@ -242,10 +243,17 @@ p {
   padding: 0.5rem;
   padding-bottom: 0px;
 }
+.userName {
+  font-size: 10vw;
+  text-align: center;
+  border-radius: 5vw;
+  border: 1vw solid black;
+}
 .enter {
   font-family: Optima;
+  font-size: 10vw;
   width: 13vw;
-  height: 5vh;
+  height: 10vw;
   /* display: inline-block; */
   background: black;
   color: var(--clr-white);
@@ -293,18 +301,16 @@ p {
     /* middle magenta */ 0 0 70px 45px #0ff; /* outer cyan */
 }
 .leaderboard {
-  margin-left: 5vw;
-  margin-right: 5vw;
-
   display: grid;
 
-  grid-template-columns: repeat(3, 1fr);
+  /* grid-template-columns: repeat(3, 1fr); */
+  grid-template-columns: 22vw 22vw 22vw 22vw;
   /* column-gap: 10w; */
   color: black;
-  font-size: 5vh;
+  font-size: 1.2vh;
+  text-transform: uppercase;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-
   text-align: center;
 }
 
@@ -314,10 +320,9 @@ p {
   border-right: 1px solid black;
 }
 .columnHeaders {
-  margin-left: 5vw;
-  margin-right: 5vw;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  text-transform: uppercase;
+  grid-template-columns: 22vw 22vw 22vw 22vw;
   /* column-gap: 10w; */
   color: black;
 
@@ -325,16 +330,29 @@ p {
   border-bottom: 1px solid black;
 
   text-align: center;
-  font-size: 1.8vh;
+  font-size: 1.5vh;
+  margin: 0;
+  position: relative;
+  top: 50%;
 }
 .columnHeaders > span {
-  padding: 2vw;
+  /* padding: 2vw; */
+
+  /* -ms-transform: translateY(-50%);
+  transform: translateY(-50%); */
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  /* vertical-align: center; */
+
   border-left: 1px solid black;
   border-right: 1px solid black;
 }
 .lBoard {
   /* margin-left: 5vw;
   margin-right: 5vw; */
+  max-width: 88vw;
+  min-width: 88vw;
+  margin: 6vw;
   background: linear-gradient(magenta, cyan);
   /* background-color: cyan; */
 }
@@ -369,7 +387,7 @@ p {
 .item p {
   margin-bottom: 0;
 }
-.modal {
+/* .modal {
   position: absolute;
   top: 2rem;
   left: 50%;
@@ -379,7 +397,7 @@ p {
   padding: 0.25rem 1rem;
   border-radius: var(--radius);
   text-transform: capitalize;
-}
+} */
 
 .modal p {
   margin-bottom: 0;
@@ -402,26 +420,44 @@ p {
 .nav-links a {
   color: var(--clr-grey-5);
 }
+.modal {
+  border: 0.15vh solid white;
+  display: block;
+  position: fixed;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  width: 80vw;
+  text-align: center;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 1);
+}
+/* .modal_content {
+  background-color: black;
+  position: absolute;
+} */
 .menu {
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
   color: white;
   padding: 0vh;
   /* margin: 5vh; */
   margin-bottom: 2vh;
-  height: 6vh;
+  height: 10vh;
   background: black;
 
   border-bottom: 1px solid white;
-  text-align: center;
+  /* text-align: center; */
   display: grid;
   column-gap: 0rem;
-  grid-template-columns: repeat(2, 0fr);
+  grid-template-columns: repeat(2, 0.55fr);
+  padding-bottom: 13vh;
 }
 .menuButton {
-  margin-top: 1vh;
-  margin-left: 1vh;
-  width: 3vh;
-  height: 3vh;
+  margin-top: 3vh;
+  margin-left: 3vh;
+  width: 4.5vh;
+  height: 4.5vh;
+  font-size: 3vh;
+  padding: 0.3vh;
   /* margin-top: -10vh; */
 }
 .puzzleLetter {
@@ -614,12 +650,24 @@ input {
     height: 14.5vw;
   }
   h1 {
-    height: 10vw;
     padding: 0vw;
     font-size: 7vw;
   }
   .letterlist {
     row-gap: 0vh;
     grid-template-columns: repeat(6, 10fr);
+  }
+  .menu {
+    height: 6vh;
+    padding-bottom: 0vh;
+  }
+  .menuButton {
+    margin-top: 1vh;
+    margin-left: 1vh;
+    width: 3vh;
+    height: 3vh;
+    font-size: 2vh;
+    padding: 0vh;
+    /* margin-top: -10vh; */
   }
 }

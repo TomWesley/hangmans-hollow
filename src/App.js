@@ -2,7 +2,11 @@ import React from 'react'
 import Letters from './Letters'
 import { useState, useEffect } from 'react'
 import AnswerLetters from './AnswerLetters'
-import { GiAbstract052, GiThreePointedShuriken } from 'react-icons/gi'
+import {
+  GiAbstract009,
+  GiThreePointedShuriken,
+  GiAbstract027,
+} from 'react-icons/gi'
 import firebase from './firebase'
 import {
   query,
@@ -20,7 +24,7 @@ import {
 let p = localStorage.getItem('puzzleLetters')
 const db = getFirestore(firebase)
 if (p) {
-  if (JSON.parse(p)[0].name != 'Y') {
+  if (JSON.parse(p)[0].name != 'V') {
     localStorage.removeItem('preselected')
     localStorage.removeItem('letters')
     localStorage.removeItem('gameStateCurrent')
@@ -61,8 +65,17 @@ function App() {
   }
 
   async function seeLeaderboard() {
-    setLeaderboardStatus(1)
-    const q = query(collection(db, 'users'), orderBy('score'), limit(3))
+    if (leaderboardStatus === 0) {
+      setLeaderboardStatus(1)
+    } else {
+      setLeaderboardStatus(0)
+    }
+    const q = query(
+      collection(db, 'users'),
+      orderBy('winningPercentage', 'desc'),
+      orderBy('score'),
+      limit(10)
+    )
     const documentSnapshots = await getDocs(q)
     setLeaderboard([])
     var counter = 0
@@ -77,7 +90,7 @@ function App() {
       counter = counter + 1
     })
     setLeaderboard(tempArray)
-    console.log('temporary', leaderBoard)
+    // console.log('temporary', leaderBoard)
   }
   if (userName) {
     if (leaderboardStatus === 0) {
@@ -90,7 +103,7 @@ function App() {
                 seeLeaderboard()
               }}
             >
-              <GiAbstract052 />
+              <GiAbstract009 />
             </button>
             <h1>Hangman's Hollow</h1>
           </div>
@@ -102,15 +115,22 @@ function App() {
         </main>
       )
     } else if (leaderBoard.length > 0) {
-      console.log('HERE', leaderBoard.length)
+      // console.log('HERE', leaderBoard.length)
       return (
         <section>
-          <div>
-            <h4> Global Leaderboard</h4>
+          <div className='menu'>
+            <button
+              className='menuButton'
+              onClick={() => {
+                seeLeaderboard()
+              }}
+            >
+              <GiAbstract027 />
+            </button>
+            <h1>Global Leaderboard</h1>
           </div>
+          <div></div>
           <div className='lBoard'>
-            {/* {leaderBoard[0].score}
-            {leaderBoard[1].score} */}
             {leaderBoard.map((topTen, index) => {
               console.log(index)
               if (index === 0) {
@@ -123,13 +143,16 @@ function App() {
                     >
                       <span>Rank</span>
                       <span>Username</span>
-                      <span>Avg. Missed/Puzzle</span>
+                      <span>Avg. Missed</span>
+                      <span>Winning Percentage</span>
                     </div>
                     <div key={index} className='leaderboard'>
                       <span>#{index + 1}</span>
-                      <span>{leaderBoard[index].name}</span>
+                      <span style={{ fontsize: '.1vh' }}>
+                        {leaderBoard[index].name}
+                      </span>
                       <span>{leaderBoard[index].score}</span>
-                      {/* <h4>{leaderBoard[index].score}</h4> */}
+                      <span>{leaderBoard[index].winningPercentage}%</span>
                     </div>
                   </div>
                 )
@@ -137,8 +160,11 @@ function App() {
                 return (
                   <div key={index} className='leaderboard'>
                     <span>#{index + 1}</span>
-                    <span>{leaderBoard[index].name}</span>
+                    <span style={{ fontsize: '.1vh' }}>
+                      {leaderBoard[index].name}
+                    </span>
                     <span>{leaderBoard[index].score}</span>
+                    <span>{leaderBoard[index].winningPercentage}%</span>
                     {/* <h4>{leaderBoard[index].score}</h4> */}
                   </div>
                 )
@@ -162,9 +188,11 @@ function App() {
             }}
           />
           <input
+            className='userName'
             type='text'
             defaultValue=''
             //value={userName}
+            maxLength={10}
             onChange={(e) => {
               userN = e.target.value
             }}
