@@ -666,8 +666,11 @@ input {
     margin-left: 1vh;
     width: 3vh;
     height: 3vh;
-    font-size: 2vh;
-    padding: 0vh;
+    font-size: 1.9vh;
+    /* padding: 0.1vh; */
+    text-align: center;
+    align-content: center;
+    color: black;
     /* margin-top: -10vh; */
   }
 }
