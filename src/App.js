@@ -36,6 +36,9 @@ if (p) {
 
 const getLocalStorageUsername = () => {
   let userName = localStorage.getItem('userName')
+  if (userName === 'temp') {
+    localStorage.removeItem('userName')
+  }
   if (userName) {
     return JSON.parse(localStorage.getItem('userName'))
   } else {
