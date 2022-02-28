@@ -352,10 +352,10 @@ const Letters = () => {
             Congratulations - You won with {gameStateCurrent.score} letters to
             spare
           </h4>
-          <h4>
+          {/* <h4>
             Your Average # of Misses per game is {localStats.av} and your
             winning percentage is {localStats.pct}%
-          </h4>
+          </h4> */}
           {/* Add in the used letters */}
         </div>
         <div>
@@ -385,10 +385,10 @@ const Letters = () => {
           <h4>
             Sorry, You Missed Today's Puzzle. Come back to the Hollow Tomorrow.
           </h4>
-          <h4>
+          {/* <h4>
             Your Average # of Misses per game is {localStats.av} and your
             winning percentage is {localStats.pct}%
-          </h4>
+          </h4> */}
         </div>
         <div>
           <h3>Your Guesses In Order:</h3>
