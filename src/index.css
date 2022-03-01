@@ -452,12 +452,15 @@ p {
   padding-bottom: 13vh;
 }
 .menuButton {
+  background-color: white;
+  color: black;
   margin-top: 3vh;
   margin-left: 3vh;
   width: 4.5vh;
   height: 4.5vh;
   font-size: 3vh;
   padding: 0.3vh;
+  /* color: white; */
   /* margin-top: -10vh; */
 }
 .puzzleLetter {

@@ -117,15 +117,17 @@ const Letters = () => {
         av: avg,
       })
     } else {
+      var tempDidWin = parseInt(didWin) * 100
       await setDoc(doc(db, 'users', localStorage.getItem('userName')), {
         name: JSON.parse(localStorage.getItem('userName')),
         score: increment(trueScore),
         numberOfGames: increment(1),
         averageScore: trueScore,
         victories: didWin,
-        winningPercentage: didWin,
+        winningPercentage: tempDidWin,
       })
-      var tempDidWin = parseInt(didWin) * 100
+
+      console.log('Look at me', tempDidWin)
       setLocalStats({
         pct: tempDidWin,
         av: trueScore,
