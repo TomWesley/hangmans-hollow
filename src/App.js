@@ -154,7 +154,7 @@ function App() {
                       <span style={{ fontsize: '.1vh' }}>
                         {leaderBoard[index].name}
                       </span>
-                      <span>{leaderBoard[index].score}</span>
+                      <span>{leaderBoard[index].averageScore}</span>
                       <span>{leaderBoard[index].winningPercentage}%</span>
                     </div>
                   </div>
@@ -166,7 +166,7 @@ function App() {
                     <span style={{ fontsize: '.1vh' }}>
                       {leaderBoard[index].name}
                     </span>
-                    <span>{leaderBoard[index].score}</span>
+                    <span>{leaderBoard[index].averageScore}</span>
                     <span>{leaderBoard[index].winningPercentage}%</span>
                     {/* <h4>{leaderBoard[index].score}</h4> */}
                   </div>
