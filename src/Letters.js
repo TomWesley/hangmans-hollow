@@ -125,9 +125,9 @@ const Letters = () => {
         victories: didWin,
         winningPercentage: didWin,
       })
-
+      var tempDidWin = parseInt(didWin) * 100
       setLocalStats({
-        pct: didWin * 100,
+        pct: tempDidWin,
         av: trueScore,
       })
     }
