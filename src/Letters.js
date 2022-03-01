@@ -102,8 +102,8 @@ const Letters = () => {
       var winPct =
         (100 * (docSnap.data().victories + didWin)) /
         (docSnap.data().numberOfGames + 1)
-      avg = avg.toFixed(0)
-      winPct = winPct.toFixed(0)
+      avg = parseInt(avg)
+      winPct = parseInt(winPct)
       await updateDoc(doc(db, 'users', localStorage.getItem('userName')), {
         name: JSON.parse(localStorage.getItem('userName')),
         score: increment(trueScore),
