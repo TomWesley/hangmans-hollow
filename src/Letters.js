@@ -125,6 +125,7 @@ const Letters = () => {
         victories: didWin,
         winningPercentage: didWin,
       })
+
       setLocalStats({
         pct: didWin * 100,
         av: trueScore,
@@ -132,7 +133,7 @@ const Letters = () => {
     }
 
     const refer = collection(db, 'users')
-    const q = query(refer, orderBy('score'), limit(1))
+    const q = query(refer, orderBy('averageScore'), limit(1))
     const querySnapshot = await getDocs(q)
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
