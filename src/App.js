@@ -76,7 +76,7 @@ function App() {
     const q = query(
       collection(db, 'users'),
       orderBy('winningPercentage', 'desc'),
-      orderBy('score'),
+      orderBy('averageScore'),
       limit(10)
     )
     const documentSnapshots = await getDocs(q)
