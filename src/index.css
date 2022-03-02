@@ -5,7 +5,7 @@ Variables
 */
 
 :root {
-  --letter-size: 14vw;
+  --letter-size: 10.5vw;
   --letter-sizeh: 8vw;
   --font-size: 10.5vw;
   /* dark shades of primary color*/
@@ -307,11 +307,12 @@ p {
   grid-template-columns: 22vw 22vw 22vw 22vw;
   /* column-gap: 10w; */
   color: black;
-  font-size: 1.2vh;
+  font-size: 3 vw;
   text-transform: uppercase;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   text-align: center;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
 .leaderboard > span {
@@ -330,10 +331,11 @@ p {
   border-bottom: 1px solid black;
 
   text-align: center;
-  font-size: 1.5vh;
+  font-size: 4vw;
   margin: 0;
   position: relative;
   top: 50%;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 .columnHeaders > span {
   /* padding: 2vw; */
@@ -466,7 +468,7 @@ p {
 .puzzleLetter {
   font-family: Arial, Helvetica, sans-serif;
   border: 0.15rem solid black;
-  width: 10vw;
+  width: 10.5vw;
   height: 22vh;
   color: black;
   text-align: center;
@@ -486,7 +488,7 @@ p {
 .puzzleLetterHidden {
   font-family: Arial, Helvetica, sans-serif;
   border: 0.15rem solid black;
-  width: 10vw;
+  width: 10.5vw;
   height: 22vh;
   color: black;
   color: transparent;
@@ -506,8 +508,8 @@ p {
   background-color: transparent;
 
   align-self: center;
-  max-width: 60vw;
-  min-width: 60vw;
+  max-width: 84vw;
+  min-width: 84vw;
   min-height: 20vh;
   max-height: 20vh;
 

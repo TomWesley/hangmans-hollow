@@ -207,7 +207,7 @@ const Letters = () => {
         setGameStateCurrent({ ...gameStateCurrent, status: 'victory' })
 
         writeToDatabase('victory')
-
+        // const tempHandlerTwo = 1 + localStorage.getItem
         handleClick()
       }
     }
@@ -256,7 +256,6 @@ const Letters = () => {
       if (preselected.status === true) {
         newArray[preselected.key].isHovered = false
         setPreselected({ ...preselected, status: false })
-        // preselected.status = false
       }
     }
     if (newValue === true) {
@@ -355,6 +354,7 @@ const Letters = () => {
             Congratulations - You won with {gameStateCurrent.score} letters to
             spare
           </h4>
+
           {/* <h4>
             Your Average # of Misses per game is {localStats.av} and your
             winning percentage is {localStats.pct}%
