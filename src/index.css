@@ -5,7 +5,7 @@ Variables
 */
 
 :root {
-  --letter-size: 16.8vw;
+  --letter-size: 12vw;
   --letter-sizeh: 8vw;
   --font-size: 10.5vw;
   /* dark shades of primary color*/
@@ -468,7 +468,7 @@ p {
 .puzzleLetter {
   font-family: Arial, Helvetica, sans-serif;
   border: 0.15rem solid black;
-  width: 16.8vw;
+  width: 12vw;
   height: 22vh;
   color: black;
   text-align: center;
@@ -488,7 +488,7 @@ p {
 .puzzleLetterHidden {
   font-family: Arial, Helvetica, sans-serif;
   border: 0.15rem solid black;
-  width: 16.8vw;
+  width: 12vw;
   height: 22vh;
   color: black;
   color: transparent;
