@@ -24,7 +24,7 @@ import {
 let p = localStorage.getItem('puzzleLetters')
 const db = getFirestore(firebase)
 if (p) {
-  if (JSON.parse(p)[0].name != 'W') {
+  if (JSON.parse(p)[0].name != 'B') {
     localStorage.removeItem('preselected')
     localStorage.removeItem('letters')
     localStorage.removeItem('gameStateCurrent')
