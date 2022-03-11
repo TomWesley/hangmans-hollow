@@ -1,32 +1,32 @@
 export default [
   {
     id: 1,
-    name: 'B',
+    name: 'V',
     isHidden: true,
   },
   {
     id: 2,
-    name: 'O',
+    name: 'I',
     isHidden: true,
   },
   {
     id: 3,
-    name: 'U',
+    name: 'O',
     isHidden: true,
   },
   {
     id: 4,
-    name: 'Q',
+    name: 'L',
     isHidden: true,
   },
   {
     id: 5,
-    name: 'U',
+    name: 'E',
     isHidden: true,
   },
   {
     id: 6,
-    name: 'E',
+    name: 'N',
     isHidden: true,
   },
   {
