@@ -551,7 +551,8 @@ p {
   border-radius: 1rem;
   padding: 1rem;
   border: 0.1rem solid black;
-  box-shadow: 0 0 1rem 0.5rem #fff, /* inner white */ 0 0 2rem 1rem #f0f,
+  box-shadow: 0 0 1rem 0.5rem #fff,
+    /* inner white */ 0 0 2rem 1rem rgb(213, 24, 213),
     /* middle magenta */ 0 0 2rem 1.5rem #0ff; /* outer cyan */
   /* grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); */
   margin-bottom: 3vw;
