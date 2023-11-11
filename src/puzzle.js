@@ -6,7 +6,7 @@ export default [
   },
   {
     id: 2,
-    name: 'N',
+    name: 'L',
     isHidden: true,
   },
   {
