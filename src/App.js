@@ -54,11 +54,6 @@ function App() {
   const [leaderboardStatus, setLeaderboardStatus] = useState(0)
   //Set username if you don't have one in local storage.
 
-  // <form>
-  //     <label>Enter your name:
-  //       <input type="text" />
-  //     </label>
-  //   </form>
   useEffect(() => {
     localStorage.setItem('userName', JSON.stringify(userName))
   })
