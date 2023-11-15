@@ -1,3 +1,5 @@
+import { generate, count } from 'random-words'
+
 export default [
   {
     id: 1,
