@@ -154,6 +154,7 @@ const Letters = () => {
     localStorage.setItem('usedLetters', JSON.stringify(usedLetters))
     localStorage.setItem('gameStateCurrent', JSON.stringify(gameStateCurrent))
     const puzLength = puz.length
+
     var victoryTracker = 0
     if (gameStateCurrent.status === 'solving') {
       if (gameStateCurrent.score === 0) {
