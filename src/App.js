@@ -23,16 +23,17 @@ import {
 
 let p = localStorage.getItem('puzzleLetters')
 const db = getFirestore(firebase)
-if (p) {
-  if (JSON.parse(p)[0].name != 'I') {
-    localStorage.removeItem('preselected')
-    localStorage.removeItem('letters')
-    localStorage.removeItem('gameStateCurrent')
-    localStorage.removeItem('usedLetters')
-    localStorage.removeItem('puzzleLetters')
-    window.location.reload(true)
-  }
-}
+//Temporarily turned this off for testing
+// if (p) {
+//   if (JSON.parse(p)[0].name != 'I') {
+//     localStorage.removeItem('preselected')
+//     localStorage.removeItem('letters')
+//     localStorage.removeItem('gameStateCurrent')
+//     localStorage.removeItem('usedLetters')
+//     localStorage.removeItem('puzzleLetters')
+//     window.location.reload(true)
+//   }
+// }
 
 const getLocalStorageUsername = () => {
   let userName = localStorage.getItem('userName')
@@ -40,6 +41,7 @@ const getLocalStorageUsername = () => {
     localStorage.removeItem('userName')
     window.location.reload(true)
   }
+  //May be able to remove this temp related code above once the database is clean.
   if (userName) {
     return JSON.parse(localStorage.getItem('userName'))
   } else {
