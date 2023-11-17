@@ -1,6 +1,8 @@
 import { generate, count } from 'random-words'
 
-const w = 'IVORY'
+let w = generate({ minLength: 7, maxLength: 7 })
+w = w.toUpperCase()
+//const w = 'IVORY'
 const word = Array.from(w)
 let p = {
   id: 1,
@@ -22,10 +24,10 @@ let text = letterLength.toString()
 text = text + 'vw'
 console.log(text)
 // Get the root element
-const root = document.documentElement
+//const root = document.documentElement
 
 // Update the CSS variable value
-root.style.setProperty('--letter-size', text)
+//root.style.setProperty('--letter-size', text)
 
 export default puz
 

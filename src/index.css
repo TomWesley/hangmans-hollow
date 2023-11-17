@@ -476,10 +476,6 @@ p {
   text-decoration: underline;
   text-decoration-color: black;
   padding: 1vw;
-  /* padding-bottom: 10rem;
-  padding-right: 1rem;
-  padding-top: 1rem;
-  padding-left: 1rem; */
   box-shadow: 0.1rem 0.5rem 1rem 0rem rgba(0, 0, 0, 0.75);
   transition: 0.3s;
   font-size: 8vw;
@@ -503,8 +499,10 @@ p {
 }
 
 .puzzle {
-  padding-top: 0vw;
-  align-content: center;
+  position: fixed;
+  top: 103px;
+  padding-left: 100px;
+
   background-color: transparent;
 
   align-self: center;
@@ -513,7 +511,7 @@ p {
   min-height: 20vh;
   max-height: 20vh;
 
-  margin: 0 auto;
+  margin: auto;
   /* margin-bottom: 4rem; */
   display: grid;
   column-gap: 0rem;
