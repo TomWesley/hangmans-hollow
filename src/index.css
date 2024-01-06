@@ -635,7 +635,7 @@ input {
   }
   .puzzle {
     /* margin: 0.5rem; */
-
+    align-content: center;
     max-height: 12vw;
     min-height: 12vw;
     background: transparent;
