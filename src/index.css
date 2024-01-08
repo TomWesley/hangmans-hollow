@@ -634,12 +634,12 @@ input {
     padding: 0vw;
   }
   .puzzle {
-    /* margin: 0.5rem; */
-    align-content: center;
+    margin: 0.5rem;
+    /* align-content: center; */
     max-height: 12vw;
     min-height: 12vw;
     background: transparent;
-    max-width: 84vw;
+    max-width: 44vw;
     min-width: 84vw;
   }
   .btn {
