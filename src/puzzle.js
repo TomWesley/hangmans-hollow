@@ -1,6 +1,6 @@
 import { generate, count } from 'random-words'
 
-let w = generate({ minLength: 7, maxLength: 7 })
+let w = generate({ minLength: 8, maxLength: 8 })
 w = w.toUpperCase()
 //const w = 'IVORY'
 const word = Array.from(w)

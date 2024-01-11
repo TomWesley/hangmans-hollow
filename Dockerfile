@@ -1,24 +1,23 @@
-# Stage 0 - Build Frontend Assets
-FROM node:12.16.3-alpine as build
+FROM node:lts-alpine as builder
 
-WORKDIR /app
-COPY package*.json ./
-# RUN npm --verbose install
+# by only copying package.json, before running npm install. We can leverage dockers caching strategy for steps. Otherwise docker needs to run npm install every time you change any of the code.
+COPY package.json ./
 RUN npm install
-RUN npx browserslist@latest --update-db
+RUN mkdir /app-ui
+RUN mv ./node_modules ./app-ui
+WORKDIR /app-ui
 COPY . .
+# in this step the static React files are created. For more info see package.json
 RUN npm run build
-# RUN npm fund
-# RUN npm audit fix
 
+FROM nginx:alpine
 
+# copy the .conf template
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
-# Stage 1 - Serve Frontend Assets
-FROM fholzer/nginx-brotli:v1.12.2
+## Remove default nginx index page and replace it with the static files we created in the first step
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /app-ui/build /usr/share/nginx/html
+EXPOSE 80
 
-WORKDIR /etc/nginx
-ADD nginx.conf /etc/nginx/nginx.conf
-
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 443
-CMD ["nginx", "-g", "daemon off;"]
+CMD nginx -g 'daemon off;'
