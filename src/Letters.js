@@ -409,6 +409,16 @@ const Letters = () => {
             )
           })}
         </div>
+        <div className='btnscenter'>
+          <button
+            className='btn'
+            onClick={() => {
+              // changeHover(index, true)
+            }}
+          >
+            Try Another
+          </button>
+        </div>
       </section>
     )
   }
