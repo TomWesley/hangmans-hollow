@@ -24,6 +24,19 @@ import {
 
 const db = getFirestore(firebase)
 const versionTrigger = 1
+
+const ResetGame = () => {
+  localStorage.removeItem('gameStateCurrent')
+  getLocalStorageGameState()
+  localStorage.removeItem('puzzleLetters')
+  localStorage.removeItem('finalChosenLetters')
+  getLocalStorageFinalChosenLetters()
+  localStorage.removeItem('usedLetters')
+  getLocalStorageUsedLetters()
+  localStorage.removeItem('letters')
+  getLocalStorageLetters()
+  window.location.reload(false)
+}
 const getLocalStorageUsedLetters = () => {
   let usedLetters = localStorage.getItem('usedLetters')
   if (usedLetters) {
@@ -377,6 +390,16 @@ const Letters = () => {
             )
           })}
         </div>
+        <div className='btnscenter'>
+          <button
+            className='btnReset'
+            onClick={() => {
+              ResetGame()
+            }}
+          >
+            Try Another
+          </button>
+        </div>
       </section>
     )
   } else {
@@ -411,9 +434,9 @@ const Letters = () => {
         </div>
         <div className='btnscenter'>
           <button
-            className='btn'
+            className='btnReset'
             onClick={() => {
-              // changeHover(index, true)
+              ResetGame()
             }}
           >
             Try Another
