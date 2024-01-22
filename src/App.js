@@ -182,12 +182,12 @@ function App() {
       <form onSubmit={handleSubmit}>
         <label className='alias'>
           Enter An Alias
-          <hr
+          {/* <hr
             style={{
               color: 0,
               height: 5,
             }}
-          />
+          /> */}
           <input
             className='userName'
             type='text'
