@@ -1,5 +1,5 @@
 export default {
   id: 1,
-  score: 8,
+  score: 10,
   status: 'solving',
 }
