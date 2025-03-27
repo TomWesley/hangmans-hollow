@@ -6,6 +6,7 @@ import AnswerLetters from './AnswerLetters'
 import puz from './puzzle'
 import gamestate from './gamestate'
 import firebase from './firebase'
+import BatMeter from './BatMeter';
 import {
   query,
   orderBy,
@@ -290,9 +291,10 @@ const Letters = () => {
           </button>
         </div> */}
         <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
-        <div className='container'>
+        <BatMeter score={gameStateCurrent.score} maxScore={8} />
+        {/* <div className='container'>
           <h4>Number Of Misses Remaining: {gameStateCurrent.score}</h4>
-        </div>
+        </div> */}
         <div>
           {preselected.status ? (
             <button
@@ -363,7 +365,7 @@ const Letters = () => {
         <div>
           <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         </div>
-        <div className='container' className='victorywords'>
+        <div className='victorywords'>
           <h4>
             Congratulations - You won with {gameStateCurrent.score} letters to
             spare
@@ -408,7 +410,7 @@ const Letters = () => {
         <div className='defeat'>
           <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         </div>
-        <div className='container' className='defeatwords'>
+        <div className='defeatwords'>
           <h4>
             Sorry, You Missed Today's Puzzle. Come back to the Hollow Tomorrow.
           </h4>
