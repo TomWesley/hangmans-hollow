@@ -1,3 +1,4 @@
+// src/Letters.js
 import React from 'react'
 import Letter from './Letter'
 import { useState, useEffect } from 'react'
@@ -6,7 +7,7 @@ import AnswerLetters from './AnswerLetters'
 import puz from './puzzle'
 import gamestate from './gamestate'
 import firebase from './firebase'
-import BatMeter from './BatMeter';
+import BatMeter from './BatMeter'
 import {
   query,
   orderBy,
@@ -87,7 +88,7 @@ const getLocalStoragePreselected = () => {
 
 var scoreInc = 0
 
-const Letters = () => {
+const Letters = ({ casualMode = false }) => {
   const [gameStateCurrent, setGameStateCurrent] = useState(
     getLocalStorageGameState()
   )
@@ -101,7 +102,9 @@ const Letters = () => {
 
   //Firebase Incoming
   async function writeToDatabase(s) {
-    var trueScore = 8 - gameStateCurrent.score
+    // Skip writing to database in casual mode
+    if (casualMode) return;
+    var trueScore = gameStateCurrent.maxBudget - gameStateCurrent.score
     var didWin = 0
 
     if (s === 'victory') {
@@ -171,7 +174,7 @@ const Letters = () => {
 
     var victoryTracker = 0
     if (gameStateCurrent.status === 'solving') {
-      if (gameStateCurrent.score === 0) {
+      if (gameStateCurrent.score >= gameStateCurrent.maxBudget) {
         setfinalChosenLetters(usedLetters)
         setGameStateCurrent({ ...gameStateCurrent, status: 'defeat' })
         writeToDatabase('defeat')
@@ -228,21 +231,29 @@ const Letters = () => {
     }
   })
   const scoreChange = (i) => {
-    scoreInc = -1
+    scoreInc = 0;
+    let isCorrectGuess = false;
+    
+    // Check if the letter is in the puzzle
     puz.map((puzLetter) => {
       if (puzLetter.name === letters[i].name) {
-        // if (usedLetters.usedLetters.indexOf(letters[i].name) > -1) {
-        scoreInc = 0
+        isCorrectGuess = true;
       }
-    })
-    var s = gameStateCurrent.score + scoreInc
-    setGameStateCurrent({ ...gameStateCurrent, score: s })
+    });
+    
+    // If not a correct guess, add the letter's cost to the score
+    if (!isCorrectGuess) {
+      scoreInc = letters[i].cost;
+    }
+    
+    var s = gameStateCurrent.score + scoreInc;
+    setGameStateCurrent({ ...gameStateCurrent, score: s });
   }
 
   const resetGame = () => {
     localStorage.clear()
     letters.map((letters) => (letters.isUsed = false))
-    setGameStateCurrent({ ...gameStateCurrent, score: 8 })
+    setGameStateCurrent({ ...gameStateCurrent, score: 0 })
     setUsedLetters([])
   }
   function handleClick() {
@@ -291,10 +302,7 @@ const Letters = () => {
           </button>
         </div> */}
         <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
-        <BatMeter score={gameStateCurrent.score} maxScore={8} />
-        {/* <div className='container'>
-          <h4>Number Of Misses Remaining: {gameStateCurrent.score}</h4>
-        </div> */}
+        <BatMeter currentSpent={gameStateCurrent.score} maxBudget={gameStateCurrent.maxBudget} />
         <div>
           {preselected.status ? (
             <button
@@ -365,10 +373,9 @@ const Letters = () => {
         <div>
           <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         </div>
-        <div className='victorywords'>
+        <div className='container victorywords'>
           <h4>
-            Congratulations - You won with {gameStateCurrent.score} letters to
-            spare
+            Congratulations - You won with {gameStateCurrent.maxBudget - gameStateCurrent.score} budget to spare
           </h4>
 
           {/* <h4>
@@ -410,9 +417,9 @@ const Letters = () => {
         <div className='defeat'>
           <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         </div>
-        <div className='defeatwords'>
+        <div className='container defeatwords'>
           <h4>
-            Sorry, You Missed Today's Puzzle. Come back to the Hollow Tomorrow.
+            Sorry, You exceeded your budget. Come back to the Hollow Tomorrow.
           </h4>
           {/* <h4>
             Your Average # of Misses per game is {localStats.av} and your

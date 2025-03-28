@@ -472,29 +472,26 @@ p {
   position: absolute;
 } */
 
-/* Add to src/index.css */
-/* Add to src/index.css */
-/* Add to src/index.css */
+/* Bat meter container styling from previous implementation */
 .bat-meter-container {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 2rem auto;
   gap: 2rem;
-  /* filter: drop-shadow(5px 5px 5px #1cb428) drop-shadow(5px 5px 5px #ad1aa6); */
-  
 }
 
 .bat-wrapper {
   position: relative;
   width: 200px;
   height: 300px;
-  filter: drop-shadow(5px 5px 5px #1cb428) drop-shadow(5px 5px 5px #ad1aa6);
-
   
 }
 
 .bat-outline {
+  
+  filter: invert(57%) sepia(93%) saturate(1752%) hue-rotate(360deg) brightness(119%) contrast(106%);
+
   position: absolute;
   top: 0;
   left: 0;
@@ -504,11 +501,12 @@ p {
   background-repeat: no-repeat;
   background-position: center;
   
-  
-  opacity: 0.3; /* Makes it appear as just an outline */
+  /* filter: drop-shadow(5px 5px 5px #9000ff) drop-shadow(5px 5px 5px #ff0000); */
+  opacity: q; /* Makes it appear as just an outline */
 }
 
 .bat-image {
+  filter: drop-shadow(5px 5px 5px #9000ff) drop-shadow(5px 5px 5px #ff0000);
   position: absolute;
   top: 0;
   left: 0;
@@ -517,13 +515,117 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  transition: all 1s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
+
 
 .misses-text {
   font-size: 1.5rem;
   color: black;
   font-weight: bold;
+}
+
+.budget-text {
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+
+  font-size: 1.5rem;
+  color: black;
+  font-weight: bold;
+}
+
+/* Update button styles */
+.btn, .btntwo, .btnUsed {
+  position: relative;
+  padding-top: 10px; /* More space for the cost number */
+}
+.letter-container {
+  position: relative;
+}
+
+.letter-cost {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.verification-message {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: black;
+  text-align: center;
+}
+
+/* Play mode selection styles */
+.play-mode-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 1rem;
+}
+
+.game-title {
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  color: black;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.play-options {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.play-option-btn {
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  min-width: 200px;
+  transition: all 0.3s ease;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.play-option-btn.competitive {
+  background-color: #000000;
+}
+
+.play-option-btn.casual {
+  background-color: #000000;
+}
+
+.play-option-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.verification-message {
+  font-size: 1rem;
+  margin: 1rem 0;
+  color: black;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 650px) {
+  .play-options {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .game-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
 }
 
 /* Responsive styles */

@@ -2,11 +2,9 @@
 import React from 'react';
 import batOutline from './bat-outline.png'; // Make sure this is in your src/images folder
 
-const BatMeter = ({ score, maxScore }) => {
-  // Calculate fill percentage (inverted so it fills up as score decreases)
-  // At score = maxScore (full health), we want 0% filled
-  // At score = 0 (game over), we want 100% filled
-  const fillPercentage = 20+((maxScore - score) / maxScore) * 80;
+const BatMeter = ({ currentSpent, maxBudget }) => {
+  // Calculate fill percentage
+  const fillPercentage =  (currentSpent / maxBudget) * 100;
   
   return (
     <div className="bat-meter-container">
@@ -26,8 +24,8 @@ const BatMeter = ({ score, maxScore }) => {
           style={{ backgroundImage: `url(${batOutline})` }}
         ></div>
       </div>
-      <div className="misses-text">
-        Misses Remaining: {score}
+      <div className="budget-text">
+        {currentSpent}/{maxBudget} Consumed
       </div>
     </div>
   );
