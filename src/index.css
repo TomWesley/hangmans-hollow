@@ -490,7 +490,7 @@ p {
 
 .bat-outline {
   
-  filter: invert(57%) sepia(93%) saturate(1752%) hue-rotate(360deg) brightness(119%) contrast(106%);
+  /* filter: invert(57%) sepia(93%) saturate(1752%) hue-rotate(360deg) brightness(119%) contrast(106%); */
 
   position: absolute;
   top: 0;
@@ -501,12 +501,11 @@ p {
   background-repeat: no-repeat;
   background-position: center;
   
-  /* filter: drop-shadow(5px 5px 5px #9000ff) drop-shadow(5px 5px 5px #ff0000); */
-  opacity: q; /* Makes it appear as just an outline */
+  filter: drop-shadow(5px 5px 5px #9000ff) drop-shadow(5px 5px 5px #ff0000);
+  opacity: 0.5; /* Makes it appear as just an outline */
 }
 
 .bat-image {
-  filter: drop-shadow(5px 5px 5px #9000ff) drop-shadow(5px 5px 5px #ff0000);
   position: absolute;
   top: 0;
   left: 0;
