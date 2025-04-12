@@ -1,23 +1,23 @@
 FROM node:lts-alpine as builder
 
-COPY package.json ./
+WORKDIR /app
+COPY package.json package-lock.json* ./
 RUN npm install
-RUN mkdir /app-ui
-RUN mv ./node_modules ./app-ui
-WORKDIR /app-ui
 COPY . .
 RUN npm run build
 
 FROM nginx:alpine
 
-# Copy the nginx config directly
-COPY ./nginx.conf /etc/nginx/nginx.conf
+# Copy nginx config directly (not as a template)
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Remove default nginx index page and replace it with the static files
+# Remove default nginx index page
 RUN rm -rf /usr/share/nginx/html/*
-COPY --from=builder /app-ui/build /usr/share/nginx/html
 
-# Expose port 8080
+# Copy built assets from builder stage
+COPY --from=builder /app/build /usr/share/nginx/html
+
+# Make port 8080 available
 EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]
