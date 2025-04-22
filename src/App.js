@@ -8,6 +8,7 @@ import {
   GiAbstract027,
 } from 'react-icons/gi'
 import firebase from './firebase'
+import ResetButton from './ResetButton'
 import {
   query,
   orderBy,
@@ -238,6 +239,7 @@ function App() {
               <Letters casualMode={userName === 'casual_player'} />
             </section>
           </div>
+          <ResetButton />
         </main>
       )
     } else if (leaderBoard.length > 0) {
@@ -290,10 +292,16 @@ function App() {
               }
             })}
           </div>
+          <ResetButton />
         </section>
       )
     } else {
-      return <h1>Loading...</h1>
+      return (
+        <div>
+          <h1>Loading...</h1>
+          <ResetButton />
+        </div>
+      )
     }
   } else {
     // Mode selection screen
@@ -315,6 +323,7 @@ function App() {
               Play Casually
             </button>
           </div>
+          <ResetButton />
         </div>
       )
     }
@@ -338,6 +347,7 @@ function App() {
             <button className='enter' type='submit'>
               Enter
             </button>
+            <ResetButton />
           </form>
         )
       } else if (verificationState === 'needsEmail') {
@@ -355,6 +365,7 @@ function App() {
             <button className='enter' type='submit'>
               Verify
             </button>
+            <ResetButton />
           </form>
         )
       } else if (verificationState === 'needsCode') {
@@ -375,11 +386,18 @@ function App() {
             <button className='enter' type='submit'>
               Submit
             </button>
+            <ResetButton />
           </form>
         )
       }
     }
     // Casual mode flow was already handled with handlePlayModeSelection
+    return (
+      <div>
+        <h1>Something went wrong</h1>
+        <ResetButton />
+      </div>
+    )
   }
 }
 

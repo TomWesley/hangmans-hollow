@@ -1,31 +1,17 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react'
+import React from 'react'
 
 const AnswerLetter = ({ st, id, name, isHidden }) => {
-  if (isHidden) {
-    return (
-      <article>
-        {/* <button className='btn' onClick={App.changeData}> */}
-        <h3 className='puzzleLetterHidden'>?</h3>
-      </article>
-    )
-  } else {
-    if (st == 'victory') {
-      return (
-        <div>
-          {/* <button className='btn' onClick={App.changeData}> */}
-          <h3 className='puzzleLetter'>{name}</h3>
-        </div>
-      )
-    } else {
-      return (
-        <div>
-          {/* <button className='btn' onClick={App.changeData}> */}
-          <h3 className='puzzleLetter'>{name}</h3>
-        </div>
-      )
-    }
-  }
+  const letterClass = isHidden 
+    ? 'puzzleLetterHidden' 
+    : `puzzleLetter ${st === 'victory' ? 'victory-letter' : ''}`;
+
+  return (
+    <div className="answer-letter">
+      <div className={letterClass}>
+        {isHidden ? '?' : name}
+      </div>
+    </div>
+  )
 }
 
 export default AnswerLetter

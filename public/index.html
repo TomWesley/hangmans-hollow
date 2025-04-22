@@ -4,10 +4,12 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1 maximum-scale=1.0,user-scalable=no"
-    />
-    <meta name="theme-color" content="#000000" />
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Web site created using create-react-app"
@@ -28,6 +30,29 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Hangman's Hollow</title>
+    <style>
+      /* Prevent overscroll bounce effects */
+      html {
+        height: 100%;
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+      }
+      
+      body {
+        height: 100%;
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      /* Prevent text size adjustment on orientation change */
+      * {
+        -webkit-text-size-adjust: none;
+        text-size-adjust: none;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
