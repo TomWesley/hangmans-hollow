@@ -3,158 +3,144 @@ import Letter from './Letter';
 
 const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm, preselected }) => {
   const carouselRef = useRef(null);
-  const [startX, setStartX] = useState(0);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isManualScroll, setIsManualScroll] = useState(false);
-
+  const [startX, setStartX] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  
   // Filter out used letters from the carousel
   const availableLetters = letters.filter(letter => 
     !usedLetters.includes(letter.name) && !letter.isUsed
   );
-
-  // Set up the circular array
-  // Duplicate letters at beginning and end to create wraparound effect
-  const getCircularArray = () => {
-    // Need at least 3 sets for proper wraparound
-    const fullArray = [...availableLetters, ...availableLetters, ...availableLetters];
-    return fullArray;
-  };
-
-  const circularLetters = getCircularArray();
-
-  // Calculate the offset to center the first set of letters
-  useEffect(() => {
-    if (carouselRef.current && availableLetters.length > 0) {
-      const letterWidth = 60; // Width of each letter element
-      const middleOffset = availableLetters.length * letterWidth;
-      
-      // Offset to the middle of the three sets of letters
-      // This ensures we can scroll in both directions with wraparound
-      carouselRef.current.scrollLeft = middleOffset;
-    }
-  }, [availableLetters.length]);
-
-  // Handle wraparound scrolling
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!carouselRef.current || isManualScroll) return;
-
-      const container = carouselRef.current;
-      const letterWidth = 60;
-      const totalSetWidth = availableLetters.length * letterWidth;
-      
-      // Check if we've scrolled past the middle set
-      if (container.scrollLeft < totalSetWidth / 2) {
-        // Jumped to first set, reposition to middle set
-        container.scrollLeft += totalSetWidth;
-      } else if (container.scrollLeft > totalSetWidth * 2.5) {
-        // Jumped to third set, reposition to middle set
-        container.scrollLeft -= totalSetWidth;
-      }
-      
-      // Update current index based on scroll position
-      const relativePosition = container.scrollLeft % totalSetWidth;
-      const newIndex = Math.round(relativePosition / letterWidth);
-      setCurrentIndex(newIndex % availableLetters.length);
-    };
-
-    const carousel = carouselRef.current;
-    if (carousel) {
-      carousel.addEventListener('scroll', handleScroll);
+  
+  // Calculate visible letters (show 5 at a time)
+  const getVisibleLetters = () => {
+    if (availableLetters.length <= 5) {
+      return availableLetters;
     }
     
-    return () => {
-      if (carousel) {
-        carousel.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [availableLetters.length, isManualScroll]);
-
-  // Scroll to prev/next letter with arrow buttons
-  const scrollToLetter = (direction) => {
-    if (!carouselRef.current) return;
+    let visibleLetters = [];
+    for (let i = 0; i < 5; i++) {
+      // Get letter with wraparound
+      const index = (currentIndex + i) % availableLetters.length;
+      visibleLetters.push(availableLetters[index]);
+    }
     
-    setIsManualScroll(true);
-    
-    const letterWidth = 60;
-    const targetScroll = carouselRef.current.scrollLeft + (direction * letterWidth);
-    
-    carouselRef.current.scrollTo({
-      left: targetScroll,
-      behavior: 'smooth'
-    });
-    
-    // Reset manual scroll flag after animation
-    setTimeout(() => {
-      setIsManualScroll(false);
-    }, 300);
+    return visibleLetters;
   };
-
-  const scrollPrev = () => scrollToLetter(-1);
-  const scrollNext = () => scrollToLetter(1);
-
-  // Touch handlers for swiping
-  const handleTouchStart = (e) => {
-    setIsManualScroll(true);
+  
+  // Move to the next letter
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => 
+      (prevIndex + 1) % availableLetters.length
+    );
+  };
+  
+  // Move to the previous letter
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) => 
+      (prevIndex - 1 + availableLetters.length) % availableLetters.length
+    );
+  };
+  
+  // Handle manual drag
+  const handleMouseDown = (e) => {
     setIsDragging(true);
-    setStartX(e.touches[0].pageX - carouselRef.current.offsetLeft);
-    setScrollPosition(carouselRef.current.scrollLeft);
+    setStartX(e.clientX);
   };
-
+  
+  const handleMouseMove = (e) => {
+    if (!isDragging || startX === null) return;
+    
+    const deltaX = e.clientX - startX;
+    
+    // Only change index if dragged far enough to consider it intentional
+    if (Math.abs(deltaX) > 30) {
+      if (deltaX > 0) {
+        handlePrev();
+      } else {
+        handleNext();
+      }
+      
+      // Reset drag after handling
+      setIsDragging(false);
+      setStartX(null);
+    }
+  };
+  
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setStartX(null);
+  };
+  
+  // Touch handlers for mobile
+  const handleTouchStart = (e) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].clientX);
+  };
+  
   const handleTouchMove = (e) => {
-    if (!isDragging) return;
+    if (!isDragging || startX === null) return;
     
-    const x = e.touches[0].pageX - carouselRef.current.offsetLeft;
-    const distance = x - startX;
+    const deltaX = e.touches[0].clientX - startX;
     
-    // Only scroll by direct finger movement
-    carouselRef.current.scrollLeft = scrollPosition - distance;
+    // Only change index if dragged far enough to consider it intentional
+    if (Math.abs(deltaX) > 30) {
+      if (deltaX > 0) {
+        handlePrev();
+      } else {
+        handleNext();
+      }
+      
+      // Reset drag after handling
+      setIsDragging(false);
+      setStartX(null);
+    }
   };
-
+  
   const handleTouchEnd = () => {
     setIsDragging(false);
-    
-    // Snap to nearest letter
-    if (carouselRef.current) {
-      const letterWidth = 60;
-      const currentScroll = carouselRef.current.scrollLeft;
-      const targetIndex = Math.round(currentScroll / letterWidth);
-      
-      carouselRef.current.scrollTo({
-        left: targetIndex * letterWidth,
-        behavior: 'smooth'
-      });
-      
-      // Reset manual scroll flag after snap animation completes
-      setTimeout(() => {
-        setIsManualScroll(false);
-      }, 300);
-    }
+    setStartX(null);
   };
-
+  
+  // Clear any event listeners when component unmounts
+  useEffect(() => {
+    const handleMouseLeave = () => {
+      setIsDragging(false);
+      setStartX(null);
+    };
+    
+    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mouseleave', handleMouseLeave);
+    
+    return () => {
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+  
   return (
     <div className="letter-carousel-container">
       <div className="carousel-nav-container">
         <button 
           className="carousel-nav-button left-arrow" 
-          onClick={scrollPrev}
-          aria-label="Scroll left"
+          onClick={handlePrev}
+          aria-label="Previous letter"
         >
           <span className="arrow-icon">&lsaquo;</span>
         </button>
         
         <div 
-          className="letter-carousel" 
+          className="letter-carousel"
           ref={carouselRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {circularLetters.map((letter, index) => (
+          {getVisibleLetters().map((letter) => (
             <div 
-              key={`${letter.id}-${Math.floor(index / availableLetters.length)}`} 
+              key={letter.id} 
               className="carousel-item"
             >
               <button
@@ -169,8 +155,8 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
         
         <button 
           className="carousel-nav-button right-arrow" 
-          onClick={scrollNext}
-          aria-label="Scroll right"
+          onClick={handleNext}
+          aria-label="Next letter"
         >
           <span className="arrow-icon">&rsaquo;</span>
         </button>

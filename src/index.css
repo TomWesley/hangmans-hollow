@@ -559,8 +559,8 @@ p {
 /* Add scroll-snap to carousel items for better positioning */
 .carousel-item {
   flex: 0 0 auto;
-  width: 60px;
-  margin: 0 5px;
+  width: 45px;  /* Reduced from 60px */
+  margin: 0 2px; /* Reduced from 5px */
   scroll-snap-align: center;
   transition: transform 0.2s ease;
 }
