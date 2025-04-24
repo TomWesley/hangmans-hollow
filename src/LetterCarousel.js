@@ -3,95 +3,73 @@ import Letter from './Letter';
 
 const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm, preselected }) => {
   const carouselRef = useRef(null);
-  const [position, setPosition] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [startX, setStartX] = useState(null);
-  const [currentDelta, setCurrentDelta] = useState(0);
+  const [lastX, setLastX] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
   
   // Filter out used letters from the carousel
   const availableLetters = letters.filter(letter => 
     !usedLetters.includes(letter.name) && !letter.isUsed
   );
   
-  const letterWidth = 45; // Width of each letter item
-  
-  // Create a circular array that repeats the available letters multiple times for smooth scrolling
-  const getCircularLetters = () => {
-    // Create a buffer of letters on each side for smooth scrolling
-    return [...availableLetters, ...availableLetters, ...availableLetters];
-  };
-
-  // Get the display offset based on current position
-  const getDisplayStyle = () => {
-    const totalWidth = availableLetters.length * letterWidth;
+  // Calculate visible letters (show 5 at a time)
+  const getVisibleLetters = () => {
+    if (availableLetters.length <= 5) {
+      return availableLetters;
+    }
     
-    // Ensure position stays within bounds for the middle set
-    const adjustedPosition = ((position % totalWidth) + totalWidth) % totalWidth;
+    let visibleLetters = [];
+    const offset = 2; // Show 2 letters before and 2 after current (total of 5)
     
-    // Add offset for the first set of letters to center the view
-    const offset = -adjustedPosition + totalWidth;
+    for (let i = -offset; i <= offset; i++) {
+      // Get letter with wraparound
+      const index = ((currentIndex + i) % availableLetters.length + availableLetters.length) % availableLetters.length;
+      visibleLetters.push(availableLetters[index]);
+    }
     
-    return {
-      transform: `translateX(${offset + currentDelta}px)`,
-      transition: isAnimating ? 'transform 0.3s ease-out' : 'none'
-    };
+    return visibleLetters;
   };
   
-  // Move to next/prev letter with arrow buttons
-  const moveBy = (steps) => {
-    if (isAnimating || availableLetters.length === 0) return;
-    
-    setIsAnimating(true);
-    setPosition(prev => prev + (steps * letterWidth));
-    
-    setTimeout(() => {
-      setIsAnimating(false);
-    }, 300);
-  };
-  
-  // Snap to nearest letter on release
-  const snapToNearestLetter = () => {
+  // Move in a direction (positive = right, negative = left)
+  const moveDirection = (direction) => {
     if (availableLetters.length === 0) return;
     
-    setIsAnimating(true);
+    const step = direction > 0 ? 1 : -1;
     
-    const totalPosition = position + currentDelta;
-    const newPosition = Math.round(totalPosition / letterWidth) * letterWidth;
-    
-    setPosition(newPosition);
-    setCurrentDelta(0);
-    
-    setTimeout(() => {
-      setIsAnimating(false);
-    }, 300);
+    setCurrentIndex(prevIndex => {
+      const newIndex = (prevIndex + step + availableLetters.length) % availableLetters.length;
+      return newIndex;
+    });
   };
   
-  // Handle touch/mouse events for smooth dragging
+  // Handle touch/mouse events
   const handleStart = (clientX) => {
-    if (isAnimating) return;
-    
     setIsDragging(true);
     setStartX(clientX);
+    setLastX(clientX);
   };
   
   const handleMove = (clientX) => {
-    if (!isDragging || startX === null || isAnimating) return;
+    if (!isDragging || startX === null) return;
     
-    const delta = clientX - startX;
-    setCurrentDelta(delta);
+    // Only detect direction changes, not exact position
+    if (lastX !== null) {
+      const movementX = clientX - lastX;
+      
+      // If moved enough in one direction, move by one letter
+      if (Math.abs(movementX) > 15) { // 15px threshold to avoid accidental movements
+        const direction = movementX > 0 ? -1 : 1; // Right to left = positive index
+        moveDirection(direction);
+        setLastX(clientX); // Update last position after moving
+      }
+    }
   };
   
   const handleEnd = () => {
-    if (!isDragging || isAnimating) {
-      setIsDragging(false);
-      setStartX(null);
-      return;
-    }
-    
-    snapToNearestLetter();
     setIsDragging(false);
     setStartX(null);
+    setLastX(null);
   };
   
   // Mouse event handlers
@@ -119,14 +97,14 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [isDragging, isAnimating]);
+  }, [isDragging]);
   
   return (
     <div className="letter-carousel-container">
       <div className="carousel-nav-container">
         <button 
           className="carousel-nav-button left-arrow" 
-          onClick={() => moveBy(-1)}
+          onClick={() => moveDirection(-1)}
           aria-label="Previous letter"
         >
           <span className="arrow-icon">&lsaquo;</span>
@@ -135,19 +113,16 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
         <div 
           className="letter-carousel"
           ref={carouselRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
-          <div 
-            className="carousel-track"
-            style={getDisplayStyle()}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
-            {getCircularLetters().map((letter, index) => (
+          <div className="carousel-track">
+            {getVisibleLetters().map((letter, index) => (
               <div 
-                key={`${letter.id}-${Math.floor(index / availableLetters.length)}`} 
+                key={`visible-${index}`} 
                 className="carousel-item"
               >
                 <button
@@ -163,7 +138,7 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
         
         <button 
           className="carousel-nav-button right-arrow" 
-          onClick={() => moveBy(1)}
+          onClick={() => moveDirection(1)}
           aria-label="Next letter"
         >
           <span className="arrow-icon">&rsaquo;</span>

@@ -197,13 +197,13 @@ p {
 
 .carousel-track {
   display: flex;
-  position: absolute;
-  left: 50%;
-  top: 0;
+  align-items: center;
+  justify-content: center;
   height: 100%;
-  will-change: transform;
-  cursor: grab;
+  width: 100%;
+  transition: transform 0.3s ease;
 }
+
 .carousel-track:active {
   cursor: grabbing;
 }
@@ -227,6 +227,10 @@ p {
   border-radius: 10px;
   margin: 0 auto;
   touch-action: pan-x;
+  cursor: grab;
+}
+.letter-carousel:active {
+  cursor: grabbing;
 }
 .letter-carousel::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
@@ -563,6 +567,25 @@ p {
   justify-content: center;
   align-items: center;
   user-select: none;
+  transition: all 0.3s ease;
+}
+.carousel-item:nth-child(1) {
+  transform: scale(1.0);
+}
+.carousel-item:nth-child(2) {
+  transform: scale(1.1);
+}
+.carousel-item:nth-child(3) {
+  transform: scale(1.15);
+}
+.carousel-item:nth-child(4) {
+  transform: scale(1.1);
+}
+.carousel-item:nth-child(5) {
+  transform: scale(1.0);
+}
+.carousel-item:not(:nth-child(3)) .carousel-letter-btn {
+  opacity: 0.9;
 }
 
 
@@ -724,6 +747,23 @@ p {
   width: 90%;
   max-width: 500px;
   border-radius: 10px;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-50px); opacity: 0; }
+}
+
+.slide-in-right {
+  animation: slideIn 0.3s forwards;
+}
+
+.slide-out-left {
+  animation: slideOut 0.3s forwards;
 }
 
 @keyframes subtlePulse {
