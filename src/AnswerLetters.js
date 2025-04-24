@@ -7,7 +7,7 @@ const AnswerLetters = (props) => {
   const u = props.u
   const fa = props.s === 'victory';
   
-  // Use the imported puzzle directly instead of localStorage
+  // Use the imported puzzle directly
   const [puzzleLetters, setPuzzleLetters] = useState(puzzle);
 
   // Calculate the number of letters to determine responsive layout
@@ -38,7 +38,7 @@ const AnswerLetters = (props) => {
         })}
       </div>
     </div>
-  )
+  );
 }
 
 export default AnswerLetters

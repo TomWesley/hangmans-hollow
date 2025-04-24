@@ -339,21 +339,19 @@ p {
 
 /* Answer letters container */
 .answer-letters-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin: 5px 0;
-  padding: 0 10px;
+  width: 90%;
+  max-width: 90vw;
+  margin: 5px auto;
+  padding: 0;
 }
 
 /* Puzzle container with automatic layout */
 .puzzle {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
-  padding: 10px;
-  max-width: 95vw;
+  gap: 5px;
+  padding: 5px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -388,14 +386,21 @@ p {
 
 /* Puzzle letter styles */
 .puzzleLetter, .puzzleLetterHidden {
+  --base-width: 45px;
+  --base-height: 70px;
+  --base-font: 2.5rem;
+  
+  /* Responsive scaling based on puzzle length */
+  --scale-factor: 1;
+  width: calc(var(--base-width) * var(--scale-factor));
+  height: calc(var(--base-height) * var(--scale-factor));
+  font-size: calc(var(--base-font) * var(--scale-factor));
+  
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 45px;
-  height: 60px;
   border: 2px solid black;
   border-radius: 5px;
-  font-size: 1.8rem;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
@@ -411,6 +416,65 @@ p {
   background-color: white;
   color: transparent;
 }
+
+.puzzle-5 .puzzleLetter, .puzzle-5 .puzzleLetterHidden {
+  --scale-factor: 1.1;
+}
+
+.puzzle-6 .puzzleLetter, .puzzle-6 .puzzleLetterHidden {
+  --scale-factor: 1;
+}
+
+.puzzle-7 .puzzleLetter, .puzzle-7 .puzzleLetterHidden {
+  --scale-factor: 0.9;
+}
+
+.puzzle-8 .puzzleLetter, .puzzle-8 .puzzleLetterHidden {
+  --scale-factor: 0.8;
+}
+@media (max-width: 320px) {
+  .puzzle-5 .puzzleLetter, .puzzle-5 .puzzleLetterHidden {
+    --scale-factor: 1;
+  }
+  
+  .puzzle-6 .puzzleLetter, .puzzle-6 .puzzleLetterHidden {
+    --scale-factor: 0.85;
+  }
+  
+  .puzzle-7 .puzzleLetter, .puzzle-7 .puzzleLetterHidden {
+    --scale-factor: 0.75;
+  }
+  
+  .puzzle-8 .puzzleLetter, .puzzle-8 .puzzleLetterHidden {
+    --scale-factor: 0.65;
+  }
+}
+@media (min-width: 321px) and (max-width: 375px) {
+  .puzzle-7 .puzzleLetter, .puzzle-7 .puzzleLetterHidden {
+    --scale-factor: 0.8;
+  }
+  
+  .puzzle-8 .puzzleLetter, .puzzle-8 .puzzleLetterHidden {
+    --scale-factor: 0.7;
+  }
+}
+
+@media (min-width: 376px) and (max-width: 414px) {
+  .puzzle-8 .puzzleLetter, .puzzle-8 .puzzleLetterHidden {
+    --scale-factor: 0.75;
+  }
+}
+
+/* For landscape orientation */
+@media (orientation: landscape) and (max-height: 500px) {
+  .puzzle-5 .puzzleLetter, .puzzle-5 .puzzleLetterHidden,
+  .puzzle-6 .puzzleLetter, .puzzle-6 .puzzleLetterHidden,
+  .puzzle-7 .puzzleLetter, .puzzle-7 .puzzleLetterHidden,
+  .puzzle-8 .puzzleLetter, .puzzle-8 .puzzleLetterHidden {
+    --scale-factor: 0.7;
+  }
+}
+
 
 /* Victory animation for letters */
 .puzzleLetter.victory-letter {
@@ -1121,12 +1185,12 @@ form {
   .letter-carousel {
     width: 83%;
   }
-  .puzzleLetter, .puzzleLetterHidden {
+  /* .puzzleLetter, .puzzleLetterHidden {
     width: 36px;
     height: 48px;
     font-size: 1.4rem;
   }
-  
+   */
   .puzzle {
     gap: 6px;
   }
