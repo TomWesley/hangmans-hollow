@@ -594,7 +594,7 @@ p {
   width: 40px;
   height: 65px;
   border-radius: 8px;
-  border: 2px solid #222;
+  border: 1px solid #ffffff;
   background: linear-gradient(145deg, #000000, #222222);
   color: white;
   display: flex;
@@ -622,7 +622,8 @@ p {
 .carousel-letter-btn.hovered {
   background: white;
   color: black;
-  box-shadow: 0 0 15px 5px #fff, 0 0 25px 10px #f0f, 0 0 35px 15px #0ff;
+  /* box-shadow: 0 0 15px 5px #fff, 0 0 25px 10px #f0f, 0 0 35px 15px #0ff; */
+  box-shadow: 0 0 2px 2px #ffffff95, 0 0 5px 5px rgba(255, 0, 255, 0.774), 0 0 6px 6px rgba(0, 255, 255, 0.556);
   transform: translateY(-3px) scale(1.05);
 }
 
