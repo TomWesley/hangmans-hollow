@@ -13,6 +13,12 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
     !usedLetters.includes(letter.name) && !letter.isUsed
   );
   
+  // Create a map of letter costs for quick lookup
+  const letterCosts = {};
+  letters.forEach(letter => {
+    letterCosts[letter.name] = letter.cost;
+  });
+  
   // Calculate visible letters (show 5 at a time)
   const getVisibleLetters = () => {
     if (availableLetters.length <= 5) {
@@ -153,16 +159,17 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
       </button>
       
       <div className="used-letters-section">
-        <h3>Used Letters:</h3>
+        <h3>Used Letters</h3>
         <div className="used-letters-grid">
           {usedLetters.length > 0 ? (
             usedLetters.map((letter, index) => (
               <div key={index} className="used-letter">
                 {letter}
+                <span className="letter-cost-indicator">{letterCosts[letter]}</span>
               </div>
             ))
           ) : (
-            <div className="no-letters-used">No letters used yet</div>
+            <div className="no-letters-used"></div>
           )}
         </div>
       </div>
