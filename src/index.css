@@ -256,19 +256,19 @@ p {
 
 /* Position arrows at the very edges */
 .carousel-nav-button.left-arrow {
-  left: 0;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  left: -4vw;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .carousel-nav-button.right-arrow {
-  right: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  right: -4vw;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 /* Stylish arrow icons */
@@ -330,13 +330,10 @@ p {
 .game-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: flex-start;
   height: 100vh;
-  width: 100vw;
   overflow: hidden;
-  padding: 10px;
 }
-
 /* Answer letters container */
 .answer-letters-container {
   width: 90%;
@@ -590,10 +587,8 @@ p {
 .letter-carousel-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin-top: 5px auto;
-  padding: 0;
+  height: auto;
+  gap: 5px;
 }
 
 /* The carousel wrapper */
@@ -736,32 +731,44 @@ p {
 
 /* Confirm button styling */
 .confirm {
-  margin: 10px auto;
-  padding: 8px 15px;
+  margin: 15px auto;
+  padding: 10px 15px;
   font-size: 1rem;
-  background: linear-gradient(145deg, #000000, #222222);
-  color: white;
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
   width: auto;
   min-width: 200px;
-  height: auto;
+  height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.3s ease;
 }
 
 .confirm:hover {
   transform: translateY(-2px);
   box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.3), 0 0 25px 10px rgba(255, 0, 255, 0.2), 0 0 35px 15px rgba(0, 255, 255, 0.1);
 }
+.confirm.active {
+  background: linear-gradient(145deg, #000000, #222222);
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+.confirm.inactive {
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.6);
+  cursor: default;
+}
+.confirm.active:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.3), 0 0 25px 10px rgba(255, 0, 255, 0.2), 0 0 35px 15px rgba(0, 255, 255, 0.1);
+}
+
 
 /* Used Letters section */
 .used-letters-container {
-  width: 90%;
+  width: 100%;
   margin: 10px auto 5px;
   display: flex;
   flex-direction: column;
@@ -784,7 +791,9 @@ p {
   justify-content: center;
   gap: 6px;
   padding: 8px;
+  min-height: 50px; /* Fixed minimum height */
   width: 100%;
+  
   background-color: rgba(0, 0, 0, 0.05);
   border-radius: 8px;
 }
@@ -801,6 +810,13 @@ p {
   font-weight: bold;
   font-size: 0.9rem;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  animation: fadeInLetter 0.3s forwards;
+}
+.no-letters-used {
+  color: rgba(0, 0, 0, 0.4);
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 10px;
 }
 
 /* Victory screen animations */
@@ -1165,6 +1181,26 @@ form {
 
 /* Responsive adjustments for different screen sizes */
 @media (max-width: 400px) {
+  .confirm {
+    min-width: 180px;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    height: 40px;
+  }
+  
+  .used-letter {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+  
+  .used-letters-grid {
+    min-height: 40px;
+  }
+  
+  .used-letters-section h3 {
+    font-size: 0.9rem;
+  }
   .arrow-icon {
     font-size: 1.5rem;
   }
@@ -1253,6 +1289,27 @@ form {
 
 /* Landscape orientation adjustments */
 @media (max-height: 500px) and (orientation: landscape) {
+  .confirm {
+    margin: 8px auto;
+    min-width: 160px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+  
+  .used-letters-section {
+    margin: 5px auto;
+  }
+  
+  .used-letters-grid {
+    min-height: 36px;
+    padding: 5px;
+  }
+  
+  .used-letter {
+    width: 26px;
+    height: 26px;
+    font-size: 0.8rem;
+  }
   .carousel-nav-container {
     margin: 5px 0;
   }
