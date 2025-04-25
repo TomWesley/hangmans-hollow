@@ -388,7 +388,7 @@ p {
 .puzzleLetter, .puzzleLetterHidden {
   --base-width: 45px;
   --base-height: 70px;
-  --base-font: 2.5rem;
+  --base-font: 3rem;
   
   /* Responsive scaling based on puzzle length */
   --scale-factor: 1;

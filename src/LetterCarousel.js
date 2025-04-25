@@ -145,23 +145,25 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
         </button>
       </div>
       
-      {preselected.status && (
-        <button
-          className="confirm"
-          onClick={() => onLetterConfirm(preselected.key)}
-        >
-          Confirm Guess: {preselected.value}
-        </button>
-      )}
+      <button
+        className={`confirm ${preselected.status ? 'active' : 'inactive'}`}
+        onClick={() => preselected.status && onLetterConfirm(preselected.key)}
+      >
+        {preselected.status ? `Confirm Guess: ${preselected.value}` : 'Select a Letter'}
+      </button>
       
-      <div className="used-letters-container">
+      <div className="used-letters-section">
         <h3>Used Letters:</h3>
         <div className="used-letters-grid">
-          {usedLetters.map((letter, index) => (
-            <div key={index} className="used-letter">
-              {letter}
-            </div>
-          ))}
+          {usedLetters.length > 0 ? (
+            usedLetters.map((letter, index) => (
+              <div key={index} className="used-letter">
+                {letter}
+              </div>
+            ))
+          ) : (
+            <div className="no-letters-used">No letters used yet</div>
+          )}
         </div>
       </div>
     </div>
