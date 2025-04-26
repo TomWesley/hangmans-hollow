@@ -491,13 +491,16 @@ p {
 /* BatMeter Styles */
 .bat-meter-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 1rem auto;
-  gap: 1rem;
+  margin: 100px auto;
+  padding: 0;
+  height: 160px; /* Increased height to accommodate vertical layout */
   width: 90%;
   max-width: 300px;
   position: relative;
+  transform: scale(2);
 }
 
 .bat-wrapper {
@@ -505,6 +508,8 @@ p {
   width: 80px;
   height: 120px;
   transition: all 0.3s ease-in-out;
+  margin: 0 auto;
+  display: block;
 }
 
 .bat-outline {
@@ -519,7 +524,8 @@ p {
   filter: drop-shadow(5px 0px 5px rgba(0, 0, 0, 0.7));
   opacity: 1;
   z-index: -10;
-  border: dashed black;
+  border: double black;
+  background-color: #aaf0fe;
   transform: scale(1.05);
   
 }
@@ -535,6 +541,7 @@ p {
   background-repeat: no-repeat;
   background-position: center;
   transition: all 0.5s ease-in-out;
+  
   filter: brightness(0) saturate(100%) invert(17%) sepia(91%) saturate(5910%) hue-rotate(0deg) brightness(85%) contrast(124%);
 
   /* filter: drop-shadow(4px 4px 4px rgba(241, 0, 0, 0.7)); */
@@ -547,6 +554,7 @@ p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 0px;
 }
 
 .budget-text {
@@ -557,6 +565,8 @@ p {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .current-spent {
@@ -577,7 +587,7 @@ p {
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
   font-size: 0.9rem;
   color: #444;
-  margin-top: 0.25rem;
+  margin-top: 0rem;
 }
 
 /* Animation for BatMeter when budget is getting low */
@@ -1421,16 +1431,22 @@ form {
   }
   
   .bat-meter-container {
-    margin: 0.5rem auto;
+    height: 110px;
+    flex-direction: row;
+    gap: 15px;
   }
   
   .bat-wrapper {
     width: 50px;
-    height: 75px;
+    height: 80px;
+  }
+  
+  .budget-indicator {
+    margin-top: 0;
   }
   
   .budget-text {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 }
 
