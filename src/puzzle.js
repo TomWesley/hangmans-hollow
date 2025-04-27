@@ -1,19 +1,21 @@
-import { generate } from 'random-words'
+import { generate } from 'random-words';
+import { encrypt, decrypt } from './encryption';
 
-// Check if we already have a puzzle word in localStorage
-const existingPuzzle = localStorage.getItem('puzzleWord');
-
-// Generate a new word or use existing one
+// Check if we already have an encrypted puzzle word in localStorage
+const encryptedPuzzle = localStorage.getItem('puzzleWord');
 let w;
-if (!existingPuzzle) {
+
+if (!encryptedPuzzle) {
   // First time play or reset - generate a new word
   w = generate({ minLength: 5, maxLength: 8 });
   w = w.toUpperCase();
-  // Store the word in localStorage
-  localStorage.setItem('puzzleWord', w);
+  
+  // Encrypt and store the word in localStorage
+  const encrypted = encrypt(w);
+  localStorage.setItem('puzzleWord', encrypted);
 } else {
-  // Use the existing word
-  w = existingPuzzle;
+  // Decrypt the existing word
+  w = decrypt(encryptedPuzzle);
 }
 
 // Log the word for debugging (you can remove this in production)

@@ -10,6 +10,7 @@ import firebase from './firebase'
 import BatMeter from './BatMeter'
 import LetterCarousel from './LetterCarousel'
 import { resetPuzzleWord } from './puzzle'
+import { encrypt, decrypt, encryptObject, decryptObject } from './encryption'
 import {
   query,
   orderBy,
@@ -34,7 +35,6 @@ const versionTrigger = 1
 
 // Updated ResetGame function
 const ResetGame = () => {
-  // Clear all game-related localStorage items
   localStorage.removeItem('gameStateCurrent')
   localStorage.removeItem('puzzleLetters')
   localStorage.removeItem('finalChosenLetters')
@@ -42,50 +42,56 @@ const ResetGame = () => {
   localStorage.removeItem('letters')
   localStorage.removeItem('preselected')
   
-  // Reset the puzzle word (this will trigger generating a new word next time)
+  // Reset the puzzle word
   resetPuzzleWord();
   
   // Reload the page to start fresh
   window.location.reload(false)
 }
 const getLocalStorageUsedLetters = () => {
-  let usedLetters = localStorage.getItem('usedLetters')
-  if (usedLetters) {
-    return JSON.parse(localStorage.getItem('usedLetters'))
+  const encryptedUsedLetters = localStorage.getItem('usedLetters')
+  if (encryptedUsedLetters) {
+    return decryptObject(encryptedUsedLetters) || []
   } else {
     return []
   }
 }
+
 const getLocalStorageGameState = () => {
-  let gameStateCurrent = localStorage.getItem('gameStateCurrent')
-  if (gameStateCurrent) {
-    return JSON.parse(localStorage.getItem('gameStateCurrent'))
+  const encryptedGameState = localStorage.getItem('gameStateCurrent')
+  if (encryptedGameState) {
+    return decryptObject(encryptedGameState) || gamestate
   } else {
     return gamestate
   }
 }
+
 const getLocalStorageFinalChosenLetters = () => {
-  let finalChosenLetters = localStorage.getItem('finalChosenLetters')
-  if (finalChosenLetters) {
-    return JSON.parse(localStorage.getItem('finalChosenLetters'))
+  const encryptedFinalLetters = localStorage.getItem('finalChosenLetters')
+  if (encryptedFinalLetters) {
+    return decryptObject(encryptedFinalLetters) || []
   } else {
     return []
   }
 }
 
 const getLocalStorageLetters = () => {
-  let letters = localStorage.getItem('letters')
-  if (letters) {
-    return JSON.parse(localStorage.getItem('letters'))
+  const encryptedLetters = localStorage.getItem('letters')
+  if (encryptedLetters) {
+    return decryptObject(encryptedLetters) || data
   } else {
     return data
   }
 }
 
 const getLocalStoragePreselected = () => {
-  let preselected = localStorage.getItem('preselected')
-  if (preselected) {
-    return JSON.parse(localStorage.getItem('preselected'))
+  const encryptedPreselected = localStorage.getItem('preselected')
+  if (encryptedPreselected) {
+    return decryptObject(encryptedPreselected) || {
+      status: false,
+      value: '',
+      key: '',
+    }
   } else {
     return {
       status: false,
@@ -94,6 +100,7 @@ const getLocalStoragePreselected = () => {
     }
   }
 }
+
 
 var scoreInc = 0
 
@@ -110,18 +117,14 @@ const Letters = ({ casualMode = false }) => {
   const [preselected, setPreselected] = useState(getLocalStoragePreselected())
 
   useEffect(() => {
-    localStorage.setItem('letters', JSON.stringify(letters))
-  }, [letters])
+    localStorage.setItem('letters', encryptObject(letters))
+  })
   
-  // Game state effects - runs less frequently
   useEffect(() => {
-    localStorage.setItem(
-      'finalChosenLetters',
-      JSON.stringify(finalChosenLetters)
-    )
-    localStorage.setItem('preselected', JSON.stringify(preselected))
-    localStorage.setItem('usedLetters', JSON.stringify(usedLetters))
-    localStorage.setItem('gameStateCurrent', JSON.stringify(gameStateCurrent))
+    localStorage.setItem('finalChosenLetters', encryptObject(finalChosenLetters))
+    localStorage.setItem('preselected', encryptObject(preselected))
+    localStorage.setItem('usedLetters', encryptObject(usedLetters))
+    localStorage.setItem('gameStateCurrent', encryptObject(gameStateCurrent))
     
     // Check for defeat
     if (gameStateCurrent.status === 'solving' && gameStateCurrent.score >= gameStateCurrent.maxBudget) {
