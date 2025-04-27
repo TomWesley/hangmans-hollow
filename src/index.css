@@ -525,7 +525,7 @@ p {
   opacity: 1;
   z-index: -10;
   border: double black;
-  background-color: #aaf0fe;
+  background-color: #f8f8f8a3;
   transform: scale(1.05);
   
 }
@@ -570,17 +570,18 @@ p {
 }
 
 .current-spent {
-  color: #cc0000;
+  color: #ff0202;
   font-weight: bold;
 }
 
 .budget-separator {
   font-size: 1.8rem;
   opacity: 0.7;
+  
 }
 
 .max-budget {
-  color: #333;
+  color: #000000;
 }
 
 .budget-label {
@@ -738,10 +739,10 @@ p {
 .letter-cost {
   position: absolute;
   top: 2px;
-  right: 5px;
+  right: 0px;
   font-size: 0.7rem;
   font-weight: bold;
-  background-color: rgba(255, 60, 60, 0.9);
+  /* background-color: rgba(255, 60, 60, 0.9); */
   color: white;
   padding: 2px 4px;
   border-radius: 10px;
@@ -768,7 +769,7 @@ p {
 
 .confirm:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.3), 0 0 25px 10px rgba(255, 0, 255, 0.2), 0 0 35px 15px rgba(0, 255, 255, 0.1);
+  /* box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.3), 0 0 25px 10px rgba(255, 0, 255, 0.2), 0 0 35px 15px rgba(0, 255, 255, 0.1); */
 }
 .confirm.active {
   background: linear-gradient(145deg, #000000, #222222);
