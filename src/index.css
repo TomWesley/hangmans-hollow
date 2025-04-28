@@ -1031,7 +1031,9 @@ section {
   align-items: center;
   background: black;
   margin-bottom: 0;
+  position: relative;
 }
+
 
 .menu h1 {
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
@@ -1049,9 +1051,13 @@ transform: translateX(-50%);
 line-height: 0.9; /* Add this line to reduce the gap */
 }
 
+.menu .menuButton:first-child {
+  margin-left: 10px;
+}
+
 .menuButton {
   font-size: 1.25rem;
-  margin: 10px;
+  margin: 2px;
   padding: 3px;
 }
 
@@ -1173,13 +1179,12 @@ form {
 
 /* Play mode selection styles */
 .play-mode-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
-  padding: 1rem;
+  position: relative;
+}
+.play-mode-container .navigation-menu-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
 .game-title {
@@ -1614,4 +1619,238 @@ input {
     bottom: 15px;
     right: 15px;
   }
+}
+
+/* Navigation Menu Styles */
+
+/* Container positioning */
+.navigation-menu-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 100;
+}
+
+/* Menu button styles (matching existing menuButton) */
+.nav-menu-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 5vw;
+  width: 4vh;
+  height: 4vh;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dropdown menu container */
+.nav-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 150px;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 5px;
+  padding: 5px 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 101;
+  animation: menuFadeIn 0.2s ease-out forwards;
+}
+
+@keyframes menuFadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Menu options */
+.nav-menu-option {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  text-align: left;
+  background: none;
+  border: none;
+  color: white;
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-menu-option:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Rules and Prizes Pages Styles */
+.rules-page, .prizes-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, #000000, #2c1d4d);
+  color: white;
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 20px;
+  animation: pageFadeIn 0.3s ease-out forwards;
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.rules-header, .prizes-header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 10px;
+}
+
+.rules-header h1, .prizes-header h1 {
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  font-size: 2rem;
+  color: white;
+  text-align: center;
+  width: 100%; /* Take full width of container */
+  position: absolute; /* Position absolutely */
+  left: 0; /* Start from left edge */
+  right: 0; /* Extend to right edge */
+  margin: 0 auto; /* Center horizontally */
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  margin-top: 61px;
+  z-index: 1; /* Lower z-index than the button */
+}
+
+.back-button {
+  font-size: 1.5rem;
+  transform: rotate(90deg);
+  padding: 2px;
+  position: relative;
+  z-index: 2; /* Higher z-index than the title */
+  margin-bottom: 5px;
+}
+.rules-header::after, .prizes-header::after {
+  content: "";
+  width: 30px; /* Same width as the back button */
+  visibility: hidden; /* Invisible but takes space */
+}
+
+.rules-content, .prizes-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.rule-section, .prize-section {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 15px;
+  
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rule-section h2, .prize-section h2 {
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  color: #ff9d00;
+  font-size: 3.3rem;
+  margin-bottom: 10px;
+  text-shadow: 0 0 5px rgba(255, 157, 0, 0.5);
+}
+
+.rule-section p, .prize-section p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 10px;
+  
+  line-height: 1.4;
+  font-size: 4rem;
+}
+
+.bonus-section {
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  background-color: rgba(255, 215, 0, 0.05);
+}
+
+.bonus-section h2 {
+  color: #ffd700;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  .rules-header h1, .prizes-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .rule-section h2, .prize-section h2 {
+    font-size: 1.1rem;
+  }
+  
+  .rule-section p, .prize-section p {
+    font-size: 0.55rem;
+  }
+  
+  .nav-menu-dropdown {
+    width: 130px;
+  }
+  
+  .nav-menu-option {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+}
+
+/* Landscape adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+  .rules-content, .prizes-content {
+    gap: 10px;
+  }
+  
+  .rule-section, .prize-section {
+    padding: 10px;
+  }
+}
+
+.loading-container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-container .navigation-menu-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+@media (max-width: 400px) {
+  .menu h1 {
+    font-size: 1.2rem;
+  }
+  
+  .menuButton {
+    font-size: 1.2rem;
+  }
+}
+
+/* Add a transition effect for smoother menu interactions */
+.menuButton, .nav-menu-button {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.menuButton:active, .nav-menu-button:active {
+  transform: scale(0.9);
+  color: rgba(0, 0, 0, 0.8);
 }

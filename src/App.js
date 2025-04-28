@@ -9,6 +9,9 @@ import {
 } from 'react-icons/gi'
 import firebase from './firebase'
 import ResetButton from './ResetButton'
+import NavigationMenu from './NavigationMenu'
+import RulesPage from './RulesPage'
+import PrizesPage from './PrizesPage'
 import {
   query,
   orderBy,
@@ -45,6 +48,7 @@ function App() {
   const [userName, setUserName] = useState(getLocalStorageUsername())
   const [leaderboardStatus, setLeaderboardStatus] = useState(0)
   const [playMode, setPlayMode] = useState('') // 'casual' or 'competitive'
+  const [currentView, setCurrentView] = useState('game') // 'game', 'rules', or 'prizes'
   
   // New state for username verification
   const [verificationState, setVerificationState] = useState('initial') // 'initial', 'needsEmail', 'needsCode'
@@ -55,6 +59,27 @@ function App() {
   useEffect(() => {
     localStorage.setItem('userName', JSON.stringify(userName))
   })
+  
+  // Navigation handlers
+  const handleMainMenu = () => {
+    // Reset game state
+    localStorage.removeItem('userName');
+    setUserName('');
+    setPlayMode('');
+    setCurrentView('game');
+  };
+
+  const handleShowRules = () => {
+    setCurrentView('rules');
+  };
+
+  const handleShowPrizes = () => {
+    setCurrentView('prizes');
+  };
+
+  const handleBackToGame = () => {
+    setCurrentView('game');
+  };
   
   // Updated handleSubmit function
   const handleSubmit = async (event) => {
@@ -219,6 +244,16 @@ function App() {
     setLeaderboard(tempArray)
   }
   
+  // Handle Rules and Prizes views
+  if (currentView === 'rules') {
+    return <RulesPage onBack={handleBackToGame} />;
+  }
+
+  if (currentView === 'prizes') {
+    return <PrizesPage onBack={handleBackToGame} />;
+  }
+  
+  // Main game views
   if (userName) {
     if (leaderboardStatus === 0) {
       return (
@@ -233,6 +268,11 @@ function App() {
               <GiAbstract009 />
             </button>
             <h1>Hangman's Hollow</h1>
+            <NavigationMenu 
+              onMainMenu={handleMainMenu}
+              onRules={handleShowRules}
+              onPrizes={handleShowPrizes}
+            />
           </div>
           <div>
             <section>
@@ -255,6 +295,11 @@ function App() {
               <GiAbstract027 />
             </button>
             <h1>Global Leaderboard</h1>
+            <NavigationMenu 
+              onMainMenu={handleMainMenu}
+              onRules={handleShowRules}
+              onPrizes={handleShowPrizes}
+            />
           </div>
           <div></div>
           <div className='lBoard'>
@@ -297,9 +342,14 @@ function App() {
       )
     } else {
       return (
-        <div>
+        <div className="loading-container">
           <h1>Loading...</h1>
           <ResetButton />
+          <NavigationMenu 
+            onMainMenu={handleMainMenu}
+            onRules={handleShowRules}
+            onPrizes={handleShowPrizes}
+          />
         </div>
       )
     }
@@ -324,6 +374,7 @@ function App() {
             </button>
           </div>
           <ResetButton />
+          {/* Navigation menu removed from this screen */}
         </div>
       )
     }
@@ -348,6 +399,11 @@ function App() {
               Enter
             </button>
             <ResetButton />
+            <NavigationMenu 
+              onMainMenu={handleMainMenu}
+              onRules={handleShowRules}
+              onPrizes={handleShowPrizes}
+            />
           </form>
         )
       } else if (verificationState === 'needsEmail') {
@@ -366,6 +422,11 @@ function App() {
               Verify
             </button>
             <ResetButton />
+            <NavigationMenu 
+              onMainMenu={handleMainMenu}
+              onRules={handleShowRules}
+              onPrizes={handleShowPrizes}
+            />
           </form>
         )
       } else if (verificationState === 'needsCode') {
@@ -387,15 +448,25 @@ function App() {
               Submit
             </button>
             <ResetButton />
+            <NavigationMenu 
+              onMainMenu={handleMainMenu}
+              onRules={handleShowRules}
+              onPrizes={handleShowPrizes}
+            />
           </form>
         )
       }
     }
-    // Casual mode flow was already handled with handlePlayModeSelection
+    // Fallback view
     return (
-      <div>
+      <div className="loading-container">
         <h1>Something went wrong</h1>
         <ResetButton />
+        <NavigationMenu 
+          onMainMenu={handleMainMenu}
+          onRules={handleShowRules}
+          onPrizes={handleShowPrizes}
+        />
       </div>
     )
   }
