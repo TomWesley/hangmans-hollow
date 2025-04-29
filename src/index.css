@@ -1002,15 +1002,6 @@ section {
     0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
 }
 
-.alias {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 80%;
-  margin: 0;
-  font-size: 2rem;
-  text-align: center;
-}
 
 .container {
   width: 80vw;
@@ -1061,21 +1052,8 @@ line-height: 0.9; /* Add this line to reduce the gap */
   padding: 3px;
 }
 
-.userName {
-  width: 80%;
-  height: auto;
-  padding: 10px;
-  margin: 20px 0;
-  font-size: 1.5rem;
-}
 
-.enter {
-  width: 50%;
-  height: auto;
-  padding: 10px;
-  margin: 10px 0;
-  font-size: 1.2rem;
-}
+
 
 /* Remove letterlist grid to replace with carousel */
 .letterlist {
@@ -1110,65 +1088,8 @@ line-height: 0.9; /* Add this line to reduce the gap */
   /* margin: 3rem auto; */
 }
 
-/* Auth forms styling */
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-}
 
-/* Leaderboard styling */
-.lBoard {
-  height: auto;
-  max-height: 80vh;
-  overflow-y: auto;
-  width: 90%;
-  margin: 10px auto;
-}
 
-.leaderboard {
-  display: grid;
-  grid-template-columns: 22vw 22vw 22vw 22vw;
-  color: black;
-  font-size: 3vw;
-  text-transform: uppercase;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  text-align: center;
-  font-family: Impact;
-}
-
-.leaderboard > span {
-  padding: 2vw;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-  font-size: 4vw;
-}
-
-.columnHeaders {
-  display: grid;
-  text-transform: uppercase;
-  grid-template-columns: 22vw 22vw 22vw 22vw;
-  color: white;
-  -webkit-text-stroke-color: #222;
-  -webkit-text-stroke-width: 0.1vw;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  text-align: center;
-  font-size: 3vw;
-  font-family: Impact;
-}
-
-.columnHeaders > span {
-  padding-top: 1vh;
-  padding-bottom: 1vh;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-}
 
 /* Fix for the verification screens */
 .verification-message {
@@ -1853,4 +1774,286 @@ input {
 .menuButton:active, .nav-menu-button:active {
   transform: scale(0.9);
   color: rgba(0, 0, 0, 0.8);
+}
+
+/* Add these styles to your src/index.css file */
+
+/* Login error message */
+.login-error {
+  color: #ff3333;
+  background-color: rgba(255, 0, 0, 0.1);
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  width: 80%;
+  max-width: 300px;
+}
+
+/* Stats summary after game */
+.stats-summary {
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 15px auto;
+  max-width: 90%;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.stats-summary p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Enhance leaderboard styling */
+.lBoard {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.columnHeaders {
+  background-color: #000;
+  color: white;
+  border-radius: 5px 5px 0 0;
+}
+
+.columnHeaders span {
+  padding: 10px 5px;
+  font-weight: bold;
+}
+
+/* Improved login and registration forms */
+form {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.alias {
+  margin-bottom: 20px;
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+}
+
+.userName {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.userName:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  outline: none;
+  border-color: #007bff;
+}
+
+.enter {
+  background: linear-gradient(145deg, #000000, #222222);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.enter:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.enter:active {
+  transform: translateY(1px);
+}
+
+/* Mobile optimizations */
+@media (max-width: 480px) {
+  .stats-summary {
+    padding: 8px;
+  }
+  
+  .stats-summary p {
+    font-size: 0.8rem;
+  }
+}
+/* Add these styles to your src/index.css file */
+
+/* Leaderboard Page Styles */
+.leaderboard-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, #000000, #2c1d4d);
+  color: white;
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 20px;
+  animation: pageFadeIn 0.3s ease-out forwards;
+}
+
+.leaderboard-header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 10px;
+}
+
+.leaderboard-header h1 {
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  font-size: 2rem;
+  color: white;
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.leaderboard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+.leaderboard-loading h2 {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  animation: pulseLoading 1.5s infinite alternate;
+}
+
+@keyframes pulseLoading {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+/* Leaderboard content styling */
+.leaderboard-page .lBoard {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
+  max-width: 800px;
+  overflow: hidden;
+}
+
+.leaderboard-page .columnHeaders {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: 10px 10px 0 0;
+  display: grid;
+  grid-template-columns: 15vw 25vw 15vw 35vw;
+  text-align: center;
+  padding: 10px 5px;
+}
+
+.leaderboard-page .leaderboard {
+  display: grid;
+  grid-template-columns: 15vw 25vw 15vw 35vw;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 5px;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.leaderboard-page .leaderboard:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.leaderboard-page .empty-row {
+  opacity: 0.5;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.leaderboard-page .empty-row:hover {
+  transform: none;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.leaderboard-page .leaderboard-note {
+  text-align: center;
+  margin: 20px auto;
+  padding: 15px;
+  max-width: 700px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-page .leaderboard-note p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .leaderboard-page .columnHeaders,
+  .leaderboard-page .leaderboard {
+    grid-template-columns: 15vw 25vw 15vw 35vw;
+    font-size: 0.8rem;
+  }
+  
+  .leaderboard-page .leaderboard-note p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .leaderboard-page {
+    padding: 10px;
+  }
+  
+  .leaderboard-page .lBoard {
+    overflow-x: auto;
+  }
+  
+  .leaderboard-page .columnHeaders,
+  .leaderboard-page .leaderboard {
+    min-width: 450px;
+    font-size: 0.7rem;
+  }
+  
+  .leaderboard-header h1 {
+    font-size: 1.5rem;
+  }
+}
+.leaderboard-page .columnHeaders,
+.leaderboard-page .leaderboard {
+  grid-template-columns: 12vw 22vw 12vw 18vw 26vw;
+}
+
+/* For mobile screens, adjust the widths for better display */
+@media (max-width: 768px) {
+  .leaderboard-page .columnHeaders,
+  .leaderboard-page .leaderboard {
+    min-width: 600px;
+  }
+}
+
+/* Also update the standard leaderboard grid if used elsewhere */
+.columnHeaders, .leaderboard {
+  grid-template-columns: 12vw 22vw 12vw 18vw 26vw !important;
 }

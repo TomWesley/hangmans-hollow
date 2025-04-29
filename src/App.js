@@ -1,34 +1,18 @@
+// Updated App.js with getLocalStorageUsername function
 import React from 'react'
 import Letters from './Letters'
 import { useState, useEffect } from 'react'
-import AnswerLetters from './AnswerLetters'
 import {
   GiAbstract009,
-  GiThreePointedShuriken,
-  GiAbstract027,
 } from 'react-icons/gi'
-import firebase from './firebase'
 import ResetButton from './ResetButton'
 import NavigationMenu from './NavigationMenu'
 import RulesPage from './RulesPage'
 import PrizesPage from './PrizesPage'
-import {
-  query,
-  orderBy,
-  limit,
-  getFirestore,
-  startAt,
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore'
+import LeaderboardPage from './LeaderboardPage'
+import { initializeUser, verifyUserEmail } from './userManagement'
 
-let p = localStorage.getItem('puzzleLetters')
-const db = getFirestore(firebase)
-
+// Helper function to get username from localStorage
 const getLocalStorageUsername = () => {
   let userName = localStorage.getItem('userName')
   if (userName === 'temp') {
@@ -43,22 +27,38 @@ const getLocalStorageUsername = () => {
 }
 
 function App() {
-  let userN = ''
-  const [leaderBoard, setLeaderboard] = useState([])
+  // Existing state variables
   const [userName, setUserName] = useState(getLocalStorageUsername())
-  const [leaderboardStatus, setLeaderboardStatus] = useState(0)
-  const [playMode, setPlayMode] = useState('') // 'casual' or 'competitive'
-  const [currentView, setCurrentView] = useState('game') // 'game', 'rules', or 'prizes'
+  const [currentView, setCurrentView] = useState('game') // 'game', 'rules', 'prizes', or 'leaderboard'
+  const [playMode, setPlayMode] = useState('')
+  const [userStats, setUserStats] = useState(null)
   
-  // New state for username verification
-  const [verificationState, setVerificationState] = useState('initial') // 'initial', 'needsEmail', 'needsCode'
-  const [userEmail, setUserEmail] = useState('')
-  const [verificationCode, setVerificationCode] = useState('')
+  // Login flow state
+  const [loginStep, setLoginStep] = useState('username')
+  const [inputValue, setInputValue] = useState('')
   const [pendingUsername, setPendingUsername] = useState('')
+  const [loginError, setLoginError] = useState('')
 
+  // Save username to localStorage when it changes
   useEffect(() => {
     localStorage.setItem('userName', JSON.stringify(userName))
-  })
+    
+    // If user is logged in and we don't have their stats, fetch them
+    if (userName && userName !== 'casual_player' && !userStats) {
+      const fetchUserStats = async () => {
+        try {
+          const userDoc = await initializeUser(userName);
+          if (userDoc.exists) {
+            setUserStats(userDoc.data);
+          }
+        } catch (error) {
+          console.error('Failed to fetch user stats:', error);
+        }
+      };
+      
+      fetchUserStats();
+    }
+  }, [userName, userStats]);
   
   // Navigation handlers
   const handleMainMenu = () => {
@@ -67,6 +67,10 @@ function App() {
     setUserName('');
     setPlayMode('');
     setCurrentView('game');
+    setLoginStep('username');
+    setInputValue('');
+    setPendingUsername('');
+    setLoginError('');
   };
 
   const handleShowRules = () => {
@@ -76,139 +80,80 @@ function App() {
   const handleShowPrizes = () => {
     setCurrentView('prizes');
   };
+  
+  const handleShowLeaderboard = () => {
+    setCurrentView('leaderboard');
+  };
 
   const handleBackToGame = () => {
     setCurrentView('game');
   };
   
-  // Updated handleSubmit function
-  const handleSubmit = async (event) => {
-    event.preventDefault()
+  // Handle login form submission
+  const handleLoginStep = async (event) => {
+    event.preventDefault();
     
-    // Check if username exists
-    const docRef = doc(db, 'users', userN)
-    const docSnap = await getDoc(docRef)
-    
-    if (docSnap.exists()) {
-      // Username exists, need to verify
-      setPendingUsername(userN)
-      setVerificationState('needsEmail')
-    } else {
-      // New username, ask for email
-      setPendingUsername(userN)
-      setVerificationState('needsEmail')
-    }
-  }
-  
-  // Handle email submission
-  const handleEmailSubmit = async (event) => {
-    event.preventDefault()
-    
-    const docRef = doc(db, 'users', pendingUsername)
-    const docSnap = await getDoc(docRef)
-    
-    if (docSnap.exists()) {
-      // Check if this email is associated with the username
-      if (docSnap.data().email === userEmail) {
-        // Generate verification code
-        const generatedCode = Math.floor(100000 + Math.random() * 900000).toString()
-        
-        // Send verification email
-        sendVerificationEmail(userEmail, generatedCode, pendingUsername)
-        
-        // Store the code temporarily (in production, store this securely on the server)
-        localStorage.setItem('tempVerificationCode', generatedCode)
-        
-        // Move to code verification step
-        setVerificationState('needsCode')
+    if (loginStep === 'username') {
+      if (!inputValue.trim()) {
+        setLoginError('Please enter a username');
+        return;
+      }
+      
+      // Check if username exists
+      const userDoc = await initializeUser(inputValue);
+      
+      if (userDoc.exists) {
+        // Username exists, need to verify email
+        setPendingUsername(inputValue);
+        setLoginStep('email');
+        setInputValue('');
+        setLoginError('');
       } else {
-        alert("This email is not associated with this username. Please try a different username or email.")
+        // New username, ask for email
+        setPendingUsername(inputValue);
+        setLoginStep('email');
+        setInputValue('');
+        setLoginError('');
       }
-    } else {
-      // New user, create account with this email
-      const generatedCode = Math.floor(100000 + Math.random() * 900000).toString()
+    } else if (loginStep === 'email') {
+      // Basic email validation
+      if (!inputValue.includes('@') || !inputValue.includes('.')) {
+        setLoginError('Please enter a valid email address');
+        return;
+      }
       
-      // Send verification email
-      sendVerificationEmail(userEmail, generatedCode, pendingUsername)
+      // Check if this is an existing user or new user
+      const userDoc = await initializeUser(pendingUsername);
       
-      // Store the code temporarily
-      localStorage.setItem('tempVerificationCode', generatedCode)
-      
-      // Move to code verification step
-      setVerificationState('needsCode')
-    }
-  }
-  
-  // Send verification email function
-  const sendVerificationEmail = async (email, code, username) => {
-    try {
-      // Use EmailJS or a similar service to send emails from the client-side
-      // This is a simple example using fetch to call a hypothetical email API
-      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          service_id: 'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-          template_id: 'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
-          user_id: 'YOUR_USER_ID', // Replace with your EmailJS user ID
-          template_params: {
-            to_email: email,
-            verification_code: code,
-            username: username,
-            game_name: "Hangman's Hollow"
-          }
-        }),
-      });
-      
-      if (response.ok) {
-        console.log('Verification email sent successfully');
+      if (userDoc.exists) {
+        // Existing user - verify email
+        const isValid = await verifyUserEmail(pendingUsername, inputValue);
+        
+        if (isValid) {
+          // Email matches - log in user
+          setUserName(pendingUsername);
+          setLoginStep('username');
+          setInputValue('');
+          setLoginError('');
+          setUserStats(userDoc.data);
+        } else {
+          setLoginError('Email does not match our records for this username');
+        }
       } else {
-        console.error('Failed to send verification email');
-        // Fallback for testing - log the code to console
-        console.log(`Verification code for ${username}: ${code}`);
+        // New user - create account
+        const newUser = await initializeUser(pendingUsername, inputValue);
+        if (newUser.exists) {
+          setUserName(pendingUsername);
+          setLoginStep('username');
+          setInputValue('');
+          setLoginError('');
+          setUserStats(newUser.data);
+        } else {
+          setLoginError('Failed to create account. Please try again.');
+        }
       }
-    } catch (error) {
-      console.error('Error sending verification email:', error);
-      // Fallback for testing - log the code to console
-      console.log(`Verification code for ${username}: ${code}`);
     }
-  }
-  
-  // Handle verification code submission
-  const handleCodeSubmit = async (event) => {
-    event.preventDefault()
-    
-    // Get the stored code (in production, validate against server)
-    const storedCode = localStorage.getItem('tempVerificationCode')
-    
-    if (verificationCode === storedCode) {
-      // Code is correct
-      const docRef = doc(db, 'users', pendingUsername)
-      const docSnap = await getDoc(docRef)
-      
-      if (!docSnap.exists()) {
-        // Create new user with email
-        await setDoc(doc(db, 'users', pendingUsername), {
-          name: pendingUsername,
-          email: userEmail,
-          score: 0,
-          numberOfGames: 0,
-          averageScore: 0,
-          victories: 0,
-          winningPercentage: 0
-        })
-      }
-      
-      // Set the username and reset verification state
-      setUserName(pendingUsername)
-      setVerificationState('initial')
-      localStorage.removeItem('tempVerificationCode')
-    } else {
-      alert("Incorrect verification code. Please try again.")
-    }
-  }
+  };
 
   // Handle play mode selection
   const handlePlayModeSelection = (mode) => {
@@ -217,34 +162,9 @@ function App() {
       // Set a temporary username for casual play
       setUserName('casual_player');
     }
-  }
+  };
 
-  async function seeLeaderboard() {
-    if (leaderboardStatus === 0) {
-      setLeaderboardStatus(1)
-    } else {
-      setLeaderboardStatus(0)
-    }
-    const q = query(
-      collection(db, 'users'),
-      orderBy('winningPercentage', 'desc'),
-      orderBy('averageScore'),
-      limit(10)
-    )
-    const documentSnapshots = await getDocs(q)
-    setLeaderboard([])
-    var counter = 0
-    var tempArray = []
-    documentSnapshots.forEach((doc) => {
-      var temp = doc.data()
-      temp.id = counter
-      tempArray.push(temp)
-      counter = counter + 1
-    })
-    setLeaderboard(tempArray)
-  }
-  
-  // Handle Rules and Prizes views
+  // Handle various views based on currentView state
   if (currentView === 'rules') {
     return <RulesPage onBack={handleBackToGame} />;
   }
@@ -253,106 +173,39 @@ function App() {
     return <PrizesPage onBack={handleBackToGame} />;
   }
   
+  if (currentView === 'leaderboard') {
+    return <LeaderboardPage onBack={handleBackToGame} />;
+  }
+  
   // Main game views
   if (userName) {
-    if (leaderboardStatus === 0) {
-      return (
-        <main>
-          <div className='menu'>
-            <button
-              className='menuButton'
-              onClick={() => {
-                seeLeaderboard()
-              }}
-            >
-              <GiAbstract009 />
-            </button>
-            <h1>Hangman's Hollow</h1>
-            <NavigationMenu 
-              onMainMenu={handleMainMenu}
-              onRules={handleShowRules}
-              onPrizes={handleShowPrizes}
-            />
-          </div>
-          <div>
-            <section>
-              <Letters casualMode={userName === 'casual_player'} />
-            </section>
-          </div>
-          <ResetButton />
-        </main>
-      )
-    } else if (leaderBoard.length > 0) {
-      return (
-        <section>
-          <div className='menu'>
-            <button
-              className='menuButton'
-              onClick={() => {
-                seeLeaderboard()
-              }}
-            >
-              <GiAbstract027 />
-            </button>
-            <h1>Global Leaderboard</h1>
-            <NavigationMenu 
-              onMainMenu={handleMainMenu}
-              onRules={handleShowRules}
-              onPrizes={handleShowPrizes}
-            />
-          </div>
-          <div></div>
-          <div className='lBoard'>
-            {leaderBoard.map((topTen, index) => {
-              if (index === 0) {
-                return (
-                  <div key={`header-${index}`}>
-                    <div className='columnHeaders'>
-                      <span>Rank</span>
-                      <span>Username</span>
-                      <span>Avg. Missed</span>
-                      <span>Winning Percentage</span>
-                    </div>
-                    <div className='leaderboard'>
-                      <span>#{index + 1}</span>
-                      <span style={{ fontsize: '.1vh' }}>
-                        {leaderBoard[index].name}
-                      </span>
-                      <span>{leaderBoard[index].averageScore}</span>
-                      <span>{leaderBoard[index].winningPercentage}%</span>
-                    </div>
-                  </div>
-                )
-              } else {
-                return (
-                  <div key={index} className='leaderboard'>
-                    <span>#{index + 1}</span>
-                    <span style={{ fontsize: '.1vh' }}>
-                      {leaderBoard[index].name}
-                    </span>
-                    <span>{leaderBoard[index].averageScore}</span>
-                    <span>{leaderBoard[index].winningPercentage}%</span>
-                  </div>
-                )
-              }
-            })}
-          </div>
-          <ResetButton />
-        </section>
-      )
-    } else {
-      return (
-        <div className="loading-container">
-          <h1>Loading...</h1>
-          <ResetButton />
+    return (
+      <main>
+        <div className='menu'>
+          <button
+            className='menuButton'
+            onClick={handleShowLeaderboard}
+          >
+            <GiAbstract009 />
+          </button>
+          <h1>Hangman's Hollow</h1>
           <NavigationMenu 
             onMainMenu={handleMainMenu}
             onRules={handleShowRules}
             onPrizes={handleShowPrizes}
           />
         </div>
-      )
-    }
+        <div>
+          <section>
+            <Letters 
+              casualMode={userName === 'casual_player'} 
+              username={userName}
+            />
+          </section>
+        </div>
+        <ResetButton />
+      </main>
+    );
   } else {
     // Mode selection screen
     if (playMode === '') {
@@ -374,89 +227,60 @@ function App() {
             </button>
           </div>
           <ResetButton />
-          {/* Navigation menu removed from this screen */}
         </div>
       )
     }
-    // Competitive mode flow
+    // Competitive mode login flow
     else if (playMode === 'competitive') {
-      if (verificationState === 'initial') {
-        return (
-          <form onSubmit={handleSubmit}>
-            <label className='alias'>
-              Enter An Alias
-              <input
-                className='userName'
-                type='text'
-                defaultValue=''
-                maxLength={10}
-                onChange={(e) => {
-                  userN = e.target.value
-                }}
-              />
-            </label>
-            <button className='enter' type='submit'>
-              Enter
-            </button>
-            <ResetButton />
-            <NavigationMenu 
-              onMainMenu={handleMainMenu}
-              onRules={handleShowRules}
-              onPrizes={handleShowPrizes}
-            />
-          </form>
-        )
-      } else if (verificationState === 'needsEmail') {
-        return (
-          <form onSubmit={handleEmailSubmit}>
-            <label className='alias'>
-              Enter Your Email
-              <input
-                className='userName'
-                type='email'
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
-              />
-            </label>
-            <button className='enter' type='submit'>
-              Verify
-            </button>
-            <ResetButton />
-            <NavigationMenu 
-              onMainMenu={handleMainMenu}
-              onRules={handleShowRules}
-              onPrizes={handleShowPrizes}
-            />
-          </form>
-        )
-      } else if (verificationState === 'needsCode') {
-        return (
-          <form onSubmit={handleCodeSubmit}>
-            <label className='alias'>
-              Enter Verification Code
-              <div className="verification-message">
-                A verification code has been sent to {userEmail}
-              </div>
-              <input
-                className='userName'
-                type='text'
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-              />
-            </label>
-            <button className='enter' type='submit'>
-              Submit
-            </button>
-            <ResetButton />
-            <NavigationMenu 
-              onMainMenu={handleMainMenu}
-              onRules={handleShowRules}
-              onPrizes={handleShowPrizes}
-            />
-          </form>
-        )
-      }
+      return (
+        <form onSubmit={handleLoginStep}>
+          {loginStep === 'username' ? (
+            <>
+              <label className='alias'>
+                Enter An Alias
+                <input
+                  className='userName'
+                  type='text'
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  maxLength={10}
+                />
+              </label>
+            </>
+          ) : (
+            <>
+              <label className='alias'>
+                {pendingUsername ? `Email for ${pendingUsername}` : 'Enter Your Email'}
+                <input
+                  className='userName'
+                  type='email'
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                />
+              </label>
+            </>
+          )}
+          
+          {loginError && (
+            <div className="login-error">
+              {loginError}
+            </div>
+          )}
+          
+          <button className='enter' type='submit'>
+            {loginStep === 'username' ? 'Continue' : 'Submit'}
+          </button>
+          
+          <ResetButton />
+          <NavigationMenu 
+            onMainMenu={handleMainMenu}
+            onRules={handleShowRules}
+            onPrizes={handleShowPrizes}
+          />
+        </form>
+      )
     }
+    
     // Fallback view
     return (
       <div className="loading-container">

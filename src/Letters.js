@@ -6,32 +6,11 @@ import data from './data'
 import AnswerLetters from './AnswerLetters'
 import puz from './puzzle'
 import gamestate from './gamestate'
-import firebase from './firebase'
 import BatMeter from './BatMeter'
 import LetterCarousel from './LetterCarousel'
 import { resetPuzzleWord } from './puzzle'
 import { encrypt, decrypt, encryptObject, decryptObject } from './encryption'
-import {
-  query,
-  orderBy,
-  limit,
-  getFirestore,
-  collection,
-  getDocs,
-  doc,
-  setDoc,
-  writeBatch,
-  increment,
-  updateDoc,
-  addDoc,
-  getDoc,
-} from 'firebase/firestore/lite'
-
-const db = getFirestore(firebase)
-const versionTrigger = 1
-
-// Import the resetPuzzleWord function
-
+import { updateUserStats } from './userManagement'
 
 // Updated ResetGame function
 const ResetGame = () => {
@@ -48,6 +27,8 @@ const ResetGame = () => {
   // Reload the page to start fresh
   window.location.reload(false)
 }
+
+// Local storage helper functions
 const getLocalStorageUsedLetters = () => {
   const encryptedUsedLetters = localStorage.getItem('usedLetters')
   if (encryptedUsedLetters) {
@@ -101,26 +82,31 @@ const getLocalStoragePreselected = () => {
   }
 }
 
-
 var scoreInc = 0
 
-const Letters = ({ casualMode = false }) => {
+const Letters = ({ casualMode = false, username = '' }) => {
   const [gameStateCurrent, setGameStateCurrent] = useState(
     getLocalStorageGameState()
   )
-  const [localStats, setLocalStats] = useState({ av: 0, pct: 0 })
+  const [localStats, setLocalStats] = useState({ 
+    averageBudgetRemaining: 0, 
+    winningPercentage: 0 
+  })
   const [finalChosenLetters, setfinalChosenLetters] = useState(
     getLocalStorageFinalChosenLetters
   )
   const [letters, setLetters] = useState(getLocalStorageLetters())
   const [usedLetters, setUsedLetters] = useState(getLocalStorageUsedLetters())
   const [preselected, setPreselected] = useState(getLocalStoragePreselected())
+  const [gameEnded, setGameEnded] = useState(false) // Track if game has ended for stats update
+  const [hasUpdatedStats, setHasUpdatedStats] = useState(false) // Prevent multiple stat updates
 
   useEffect(() => {
     localStorage.setItem('letters', encryptObject(letters))
-  })
+  }, [letters])
   
   useEffect(() => {
+    // Save current game state to localStorage
     localStorage.setItem('finalChosenLetters', encryptObject(finalChosenLetters))
     localStorage.setItem('preselected', encryptObject(preselected))
     localStorage.setItem('usedLetters', encryptObject(usedLetters))
@@ -152,56 +138,55 @@ const Letters = ({ casualMode = false }) => {
         writeToDatabase('victory');
       }
     }
-  }, [gameStateCurrent.status, gameStateCurrent.score, usedLetters]); // Only run when these values change
-
-  //Firebase Incoming
-  async function writeToDatabase(s) {
-    // Skip writing to database in casual mode
-    if (casualMode) return;
-    var trueScore = gameStateCurrent.maxBudget - gameStateCurrent.score
-    var didWin = 0
-
-    if (s === 'victory') {
-      didWin = 1
-    }
-    const docRef = doc(db, 'users', localStorage.getItem('userName'))
-    const docSnap = await getDoc(docRef)
+  }, [gameStateCurrent, usedLetters, preselected, finalChosenLetters]);
+  
+  // Effect to update stats when game ends
+  useEffect(() => {
+    const updateStats = async () => {
+      // Only update stats once per game and only in competitive mode
+      if (hasUpdatedStats || casualMode || username === 'casual_player') {
+        return;
+      }
+      
+      // Check if game has ended (victory or defeat)
+      if (gameStateCurrent.status === 'victory' || gameStateCurrent.status === 'defeat') {
+        try {
+          // Calculate budget remaining
+          const budgetRemaining = gameStateCurrent.maxBudget - gameStateCurrent.score;
+          
+          // Get puzzle length
+          const puzzleLength = puz.length;
+          
+          // Update user stats
+          const updatedStats = await updateUserStats(
+            username,
+            gameStateCurrent.status === 'victory',
+            budgetRemaining,
+            puzzleLength,
+            usedLetters
+          );
+          
+          if (updatedStats) {
+            setLocalStats(updatedStats);
+          }
+          
+          // Mark stats as updated
+          setHasUpdatedStats(true);
+        } catch (error) {
+          console.error('Error updating stats:', error);
+        }
+      }
+    };
     
-    if (docSnap.exists()) {
-      var avg =
-        (docSnap.data().score + trueScore) / (docSnap.data().numberOfGames + 1)
-      var winPct =
-        (100 * (docSnap.data().victories + didWin)) /
-        (docSnap.data().numberOfGames + 1)
-      avg = parseInt(avg)
-      winPct = parseInt(winPct)
-      await updateDoc(doc(db, 'users', localStorage.getItem('userName')), {
-        name: JSON.parse(localStorage.getItem('userName')),
-        score: increment(trueScore),
-        numberOfGames: increment(1),
-        averageScore: avg,
-        victories: increment(didWin),
-        winningPercentage: winPct,
-      })
-      setLocalStats({
-        pct: winPct,
-        av: avg,
-      })
-    } else {
-      var tempDidWin = parseInt(didWin) * 100
-      await setDoc(doc(db, 'users', localStorage.getItem('userName')), {
-        name: JSON.parse(localStorage.getItem('userName')),
-        score: increment(trueScore),
-        numberOfGames: increment(1),
-        averageScore: trueScore,
-        victories: didWin,
-        winningPercentage: tempDidWin,
-      })
-
-      setLocalStats({
-        pct: tempDidWin,
-        av: trueScore,
-      })
+    updateStats();
+  }, [gameStateCurrent.status, casualMode, username, gameStateCurrent.score, 
+      gameStateCurrent.maxBudget, usedLetters, hasUpdatedStats]);
+  
+  // Function to write game results to the database
+  async function writeToDatabase(gameResult) {
+    // Game status is handled by the updateStats effect
+    if (casualMode || username === 'casual_player') {
+      return; // Don't update database for casual play
     }
   }
 
@@ -264,6 +249,7 @@ const Letters = ({ casualMode = false }) => {
     setLetters(newArray);
   }
 
+  // Render game based on current status
   if (gameStateCurrent.status === 'solving') {
     return (
       <section className="game-container">
@@ -289,6 +275,16 @@ const Letters = ({ casualMode = false }) => {
           <h4>
             Congratulations - You won with {gameStateCurrent.maxBudget - gameStateCurrent.score} budget to spare
           </h4>
+          
+          {!casualMode && localStats && (
+            <div className="stats-summary">
+              <p>Games won: {localStats.gamesWon} ({localStats.winningPercentage}%)</p>
+              <p>Avg. budget remaining: {localStats.averageBudgetRemaining}</p>
+              {localStats.commonLetters && localStats.commonLetters.length > 0 && (
+                <p>Your favorite letters: {localStats.commonLetters.join(', ')}</p>
+              )}
+            </div>
+          )}
         </div>
         <div>
           <h3>Your Guesses In Order:</h3>
@@ -323,6 +319,16 @@ const Letters = ({ casualMode = false }) => {
           <h4>
             Sorry, You exceeded your budget. Come back to the Hollow Tomorrow.
           </h4>
+          
+          {!casualMode && localStats && (
+            <div className="stats-summary">
+              <p>Games played: {localStats.gamesPlayed}</p>
+              <p>Win rate: {localStats.winningPercentage}%</p>
+              {localStats.commonLetters && localStats.commonLetters.length > 0 && (
+                <p>Your favorite letters: {localStats.commonLetters.join(', ')}</p>
+              )}
+            </div>
+          )}
         </div>
         <div>
           <h3>Your Guesses In Order:</h3>
