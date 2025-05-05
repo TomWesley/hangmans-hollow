@@ -492,7 +492,7 @@ Used Letters Section
 
 .used-letters-section {
   margin: var(--margin-used-letters-top) auto var(--margin-used-letters-bottom);
-  width: 70%;
+  width: 90%;
   max-width: 300px;
 }
 
@@ -509,7 +509,7 @@ Used Letters Section
 
 .used-letters-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   gap: 4px;
   padding: var(--spacing-xs);
   min-height: 40px;
@@ -757,7 +757,7 @@ Responsive Adjustments
 }
 
 /* Medium mobile devices */
-@media (min-width: 321px) and (max-width: 375px) {
+@media (min-width: 321px) and (max-width: 350px) {
   :root {
     --margin-puzzle-top: 3px;
     --margin-puzzle-bottom: 3px;
@@ -1102,5 +1102,129 @@ Leaderboard Page
   
   .leaderboard-header h1 {
     font-size: 1.5rem;
+  }
+}
+
+/* 
+This adds responsive sizing for puzzle letters based on word length
+Add this to your CSS file to replace or enhance the existing puzzle letter styles 
+*/
+
+/* Basic puzzle letter styles */
+.puzzleLetter, .puzzleLetterHidden {
+  width: 40px;
+  height: 60px;
+  font-size: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 5px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Specific sizing for different word lengths */
+/* 3-4 letter words - can be larger */
+.puzzle.puzzle-3 .puzzleLetter, .puzzle.puzzle-3 .puzzleLetterHidden,
+.puzzle.puzzle-4 .puzzleLetter, .puzzle.puzzle-4 .puzzleLetterHidden {
+  width: 45px;
+  height: 65px;
+  font-size: 2.8rem;
+}
+
+/* 5-6 letter words - standard size */
+.puzzle.puzzle-5 .puzzleLetter, .puzzle.puzzle-5 .puzzleLetterHidden,
+.puzzle.puzzle-6 .puzzleLetter, .puzzle.puzzle-6 .puzzleLetterHidden {
+  width: 40px;
+  height: 60px;
+  font-size: 2.5rem;
+}
+
+/* 7-8 letter words - smaller to fit on one line */
+.puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+.puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden {
+  width: 38px;
+  height: 58px;
+  font-size: 2rem;
+}
+
+/* Additional support for extremely long words (9+) */
+.puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
+.puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
+  width: 30px;
+  height: 45px;
+  font-size: 1.8rem;
+}
+
+/* Adjust puzzle container spacing */
+.puzzle {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  flex-wrap: nowrap; /* Prevent wrapping to new line */
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Different gap sizes based on word length */
+.puzzle-3, .puzzle-4 {
+  gap: 8px; /* Larger gaps for shorter words */
+}
+
+.puzzle-5, .puzzle-6 {
+  gap: 6px; /* Medium gaps */
+}
+
+.puzzle-7, .puzzle-8 {
+  gap: 4px; /* Smaller gaps to save space */
+}
+
+.puzzle-9, .puzzle-10 {
+  gap: 3px; /* Minimal gaps for long words */
+}
+
+/* Further adjustments for small screens */
+@media (max-width: 350px) {
+  /* Make all sizes slightly smaller on very small screens */
+  .puzzleLetter, .puzzleLetterHidden {
+    width: 32px;
+    height: 50px;
+    font-size: 2rem;
+  }
+  
+  .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+  .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden {
+    width: 35px;
+    height: 58px;
+    font-size: 1.7rem;
+  }
+  
+  .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
+  .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
+    width: 25px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+  
+  /* Reduce all gaps */
+  .puzzle {
+    gap: 4px;
+  }
+  
+  .puzzle-7, .puzzle-8, .puzzle-9, .puzzle-10 {
+    gap: 2px;
+  }
+}
+
+/* For landscape orientation */
+@media (orientation: landscape) {
+  /* Allow slightly larger sizes in landscape */
+  .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+  .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden {
+    width: 36px;
+    height: 52px;
+    font-size: 2.2rem;
   }
 }
