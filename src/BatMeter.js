@@ -43,7 +43,7 @@ const BatMeter = ({ currentSpent, maxBudget }) => {
           <span className="budget-separator">/</span>
           <span className="max-budget">{maxBudget}</span>
         </div>
-        <div className="budget-label">Budget Consumed</div>
+        {/* <div className="budget-label">Budget Consumed</div> */}
       </div>
     </div>
   );

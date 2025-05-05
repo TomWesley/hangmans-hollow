@@ -5,62 +5,53 @@ Variables
 */
 
 :root {
-  height: 100vh;
-  --letter-size: 12vw;
-  --letter-sizeh: 8vw;
-  --font-size: 10.5vw;
-  /* dark shades of primary color*/
-  --clr-primary-1: hsl(205, 86%, 17%);
-  --clr-primary-2: hsl(205, 77%, 27%);
-  --clr-primary-3: hsl(205, 72%, 37%);
-  --clr-primary-4: hsl(205, 63%, 48%);
-  /* primary/main color */
-  --clr-primary-5: hsl(205, 78%, 60%);
-  /* lighter shades of primary color */
-  --clr-primary-6: hsl(205, 89%, 70%);
-  --clr-primary-7: hsl(205, 90%, 76%);
-  --clr-primary-8: hsl(205, 86%, 81%);
-  --clr-primary-9: hsl(205, 90%, 88%);
-  --clr-primary-10: hsl(205, 100%, 96%);
-  /* darkest grey - used for headings */
-  --clr-grey-1: hsl(209, 61%, 16%);
-  --clr-grey-2: hsl(211, 39%, 23%);
-  --clr-grey-3: hsl(209, 34%, 30%);
-  --clr-grey-4: hsl(209, 28%, 39%);
-  /* grey used for paragraphs */
-  --clr-grey-5: hsl(210, 22%, 49%);
-  --clr-grey-6: hsl(209, 23%, 60%);
-  --clr-grey-7: hsl(211, 27%, 70%);
-  --clr-grey-8: hsl(210, 31%, 80%);
-  --clr-grey-9: hsl(212, 33%, 89%);
-  --clr-grey-10: hsl(210, 36%, 96%);
-  --clr-white: #fff;
-  --clr-red-dark: hsl(360, 67%, 44%);
-  --clr-red-light: hsl(360, 71%, 66%);
-  --clr-green-dark: hsl(125, 67%, 44%);
-  --clr-green-light: hsl(125, 71%, 66%);
-  --clr-black: #222;
-  --transition: all 0.3s linear;
-  --spacing: 0.1rem;
-  --radius: 0.25rem;
-  --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  --dark-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-  --max-width: 1170px;
-  --clr-orange-1: hsl(12, 83%, 98%);
-  --clr-orange-2: hsl(14, 91%, 95%);
-  --clr-orange-3: hsl(12, 89%, 89%);
-  --clr-orange-4: hsl(13, 87%, 82%);
-  --clr-orange-5: hsl(13, 88%, 68%);
-  --clr-orange-6: hsl(13, 88%, 55%);
-  --clr-orange-7: hsl(13, 74%, 49%);
-  --clr-orange-8: hsl(13, 74%, 33%);
-  --clr-orange-9: hsl(13, 73%, 25%);
-  --clr-orange-10: hsl(13, 73%, 16%);
+  /* Core game colors */
+  --color-background: orange;
+  --color-text: #222;
+  --color-header-bg: black;
+  --color-header-text: white;
+  --color-button-bg: #222;
+  --color-button-text: white;
+  --color-puzzle-letter: rgb(52, 71, 50);
+  --color-puzzle-hidden: white;
+  
+  /* Spacing - adjust these to control vertical layout */
+  --spacing-xs: 5px;
+  --spacing-sm: 10px;
+  --spacing-md: 15px;
+  --spacing-lg: 20px;
+  --spacing-xl: 30px;
+  
+  /* Core element heights - adjust to control vertical sizing */
+  --height-header: 50px;
+  --height-puzzle: auto;
+  --height-batmeter: 140px;
+  --height-carousel: 80px;
+  --height-confirm-btn: 40px;
+  --height-used-letters: auto;
+  
+  /* Element margins - adjust to move elements up/down */
+  --margin-puzzle-top: var(--spacing-sm);
+  --margin-puzzle-bottom: 45px;
+  --margin-batmeter-top: var(--spacing-sm);
+  --margin-batmeter-bottom: var(--spacing-sm);
+  --margin-carousel-top: var(--spacing-xl);
+  --margin-carousel-bottom: var(--spacing-sm);
+  --margin-confirm-top: var(--spacing-lg);
+  --margin-confirm-bottom: var(--spacing-xs);
+  --margin-used-letters-top: var(--spacing-sm);
+  --margin-used-letters-bottom: var(--spacing-sm);
+  
+  /* Font sizes */
+  --font-size-small: 0.8rem;
+  --font-size-base: 1rem;
+  --font-size-medium: 1.2rem;
+  --font-size-large: 1.5rem;
 }
 
 /*
 =============== 
-Global Styles
+Global Reset
 ===============
 */
 
@@ -82,291 +73,100 @@ html, body {
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
   -webkit-tap-highlight-color: transparent;
-}
-
-html {
-  max-width: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  min-height: 100%;
-  overflow-x: hidden;
-  background-color: orange;
-}
-
-body {
-  max-width: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  min-height: 100%;
-  overflow-x: hidden;
-  background: transparent;
-  /* background-image: linear-gradient(red, orange); */
-  background-image: black;
-}
-
-body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  /* background: var(--clr-grey-10); */
-  color: var(--clr-grey-1);
+  color: var(--color-text);
   line-height: 1.5;
-  font-size: 0.875rem;
+  font-size: var(--font-size-base);
+  background-color: var(--color-background);
 }
 
-ul {
-  list-style-type: none;
-}
-
-a {
-  text-decoration: none;
-}
+/*
+=============== 
+Main Layout
+===============
+*/
 
 main {
-  /* background-image: linear-gradient(red, orange); */
   height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
 }
 
-h2,
-h3 {
-  letter-spacing: var(--spacing);
-  text-transform: capitalize;
-  line-height: 1.25;
-  margin-bottom: 0.75rem;
-}
-
-h1 {
-  /* font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
-  color: white;
-  padding-bottom: 7rem;
-  height: 0.1rem;
-  background: black;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid white;
-  text-align: center; */
-  text-align: center;
-  width: 85vw;
-  height: 30vw;
-}
-
-h2 {
-  font-size: 2rem;
-}
-
-h3 {
-  font-size: 1.25rem;
-}
-
-h4 {
-  color: black;
-  text-align: center;
-  margin-top: 10vh;
-  margin-bottom: 4vh;
-  font-size: 1.5rem;
-}
-
-p {
-  margin-bottom: 1.25rem;
-  color: black;
-}
-
-@media screen and (min-width: 800px) {
-  h1 {
-    font-size: 5rem;
-  }
-  h2 {
-    font-size: 2.5rem;
-  }
-  h3 {
-    font-size: 1.75rem;
-  }
-  h4 {
-    font-size: 2rem;
-  }
-  body {
-    font-size: 1rem;
-  }
-
-  h2,
-  h3 {
-    line-height: 1;
-  }
-}
-
-.carousel-track {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-  transition: transform 0.3s ease;
-}
-
-.carousel-track:active {
-  cursor: grabbing;
-}
-.carousel-nav-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  position: relative;
-  max-width: 100vw;
-  margin: 0 auto;
-}
-
-/* Letter Carousel - now wider to use more screen space */
-.letter-carousel {
-  width: 85%;
-  height: 90px;
-  overflow: hidden;
-  position: relative;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-  margin: 0 auto;
-  touch-action: pan-x;
-  cursor: grab;
-}
-.letter-carousel:active {
-  cursor: grabbing;
-}
-.letter-carousel::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-/* Enhanced Navigation Buttons (arrows) */
-.carousel-nav-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.1);
-  border: none;
-  width: 30px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  padding: 0;
-  transition: all 0.2s ease;
-}
-
-/* Position arrows at the very edges */
-.carousel-nav-button.left-arrow {
-  left: -6vw;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-.carousel-nav-button.right-arrow {
-  right: -6vw;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-/* Stylish arrow icons */
-.arrow-icon {
-  font-size: 2rem;
-  color: white;
-  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-}
-
-/* Arrow hover effects */
-.carousel-nav-button:hover {
-  background: rgba(0, 0, 0, 0.2);
-  width: 35px;
-}
-
-.carousel-nav-button:hover .arrow-icon {
-  color: #fff;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
-               0 0 20px rgba(100, 200, 255, 0.5);
-  transform: scale(1.2);
-}
-
-/* Arrow active effects */
-.carousel-nav-button:active .arrow-icon {
-  transform: scale(1);
-  opacity: 0.9;
-}
-
-.carousel-nav-button:active {
-  width: 30px;
-  background: rgba(0, 0, 0, 0.3);
-}
-
-/* Disabled state for when carousel is scrolling */
-.carousel-nav-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Make arrows more visible against light backgrounds */
-.carousel-nav-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.05), transparent);
-  border-radius: inherit;
-  z-index: -1;
-}
-
-.carousel-nav-button.right-arrow::before {
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.05), transparent);
-}
-
-
-/* Game container styles */
 .game-container {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  align-items: center;
   height: 100vh;
   overflow: hidden;
-}
-/* Answer letters container */
-.answer-letters-container {
-  width: 90%;
-  max-width: 90vw;
-  margin: 5px auto;
-  padding: 0;
+  padding: 0 var(--spacing-sm);
 }
 
-/* Puzzle container with automatic layout */
+/*
+=============== 
+Header/Menu
+===============
+*/
+
+.menu {
+  width: 100%;
+  height: var(--height-header);
+  padding: var(--spacing-xs) 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-header-bg);
+  position: relative;
+}
+
+.menu h1 {
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  font-size: var(--font-size-large);
+  color: var(--color-header-text);
+  margin: 0;
+  padding: 0;
+  height: auto;
+  width: auto;
+  text-align: center;
+  flex-grow: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  line-height: 1;
+}
+
+.menuButton {
+  font-size: var(--font-size-medium);
+  margin: var(--spacing-xs);
+  padding: var(--spacing-xs);
+  background: none;
+  border: none;
+  color: var(--color-header-text);
+  cursor: pointer;
+}
+
+/*
+=============== 
+Puzzle Letters
+===============
+*/
+
+.answer-letters-container {
+  width: 90%;
+  max-width: 600px;
+  margin: var(--margin-puzzle-top) auto var(--margin-puzzle-bottom);
+  height: var(--height-puzzle);
+}
+
 .puzzle {
   display: flex;
   justify-content: center;
-  gap: 5px;
-  padding: 5px;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs);
   width: 100%;
   margin: 0 auto;
-}
-
-/* Responsive sizing based on word length */
-.puzzle-3, .puzzle-4 {
-  gap: 15px;
-}
-
-.puzzle-5, .puzzle-6 {
-  gap: 12px;
-}
-
-.puzzle-7, .puzzle-8 {
-  gap: 8px;
-}
-
-.puzzle-9, .puzzle-10 {
-  gap: 5px;
+  flex-wrap: wrap;
 }
 
 .answer-letter-wrapper {
@@ -381,18 +181,10 @@ p {
   align-items: center;
 }
 
-/* Puzzle letter styles */
 .puzzleLetter, .puzzleLetterHidden {
-  --base-width: 45px;
-  --base-height: 70px;
-  --base-font: 3rem;
-  
-  /* Responsive scaling based on puzzle length */
-  --scale-factor: 1;
-  width: calc(var(--base-width) * var(--scale-factor));
-  height: calc(var(--base-height) * var(--scale-factor));
-  font-size: calc(var(--base-font) * var(--scale-factor));
-  
+  width: 40px;
+  height: 60px;
+  font-size: 2.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -400,114 +192,51 @@ p {
   border-radius: 5px;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
 }
 
 .puzzleLetter {
-  background-color: rgb(150, 216, 227);
-  color: black;
+  background-color: var(--color-puzzle-letter);
+  color: rgb(255, 255, 255);
   text-transform: uppercase;
 }
 
 .puzzleLetterHidden {
-  background-color: white;
+  background-color: var(--color-puzzle-hidden);
   color: transparent;
 }
 
-.puzzle-5 .puzzleLetter, .puzzle-5 .puzzleLetterHidden {
-  --scale-factor: 1.1;
-}
-
-.puzzle-6 .puzzleLetter, .puzzle-6 .puzzleLetterHidden {
-  --scale-factor: 1;
-}
-
-.puzzle-7 .puzzleLetter, .puzzle-7 .puzzleLetterHidden {
-  --scale-factor: 0.9;
-}
-
-.puzzle-8 .puzzleLetter, .puzzle-8 .puzzleLetterHidden {
-  --scale-factor: 0.8;
-}
-@media (max-width: 320px) {
-  .puzzle-5 .puzzleLetter, .puzzle-5 .puzzleLetterHidden {
-    --scale-factor: 1;
-  }
-  
-  .puzzle-6 .puzzleLetter, .puzzle-6 .puzzleLetterHidden {
-    --scale-factor: 0.85;
-  }
-  
-  .puzzle-7 .puzzleLetter, .puzzle-7 .puzzleLetterHidden {
-    --scale-factor: 0.75;
-  }
-  
-  .puzzle-8 .puzzleLetter, .puzzle-8 .puzzleLetterHidden {
-    --scale-factor: 0.65;
-  }
-}
-@media (min-width: 321px) and (max-width: 375px) {
-  .puzzle-7 .puzzleLetter, .puzzle-7 .puzzleLetterHidden {
-    --scale-factor: 0.8;
-  }
-  
-  .puzzle-8 .puzzleLetter, .puzzle-8 .puzzleLetterHidden {
-    --scale-factor: 0.7;
+/* Responsive puzzle sizing */
+@media (max-width: 400px) {
+  .puzzleLetter, .puzzleLetterHidden {
+    width: 45px;
+    height: 60px;
+    font-size: 2.5rem;
   }
 }
 
-@media (min-width: 376px) and (max-width: 414px) {
-  .puzzle-8 .puzzleLetter, .puzzle-8 .puzzleLetterHidden {
-    --scale-factor: 0.75;
-  }
-}
+/*
+=============== 
+BatMeter
+===============
+*/
 
-/* For landscape orientation */
-@media (orientation: landscape) and (max-height: 500px) {
-  .puzzle-5 .puzzleLetter, .puzzle-5 .puzzleLetterHidden,
-  .puzzle-6 .puzzleLetter, .puzzle-6 .puzzleLetterHidden,
-  .puzzle-7 .puzzleLetter, .puzzle-7 .puzzleLetterHidden,
-  .puzzle-8 .puzzleLetter, .puzzle-8 .puzzleLetterHidden {
-    --scale-factor: 0.7;
-  }
-}
-
-
-/* Victory animation for letters */
-.puzzleLetter.victory-letter {
-  animation: victoryPulse 1.5s infinite;
-}
-@keyframes arrowEntrance {
-  0% { opacity: 0; width: 0; }
-  100% { opacity: 1; width: 30px; }
-}
-
-@keyframes victoryPulse {
-  0% { transform: scale(1); background-color: rgb(150, 216, 227); }
-  50% { transform: scale(1.1); background-color: rgb(100, 255, 150); }
-  100% { transform: scale(1); background-color: rgb(150, 216, 227); }
-}
-
-/* BatMeter Styles */
 .bat-meter-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 100px auto;
-  padding: 0;
-  height: 160px; /* Increased height to accommodate vertical layout */
+  margin: var(--margin-batmeter-top) auto var(--margin-batmeter-bottom);
+  height: var(--height-batmeter);
   width: 90%;
   max-width: 300px;
   position: relative;
-  transform: scale(2);
+  transform: scale(1.5);
 }
 
 .bat-wrapper {
   position: relative;
-  width: 80px;
-  height: 120px;
-  transition: all 0.3s ease-in-out;
+  width: 70px;
+  height: 100px;
   margin: 0 auto;
   display: block;
 }
@@ -527,11 +256,9 @@ p {
   border: double black;
   background-color: #f8f8f8a3;
   transform: scale(1.05);
-  
 }
 
 .bat-image {
-
   position: absolute;
   top: 0;
   left: 0;
@@ -540,13 +267,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  transition: all 0.5s ease-in-out;
-  
-  filter: brightness(0) saturate(100%) invert(17%) sepia(91%) saturate(5910%) hue-rotate(0deg) brightness(85%) contrast(124%);
-
-  /* filter: drop-shadow(4px 4px 4px rgba(241, 0, 0, 0.7)); */
-
-  
+  filter: brightness(0) saturate(100%) invert(17%) sepia(91%) saturate(5910%) hue-rotate(0deg) brightness(55%) contrast(124%);
 }
 
 .budget-indicator {
@@ -554,12 +275,12 @@ p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 0px;
+  margin-top: var(--spacing-xs);
 }
 
 .budget-text {
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
-  font-size: 1.5rem;
+  font-size: var(--font-size-medium);
   color: black;
   font-weight: bold;
   display: flex;
@@ -570,14 +291,13 @@ p {
 }
 
 .current-spent {
-  color: #ff0202;
+  color: #950505;
   font-weight: bold;
 }
 
 .budget-separator {
-  font-size: 1.8rem;
+  font-size: var(--font-size-large);
   opacity: 0.7;
-  
 }
 
 .max-budget {
@@ -586,93 +306,69 @@ p {
 
 .budget-label {
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
-  font-size: 0.9rem;
-  color: #444;
-  margin-top: 0rem;
+  font-size: var(--font-size-small);
+  color: #000000;
+  margin-top: -8px;
 }
 
-/* Animation for BatMeter when budget is getting low */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
+/*
+=============== 
+Letter Carousel
+===============
+*/
 
-/* Apply animation when budget is over 70% consumed */
-.bat-wrapper.danger {
-  animation: pulse 1.5s infinite ease-in-out;
-}
-
-/* Letter Carousel Container */
 .letter-carousel-container {
-  width: 85%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   height: auto;
-  gap: 10px;
+  margin: var(--margin-carousel-top) auto var(--margin-carousel-bottom);
 }
 
-/* The carousel wrapper */
-.letter-carousel {
+.carousel-nav-container {
   display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  width: 90%; /* Reduce width to accommodate arrows */
-  padding: 5px 0;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  max-width: 100vw;
+  margin: 0 auto;
+}
+
+.letter-carousel {
+  width: 85%;
+  height: var(--height-carousel);
+  overflow: hidden;
+  position: relative;
   background: rgba(0, 0, 0, 0.05);
   border-radius: 10px;
-  position: relative;
-  scroll-snap-type: x mandatory;
-  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.05);
+  margin: 0 auto;
+  touch-action: pan-x;
+  cursor: grab;
 }
 
-.letter-carousel::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+.carousel-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 }
 
-/* Remove the gradient scroll indicators since we now have arrows */
-.letter-carousel::before, .letter-carousel::after {
-  content: none;
-}
-
-/* Add scroll-snap to carousel items for better positioning */
 .carousel-item {
   flex: 0 0 auto;
-  width: 45px;
-  margin: 0 2px;
+  width: 40px;
+  margin: 0 var(--spacing-xs);
   display: flex;
   justify-content: center;
   align-items: center;
   user-select: none;
-  transition: all 0.3s ease;
-}
-.carousel-item:nth-child(1) {
-  transform: scale(1.0);
-}
-.carousel-item:nth-child(2) {
-  transform: scale(1.1);
-}
-.carousel-item:nth-child(3) {
-  transform: scale(1.15);
-}
-.carousel-item:nth-child(4) {
-  transform: scale(1.1);
-}
-.carousel-item:nth-child(5) {
-  transform: scale(1.0);
-}
-.carousel-item:not(:nth-child(3)) .carousel-letter-btn {
-  opacity: 0.9;
 }
 
-
-/* Button styling */
+/* Carousel letter styling */
 .carousel-letter-btn {
-  width: 40px;
-  height: 65px;
+  width: 35px;
+  height: 55px;
   border-radius: 8px;
   border: 1px solid #ffffff;
   background: linear-gradient(145deg, #000000, #222222);
@@ -683,40 +379,11 @@ p {
   align-items: center;
   cursor: pointer;
   box-shadow: 3px 3px 0px 0px rgba(5, 0, 0, 0.7);
-  transition: all 0.1s ease;
   position: relative;
   overflow: hidden;
   user-select: none;
 }
-.carousel-letter-btn * {
-  user-select: none;
-}
 
-/* Hover effect */
-.carousel-letter-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 3px 6px 0px 0px rgba(5, 0, 0, 0.5);
-}
-
-/* Selected letter highlighting */
-.carousel-letter-btn.hovered {
-  background: white;
-  color: black;
-  /* box-shadow: 0 0 15px 5px #fff, 0 0 25px 10px #f0f, 0 0 35px 15px #0ff; */
-  box-shadow: 0 0 2px 2px #ffffff95, 0 0 5px 5px rgba(255, 0, 255, 0.774), 0 0 6px 6px rgba(0, 255, 255, 0.556);
-  transform: translateY(-3px) scale(1.05);
-}
-
-.carousel-scroll-indicator {
-  position: absolute;
-  bottom: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.8rem;
-  color: rgba(0, 0, 0, 0.5);
-}
-
-/* Letter styling */
 .letter-container {
   display: flex;
   flex-direction: column;
@@ -725,108 +392,134 @@ p {
 }
 
 .letter-character {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: bold;
   font-family: Arial, sans-serif;
-  transition: all 0.2s ease;
 }
 
-.hovered .letter-character {
-  transform: scale(1.1);
-}
-
-/* Cost bubble */
 .letter-cost {
   position: absolute;
   top: 2px;
-  right: 0px;
+  right: 2px;
   font-size: 0.7rem;
   font-weight: bold;
-  /* background-color: rgba(255, 60, 60, 0.9); */
   color: white;
-  padding: 2px 4px;
-  border-radius: 10px;
+  padding: 1px 3px;
   min-width: 16px;
   text-align: center;
 }
 
-/* Confirm button styling */
+/* Selected letter highlighting */
+.carousel-letter-btn.hovered {
+  background: white;
+  color: black;
+  box-shadow: 0 0 2px 2px #ffffff95, 0 0 5px 5px rgba(255, 0, 255, 0.774), 0 0 6px 6px rgba(0, 255, 255, 0.556);
+}
+
+/* Navigation buttons */
+.carousel-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  width: 30px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  padding: 0;
+  border-radius: 10px;
+}
+
+.carousel-nav-button.left-arrow {
+  left: -6vw;
+}
+
+.carousel-nav-button.right-arrow {
+  right: -6vw;
+}
+
+.arrow-icon {
+  font-size: 2rem;
+  color: white;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+/*
+=============== 
+Confirm Button
+===============
+*/
+
 .confirm {
-  margin: 15px auto;
-  padding: 10px 15px;
-  font-size: 1rem;
+  margin: var(--margin-confirm-top) auto var(--margin-confirm-bottom);
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-base);
   border: none;
   border-radius: 50px;
   cursor: pointer;
   width: auto;
   min-width: 200px;
-  height: 44px;
+  height: var(--height-confirm-btn);
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.3s ease;
 }
 
-.confirm:hover {
-  transform: translateY(-2px);
-  /* box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.3), 0 0 25px 10px rgba(255, 0, 255, 0.2), 0 0 35px 15px rgba(0, 255, 255, 0.1); */
-}
 .confirm.active {
   background: linear-gradient(145deg, #000000, #222222);
   color: white;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
+
 .confirm.inactive {
   background: rgba(0, 0, 0, 0.1);
   color: rgba(0, 0, 0, 0.6);
   cursor: default;
 }
-.confirm.active:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.3), 0 0 25px 10px rgba(255, 0, 255, 0.2), 0 0 35px 15px rgba(0, 255, 255, 0.1);
-}
 
+/*
+=============== 
+Used Letters Section
+===============
+*/
 
-/* Used Letters section */
-.used-letters-container {
-  width: 100%;
-  margin: 10px auto 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.used-letters-section {
+  margin: var(--margin-used-letters-top) auto var(--margin-used-letters-bottom);
+  width: 70%;
+  max-width: 300px;
 }
 
 .used-letters-section h3 {
-  margin: 5px 0;
+  margin: var(--spacing-xs) 0;
   color: black;
   text-align: center;
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
-  font-size: 1.2rem;
+  font-size: var(--font-size-base);
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 1px;
   width: 100%;
 }
 
-/* Grid with limited width */
 .used-letters-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 letters per row */
-  gap: 6px;
-  padding: 8px;
-  min-height: 50px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  padding: var(--spacing-xs);
+  min-height: 40px;
   width: 100%;
-  max-width: 300px; /* Limit max width */
-  margin: 0 auto; /* Center the grid */
+  margin: 0 auto;
   background-color: rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   justify-content: center;
 }
 
-/* Redesigned used letter with cost indicator */
 .used-letter {
-  width: 34px;
-  height: 50px;
+  width: 30px;
+  height: 40px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -837,8 +530,8 @@ p {
   font-weight: bold;
   font-size: 0.9rem;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-  animation: fadeInLetter 0.3s forwards;
 }
+
 .letter-cost-indicator {
   position: absolute;
   top: 1px;
@@ -855,696 +548,42 @@ p {
 .no-letters-used {
   color: rgba(0, 0, 0, 0.4);
   font-style: italic;
-  font-size: 0.9rem;
-  padding: 10px;
+  font-size: var(--font-size-small);
+  padding: var(--spacing-sm);
 }
 
-/* Victory screen animations */
-.victorywords {
-  animation: victoryGlow 2.5s infinite alternate;
-  text-align: center;
-  margin: 10px auto;
-  padding: 10px;
-  width: 90%;
-  max-width: 500px;
-  border-radius: 10px;
-}
+/*
+=============== 
+Reset Button
+===============
+*/
 
-@keyframes slideIn {
-  from { transform: translateX(50px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-@keyframes slideOut {
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(-50px); opacity: 0; }
-}
-
-.slide-in-right {
-  animation: slideIn 0.3s forwards;
-}
-
-.slide-out-left {
-  animation: slideOut 0.3s forwards;
-}
-
-@keyframes subtlePulse {
-  0% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.7; }
-}
-
-@keyframes victoryGlow {
-  0% { 
-    text-shadow: 0 0 5px cyan, 0 0 10px white, 0 0 15px cyan; 
-    transform: scale(1);
-  }
-  100% { 
-    text-shadow: 0 0 10px cyan, 0 0 20px white, 0 0 30px cyan, 0 0 40px magenta; 
-    transform: scale(1.05);
-  }
-}
-
-/* Defeat screen animations */
-.defeatwords {
-  animation: defeatPulse 3s infinite alternate;
-  text-align: center;
-  margin: 10px auto;
-  padding: 10px;
-  width: 90%;
-  max-width: 500px;
-  border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-@keyframes defeatPulse {
-  0% { 
-    text-shadow: 0 0 5px red, 0 0 10px black; 
-    transform: scale(1);
-  }
-  100% { 
-    text-shadow: 0 0 10px red, 0 0 20px black, 0 0 30px red; 
-    transform: scale(1.03);
-  }
-}
-
-/* Reset button animations */
-
-.reset-button-container {
-  display: flex;
-  justify-content: center;
-  margin: 15px 0;
-}
-
-.btnReset {
-  position: relative;
-  animation: floatBtn 3s infinite ease-in-out;
-  background: linear-gradient(145deg, #000000, #333333);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  font-family: Impact, sans-serif;
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-  text-align: center;
-  padding: 0 10px;
-}
-
-.btnReset:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-}
-
-
-@keyframes floatBtn {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
-
-/* Animation for appearing letters in the used letters grid */
-@keyframes fadeInLetter {
-  from { 
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  to { 
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.used-letter {
-  animation: fadeInLetter 0.3s forwards;
-}
-
-/*  global classes */
-
-/* section */
-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.defeatwords {
-  margin-top: 20%;
-  margin-bottom: 5%;
-  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073,
-    0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
-}
-
-
-.container {
-  width: 80vw;
-  font-size: 8vw;
-  margin: 10vw;
-  text-align: center;
-  padding: 0vw;
-  padding-bottom: 0vw;
-  align-content: center;
-}
-
-.menu {
-  width: 100%;
-  height: auto;
-  padding: 10px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: black;
-  margin-bottom: 0;
-  position: relative;
-}
-
-
-.menu h1 {
-  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
-font-size: 1.8rem;
-color: rgb(255, 255, 255);
-margin: 0;
-padding: 0;
-height: auto;
-width: auto;
-text-align: center;
-flex-grow: 1;
-position: absolute;
-left: 50%;
-transform: translateX(-50%);
-line-height: 0.9; /* Add this line to reduce the gap */
-}
-
-.menu .menuButton:first-child {
-  margin-left: 10px;
-}
-
-.menuButton {
-  font-size: 1.25rem;
-  margin: 2px;
-  padding: 3px;
-}
-
-
-
-
-/* Remove letterlist grid to replace with carousel */
-.letterlist {
-  display: none; /* Hide the original letter grid */
-}
-
-/* The buttons no longer needed with carousel */
-.btntwo, .btn, .btnUsed, .btnscenter {
-  display: none;
-}
-
-.select {
-  /* display: grid; */
-  width: 30vw;
-  height: 6vh;
-  font-size: 2vh;
-  align-content: center;
-  align-self: center;
-  border-radius: 1rem;
-  /* padding: 1rem; */
-  margin-bottom: 3vw;
-  border: 0.1rem solid black;
-
-  /* margin: 10vh; */
-  position: relative;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, 0);
-  transform: translate(-50%, 0);
-  /* margin-right: 150px;
-  margin-left: 150px; */
-  /* margin: 3rem auto; */
-}
-
-
-
-
-/* Fix for the verification screens */
-.verification-message {
-  width: 80%;
-  text-align: center;
-  margin: 10px 0;
-}
-
-/* Play mode selection styles */
-.play-mode-container {
-  position: relative;
-}
-.play-mode-container .navigation-menu-container {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-.game-title {
-  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
-  font-size: 3rem;
-  margin-bottom: 3rem;
-  color: black;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.play-options {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.play-option-btn {
-  padding: 1rem 2rem;
-  font-size: 1.5rem;
-  cursor: pointer;
-  border-radius: 8px;
-  border: none;
-  min-width: 200px;
-  transition: all 0.3s ease;
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.play-option-btn.competitive {
-  background-color: #000000;
-}
-
-.play-option-btn.casual {
-  background-color: #000000;
-}
-
-.play-option-btn:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Responsive adjustments for different screen sizes */
-@media (max-width: 400px) {
-  .confirm {
-    min-width: 180px;
-    font-size: 0.9rem;
-    padding: 8px 12px;
-    height: 40px;
-  }
-  
-  .used-letters-section h3 {
-    font-size: 0.9rem;
-  }
-  .arrow-icon {
-    font-size: 1.5rem;
-  }
-  .carousel-nav-button {
-    font-size: 1.5rem;
-    width: 25px;
-    height: 60px;
-  }
-
-  .carousel-nav-button:hover {
-    width: 30px;
-  }
-
-  .carousel-item {
-    width: 40px;
-  }
-  
-  .letter-carousel {
-    width: 100%;
-  }
-  /* .puzzleLetter, .puzzleLetterHidden {
-    width: 36px;
-    height: 48px;
-    font-size: 1.4rem;
-  }
-   */
-  .puzzle {
-    gap: 6px;
-  }
-  
-  .victorywords h4, .defeatwords h4 {
-    font-size: 1.2rem;
-  }
-  
-  .used-letters-grid {
-    max-width: 250px;
-    gap: 5px;
-  }
-  
-  .used-letter {
-    width: 30px;
-    height: 40px;
-  }
-  
-  .letter-cost-indicator {
-    font-size: 0.5rem;
-  }
-  
-  .btnReset {
-    width: 100px;
-    height: 100px;
-    font-size: 1rem;
-  }
-  
-  .carousel-letter-btn {
-    width: 35px;
-    height: 55px;
-  }
-  
-  .letter-character {
-    font-size: 1.5rem;
-  }
-  
-  .letter-cost {
-    font-size: 0.65rem;
-    min-width: 14px;
-  }
-  
-  .bat-wrapper {
-    width: 60px;
-    height: 90px;
-  }
-  
-  .budget-text {
-    font-size: 1.2rem;
-  }
-  
-  .budget-label {
-    font-size: 0.8rem;
-  }
-}
-
-@media (min-width: 401px) and (max-width: 600px) {
-  .puzzleLetter, .puzzleLetterHidden {
-    width: 40px;
-    height: 55px;
-    font-size: 1.6rem;
-  }
-  
-  .puzzle {
-    gap: 8px;
-  }
-}
-
-/* Landscape orientation adjustments */
-@media (max-height: 500px) and (orientation: landscape) {
-  .confirm {
-    margin: 8px auto;
-    min-width: 160px;
-    height: 36px;
-    font-size: 0.85rem;
-  }
-  
-  .used-letters-section {
-    margin: 5px auto;
-  }
-  
-  .used-letters-grid {
-    max-width: 220px;
-    gap: 4px;
-  }
-  
-  .used-letter {
-    width: 26px;
-    height: 40px;
-  }
-  .carousel-nav-container {
-    margin: 5px 0;
-  }
-  
-  .carousel-nav-button {
-    width: 25px;
-    height: 50px;
-  }
-  
-  .arrow-icon {
-    font-size: 1.5rem;
-  }
-  .puzzleLetter, .puzzleLetterHidden {
-    width: 36px;
-    height: 45px;
-    font-size: 1.3rem;
-  }
-  
-  .puzzle {
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-  
-  .victorywords, .defeatwords {
-    margin: 5px auto;
-  }
-  
-  .victorywords h4, .defeatwords h4 {
-    font-size: 1rem;
-    margin: 5px 0;
-  }
-  
-  .used-letters-grid {
-    margin: 5px auto;
-    padding: 5px;
-  }
-  
-  .btnReset {
-    width: 80px;
-    height: 80px;
-    font-size: 0.9rem;
-    margin: 10px auto;
-  }
-  
-  .letter-carousel-container {
-    margin-top: 2px;
-  }
-  
-  .carousel-letter-btn {
-    width: 40px;
-    height: 55px;
-  }
-  
-  .letter-character {
-    font-size: 1.4rem;
-  }
-  
-  .confirm {
-    margin: 5px auto;
-    font-size: 0.9rem;
-    min-width: 180px;
-    padding: 6px 12px;
-  }
-  
-  .used-letters-container {
-    margin: 5px auto 2px;
-  }
-  
-  .used-letters-container h3 {
-    font-size: 0.9rem;
-    margin: 2px 0;
-  }
-  
-  .used-letters-grid {
-    padding: 5px;
-    gap: 4px;
-  }
-  
-  .used-letter {
-    width: 30px;
-    height: 40px;
-    font-size: 0.8rem;
-  }
-  
-  .bat-meter-container {
-    height: 110px;
-    flex-direction: row;
-    gap: 15px;
-  }
-  
-  .bat-wrapper {
-    width: 50px;
-    height: 80px;
-  }
-  
-  .budget-indicator {
-    margin-top: 0;
-  }
-  
-  .budget-text {
-    font-size: 1.2rem;
-  }
-}
-
-/* Responsive adjustments for the play mode selection */
-@media (max-width: 650px) {
-  .play-options {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .game-title {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .carousel-nav-button {
-    width: 35px;
-    height: 90px;
-  }
-  
-  .carousel-nav-button:hover {
-    width: 40px;
-  }
-  
-  .arrow-icon {
-    font-size: 2.2rem;
-  }
-  
-  .letter-carousel {
-    width: 90%;
-  }
-}
-
-/* Touch active state for better feedback */
-.touch-active {
-  transform: scale(0.95);
-  opacity: 0.9;
-}
-
-/* Legacy styles kept for compatibility */
-.victory {
-  align-self: center;
-  max-width: 54rem;
-  min-width: 54rem;
-  min-height: 10rem;
-  max-height: 10rem;
-  margin: 0 auto;
-  margin-bottom: 4rem;
-  display: grid;
-  column-gap: 0px;
-  grid-template-columns: repeat(6, 0fr);
-  box-shadow: 0 0 30px 15px #fff, 0 0 50px 30px #f0f, 0 0 70px 45px #0ff;
-}
-
-.users a {
-  color: var(--clr-grey-5);
-  text-transform: capitalize;
-}
-
-input {
-  color: black;
-  font-size: 6vh;
-  height: 15vw;
-  width: 50vw;
-  margin-top: 10vw;
-  margin-left: 10vw;
-}
-
-.products {
-  margin: 4rem 0;
-  display: grid;
-  gap: 2rem;
-}
-
-.victorywords {
-  font-size: 3rem;
-  margin: 2.5rem;
-  text-shadow: 0 0 10px cyan, 0 0 20px white, 0 0 30px cyan, 0 0 40px #e60073,
-    0 0 50px magenta, 0 0 60px cyan, 0 0 70px magenta;
-}
-
-/* Dark mode support - can be enabled via media query or class toggle */
-@media (prefers-color-scheme: dark) {
-  .letter-carousel {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
-  .used-letters-grid {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  .puzzleLetterHidden {
-    background-color: #333;
-    border-color: #555;
-  }
-}
-
-/* Additional touch optimizations */
-@media (pointer: coarse) {
-  /* Larger touch targets for touch devices */
-  .carousel-letter-btn {
-    min-height: 60px;
-  }
-  
-  .used-letter {
-    min-width: 32px;
-    min-height: 32px;
-  }
-  
-  .confirm {
-    min-height: 44px;
-  }
-}
-
-/* Developer reset button (fixed in bottom right) */
 .dev-reset-button {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
+  bottom: 15px;
+  right: 15px;
+  width: 50px;
+  height: 50px;
   background-color: #ff5500;
   color: white;
   border: none;
   border-radius: 50%;
-  font-size: 0.9rem;
+  font-size: var(--font-size-small);
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  z-index: 9999; /* Ensure it's always on top */
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
 }
 
-.dev-reset-button:hover {
-  background-color: #ff3300;
-  transform: scale(1.1);
-}
+/*
+===============
+Navigation Menu
+===============
+*/
 
-.dev-reset-button:active {
-  transform: scale(0.95);
-}
-
-/* Responsive adjustments */
-@media (max-width: 400px) {
-  .btnReset {
-    width: 100px;
-    height: 100px;
-    font-size: 1rem;
-  }
-  
-  .dev-reset-button {
-    width: 50px;
-    height: 50px;
-    font-size: 0.8rem;
-    bottom: 15px;
-    right: 15px;
-  }
-}
-
-/* Navigation Menu Styles */
-
-/* Container positioning */
 .navigation-menu-container {
   position: absolute;
   top: 10px;
@@ -1552,7 +591,6 @@ input {
   z-index: 100;
 }
 
-/* Menu button styles (matching existing menuButton) */
 .nav-menu-button {
   background: none;
   border: none;
@@ -1566,7 +604,6 @@ input {
   justify-content: center;
 }
 
-/* Dropdown menu container */
 .nav-menu-dropdown {
   position: absolute;
   top: 100%;
@@ -1577,15 +614,8 @@ input {
   padding: 5px 0;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   z-index: 101;
-  animation: menuFadeIn 0.2s ease-out forwards;
 }
 
-@keyframes menuFadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Menu options */
 .nav-menu-option {
   display: block;
   width: 100%;
@@ -1595,17 +625,216 @@ input {
   border: none;
   color: white;
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
-.nav-menu-option:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+/*
+===============
+Login Form
+===============
+*/
+
+form {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 90%;
+  margin: 0 auto;
 }
 
-/* Rules and Prizes Pages Styles */
+.alias {
+  margin-bottom: 20px;
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+}
+
+.userName {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.enter {
+  background: linear-gradient(145deg, #000000, #222222);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.login-error {
+  color: #ff3333;
+  background-color: rgba(255, 0, 0, 0.1);
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  width: 80%;
+  max-width: 300px;
+}
+
+/*
+===============
+Play Mode Selection
+===============
+*/
+
+.play-mode-container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-title {
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  color: black;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.play-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.play-option-btn {
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  min-width: 200px;
+  color: white;
+  font-weight: bold;
+  background-color: #000000;
+}
+
+/*
+===============
+Responsive Adjustments
+===============
+*/
+
+/* Small mobile devices */
+@media (max-width: 320px) {
+  :root {
+    --margin-puzzle-top: 2px;
+    --margin-puzzle-bottom: 2px;
+    --margin-batmeter-top: 5px;
+    --margin-batmeter-bottom: 5px;
+    --margin-carousel-top: 2px;
+    --margin-carousel-bottom: 2px;
+    --margin-confirm-top: 2px;
+    --margin-confirm-bottom: 2px;
+    --margin-used-letters-top: 2px;
+    --margin-used-letters-bottom: 2px;
+    --height-batmeter: 120px;
+  }
+  
+  .bat-meter-container {
+    transform: scale(1.3);
+  }
+  
+  .puzzleLetter, .puzzleLetterHidden {
+    width: 32px;
+    height: 45px;
+    font-size: 1.8rem;
+  }
+}
+
+/* Medium mobile devices */
+@media (min-width: 321px) and (max-width: 375px) {
+  :root {
+    --margin-puzzle-top: 3px;
+    --margin-puzzle-bottom: 3px;
+    --margin-batmeter-top: 7px;
+    --margin-batmeter-bottom: 7px;
+    --margin-carousel-top: 3px;
+    --margin-carousel-bottom: 3px;
+    --height-batmeter: 130px;
+  }
+  
+  .bat-meter-container {
+    transform: scale(1.4);
+  }
+}
+
+/* Landscape mode */
+@media (orientation: landscape) and (max-height: 500px) {
+  .game-container {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: auto auto;
+    gap: 5px;
+    height: 100vh;
+    padding: 5px;
+  }
+  
+  .answer-letters-container {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 5px;
+  }
+  
+  .bat-meter-container {
+    grid-column: 2;
+    grid-row: 1;
+    transform: scale(1);
+    height: auto;
+    margin: 5px;
+  }
+  
+  .letter-carousel-container {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+    width: 95%;
+    margin: 5px auto;
+  }
+  
+  .used-letters-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin: 5px auto;
+    max-width: none;
+    width: 95%;
+  }
+  
+  .used-letters-section h3 {
+    width: auto;
+    margin: 0;
+  }
+  
+  .used-letters-grid {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: none;
+  }
+  
+  .used-letter {
+    margin: 2px;
+  }
+}
+
+/*
+=============== 
+Rules and Prizes Pages
+===============
+*/
+
 .rules-page, .prizes-page {
   position: fixed;
   top: 0;
@@ -1639,14 +868,14 @@ input {
   font-size: 2rem;
   color: white;
   text-align: center;
-  width: 100%; /* Take full width of container */
-  position: absolute; /* Position absolutely */
-  left: 0; /* Start from left edge */
-  right: 0; /* Extend to right edge */
-  margin: 0 auto; /* Center horizontally */
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   margin-top: 61px;
-  z-index: 1; /* Lower z-index than the button */
+  z-index: 1;
 }
 
 .back-button {
@@ -1654,20 +883,20 @@ input {
   transform: rotate(90deg);
   padding: 2px;
   position: relative;
-  z-index: 2; /* Higher z-index than the title */
+  z-index: 2;
   margin-bottom: 5px;
 }
+
 .rules-header::after, .prizes-header::after {
   content: "";
-  width: 30px; /* Same width as the back button */
-  visibility: hidden; /* Invisible but takes space */
+  width: 30px;
+  visibility: hidden;
 }
 
 .rules-content, .prizes-content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  
+  gap: 15px;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -1675,25 +904,23 @@ input {
 .rule-section, .prize-section {
   background-color: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
-  padding: 15px;
-  
+  padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .rule-section h2, .prize-section h2 {
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
   color: #ff9d00;
-  font-size: 3.3rem;
-  margin-bottom: 10px;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
   text-shadow: 0 0 5px rgba(255, 157, 0, 0.5);
 }
 
 .rule-section p, .prize-section p {
   color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 10px;
-  
+  margin-bottom: 8px;
   line-height: 1.4;
-  font-size: 4rem;
+  font-size: 1rem;
 }
 
 .bonus-section {
@@ -1706,7 +933,7 @@ input {
   text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for rules/prizes pages */
 @media (max-width: 500px) {
   .rules-header h1, .prizes-header h1 {
     font-size: 1.5rem;
@@ -1717,180 +944,16 @@ input {
   }
   
   .rule-section p, .prize-section p {
-    font-size: 0.55rem;
-  }
-  
-  .nav-menu-dropdown {
-    width: 130px;
-  }
-  
-  .nav-menu-option {
     font-size: 0.9rem;
-    padding: 8px 12px;
   }
 }
 
-/* Landscape adjustments */
-@media (max-height: 500px) and (orientation: landscape) {
-  .rules-content, .prizes-content {
-    gap: 10px;
-  }
-  
-  .rule-section, .prize-section {
-    padding: 10px;
-  }
-}
+/*
+=============== 
+Leaderboard Page
+===============
+*/
 
-.loading-container {
-  position: relative;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.loading-container .navigation-menu-container {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-@media (max-width: 400px) {
-  .menu h1 {
-    font-size: 1.2rem;
-  }
-  
-  .menuButton {
-    font-size: 1.2rem;
-  }
-}
-
-/* Add a transition effect for smoother menu interactions */
-.menuButton, .nav-menu-button {
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.menuButton:active, .nav-menu-button:active {
-  transform: scale(0.9);
-  color: rgba(0, 0, 0, 0.8);
-}
-
-/* Add these styles to your src/index.css file */
-
-/* Login error message */
-.login-error {
-  color: #ff3333;
-  background-color: rgba(255, 0, 0, 0.1);
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-  text-align: center;
-  font-weight: bold;
-  width: 80%;
-  max-width: 300px;
-}
-
-/* Stats summary after game */
-.stats-summary {
-  background-color: rgba(0, 0, 0, 0.08);
-  border-radius: 8px;
-  padding: 12px;
-  margin: 15px auto;
-  max-width: 90%;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.stats-summary p {
-  margin: 5px 0;
-  font-size: 0.9rem;
-  color: #333;
-  text-align: center;
-}
-
-/* Enhance leaderboard styling */
-.lBoard {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.columnHeaders {
-  background-color: #000;
-  color: white;
-  border-radius: 5px 5px 0 0;
-}
-
-.columnHeaders span {
-  padding: 10px 5px;
-  font-weight: bold;
-}
-
-/* Improved login and registration forms */
-form {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  max-width: 90%;
-  margin: 0 auto;
-}
-
-.alias {
-  margin-bottom: 20px;
-  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
-}
-
-.userName {
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
-}
-
-.userName:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  outline: none;
-  border-color: #007bff;
-}
-
-.enter {
-  background: linear-gradient(145deg, #000000, #222222);
-  color: white;
-  border: none;
-  border-radius: 30px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-  cursor: pointer;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
-.enter:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-}
-
-.enter:active {
-  transform: translateY(1px);
-}
-
-/* Mobile optimizations */
-@media (max-width: 480px) {
-  .stats-summary {
-    padding: 8px;
-  }
-  
-  .stats-summary p {
-    font-size: 0.8rem;
-  }
-}
-/* Add these styles to your src/index.css file */
-
-/* Leaderboard Page Styles */
 .leaderboard-page {
   position: fixed;
   top: 0;
@@ -1947,7 +1010,7 @@ form {
 }
 
 /* Leaderboard content styling */
-.leaderboard-page .lBoard {
+.lBoard {
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -1956,19 +1019,24 @@ form {
   overflow: hidden;
 }
 
-.leaderboard-page .columnHeaders {
+.columnHeaders {
   background-color: rgba(0, 0, 0, 0.6);
   color: white;
   border-radius: 10px 10px 0 0;
   display: grid;
-  grid-template-columns: 15vw 25vw 15vw 35vw;
+  grid-template-columns: 12vw 22vw 12vw 18vw 26vw;
   text-align: center;
   padding: 10px 5px;
 }
 
+.columnHeaders span {
+  padding: 10px 5px;
+  font-weight: bold;
+}
+
 .leaderboard-page .leaderboard {
   display: grid;
-  grid-template-columns: 15vw 25vw 15vw 35vw;
+  grid-template-columns: 12vw 22vw 12vw 18vw 26vw;
   text-align: center;
   background-color: rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -2008,12 +1076,15 @@ form {
   margin: 0;
 }
 
-/* Mobile responsive styles */
+/* Mobile responsive styles for leaderboard */
 @media (max-width: 768px) {
+  .leaderboard-page .lBoard {
+    overflow-x: auto;
+  }
+  
   .leaderboard-page .columnHeaders,
   .leaderboard-page .leaderboard {
-    grid-template-columns: 15vw 25vw 15vw 35vw;
-    font-size: 0.8rem;
+    min-width: 600px;
   }
   
   .leaderboard-page .leaderboard-note p {
@@ -2026,34 +1097,7 @@ form {
     padding: 10px;
   }
   
-  .leaderboard-page .lBoard {
-    overflow-x: auto;
-  }
-  
-  .leaderboard-page .columnHeaders,
-  .leaderboard-page .leaderboard {
-    min-width: 450px;
-    font-size: 0.7rem;
-  }
-  
   .leaderboard-header h1 {
     font-size: 1.5rem;
   }
-}
-.leaderboard-page .columnHeaders,
-.leaderboard-page .leaderboard {
-  grid-template-columns: 12vw 22vw 12vw 18vw 26vw;
-}
-
-/* For mobile screens, adjust the widths for better display */
-@media (max-width: 768px) {
-  .leaderboard-page .columnHeaders,
-  .leaderboard-page .leaderboard {
-    min-width: 600px;
-  }
-}
-
-/* Also update the standard leaderboard grid if used elsewhere */
-.columnHeaders, .leaderboard {
-  grid-template-columns: 12vw 22vw 12vw 18vw 26vw !important;
 }
