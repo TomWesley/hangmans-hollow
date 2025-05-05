@@ -12,6 +12,7 @@ import { resetPuzzleWord } from './puzzle'
 import { encrypt, decrypt, encryptObject, decryptObject } from './encryption'
 import { updateUserStats } from './userManagement'
 
+
 // Updated ResetGame function
 const ResetGame = () => {
   localStorage.removeItem('gameStateCurrent')
@@ -248,6 +249,11 @@ const Letters = ({ casualMode = false, username = '' }) => {
     
     setLetters(newArray);
   }
+  
+  // Helper function to check if a letter is in the puzzle
+  const isLetterInPuzzle = (letter) => {
+    return puz.some(puzzleLetter => puzzleLetter.name === letter);
+  }
 
   // Render game based on current status
   if (gameStateCurrent.status === 'solving') {
@@ -290,11 +296,17 @@ const Letters = ({ casualMode = false, username = '' }) => {
           <h3>Your Guesses In Order:</h3>
         </div>
         <div className="used-letters-grid">
-          {finalChosenLetters.map((letter, index) => (
-            <div key={index} className="used-letter">
-              {letter}
-            </div>
-          ))}
+          {finalChosenLetters.map((letter, index) => {
+            // Check if the letter is in the puzzle to determine the class
+            const isCorrect = isLetterInPuzzle(letter);
+            const letterClass = isCorrect ? "used-letter hit" : "used-letter";
+            
+            return (
+              <div key={index} className={letterClass}>
+                {letter}
+              </div>
+            );
+          })}
         </div>
         <div className='reset-button-container'>
           <button
@@ -334,11 +346,17 @@ const Letters = ({ casualMode = false, username = '' }) => {
           <h3>Your Guesses In Order:</h3>
         </div>
         <div className="used-letters-grid">
-          {finalChosenLetters.map((letter, index) => (
-            <div key={index} className="used-letter">
-              {letter}
-            </div>
-          ))}
+          {finalChosenLetters.map((letter, index) => {
+            // Check if the letter is in the puzzle to determine the class
+            const isCorrect = isLetterInPuzzle(letter);
+            const letterClass = isCorrect ? "used-letter hit" : "used-letter";
+            
+            return (
+              <div key={index} className={letterClass}>
+                {letter}
+              </div>
+            );
+          })}
         </div>
         <div className='reset-button-container'>
           <button

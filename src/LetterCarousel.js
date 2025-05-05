@@ -37,6 +37,19 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
     return visibleLetters;
   };
   
+  // Helper function to check if a letter is in the puzzle
+  const isLetterInPuzzle = (letter) => {
+    // Import the puzzle (assuming it's an array of letter objects)
+    try {
+      // We need to dynamically import the puzzle here to avoid circular dependency issues
+      const puzzle = require('./puzzle').default;
+      return puzzle.some(puzzleLetter => puzzleLetter.name === letter);
+    } catch (error) {
+      console.error("Error checking if letter is in puzzle:", error);
+      return false;
+    }
+  };
+  
   // Move in a direction (positive = right, negative = left)
   const moveDirection = (direction) => {
     if (availableLetters.length === 0) return;
@@ -162,12 +175,18 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
         <h3>Used Letters</h3>
         <div className="used-letters-grid">
           {usedLetters.length > 0 ? (
-            usedLetters.map((letter, index) => (
-              <div key={index} className="used-letter">
-                {letter}
-                <span className="letter-cost-indicator">{letterCosts[letter]}</span>
-              </div>
-            ))
+            usedLetters.map((letter, index) => {
+              // Check if the letter is in the puzzle to determine the class
+              const isCorrect = isLetterInPuzzle(letter);
+              const letterClass = isCorrect ? "used-letter hit" : "used-letter";
+              
+              return (
+                <div key={index} className={letterClass}>
+                  {letter}
+                  <span className="letter-cost-indicator">{letterCosts[letter]}</span>
+                </div>
+              );
+            })
           ) : (
             <div className="no-letters-used"></div>
           )}

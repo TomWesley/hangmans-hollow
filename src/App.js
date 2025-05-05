@@ -11,6 +11,7 @@ import RulesPage from './RulesPage'
 import PrizesPage from './PrizesPage'
 import LeaderboardPage from './LeaderboardPage'
 import { initializeUser, verifyUserEmail } from './userManagement'
+import logo from './HangmansHollowLogo.png';
 
 // Helper function to get username from localStorage
 const getLocalStorageUsername = () => {
@@ -210,8 +211,11 @@ function App() {
     // Mode selection screen
     if (playMode === '') {
       return (
-        <div className="play-mode-container">
+        <div className="title-screen-container">
+          
+          <img src={logo} alt="HH Logo" className='game-logo' />
           <h1 className="game-title">Hangman's Hollow</h1>
+          
           <div className="play-options">
             <button 
               className="play-option-btn competitive" 
