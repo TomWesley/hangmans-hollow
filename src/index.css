@@ -69,7 +69,7 @@ Global Reset
 
 /* Prevent scrolling on entire document */
 html, body {
-  overflow: hidden;
+  overflow: auto;
   position: fixed;
   height: 100%;
   width: 100%;
@@ -1231,4 +1231,167 @@ Responsive Adjustments
   .rule-section p, .prize-section p {
     font-size: 0.9rem;
   }
+}
+/* Add these CSS rules to prevent zoom and touch issues */
+
+/* Global touch action to prevent unwanted gestures */
+* {
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+}
+
+/* Prevent text/element selection */
+.letter-carousel,
+.carousel-nav-button,
+.carousel-track,
+.carousel-item,
+.carousel-letter-btn,
+.letter-character,
+.letter-cost,
+.confirm,
+.used-letter {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Prevent double-tap zoom on iOS */
+.carousel-nav-button, 
+.letter-carousel,
+.confirm {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+/* Specific touch behavior for carousel */
+.letter-carousel, 
+.carousel-track {
+  touch-action: pan-x;
+  -ms-touch-action: pan-x;
+}
+
+/* Safari-specific fix for preventing zoom */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .carousel-nav-button,
+  .carousel-letter-btn,
+  .confirm {
+    font-size: 16px; /* Minimum font size to prevent zoom on Safari */
+  }
+}
+
+/* Specific scrolling styles for special pages */
+html.special-page-active, 
+body.special-page-active {
+  overflow: auto !important;
+  position: static !important;
+  height: auto !important;
+  width: 100% !important;
+  overscroll-behavior: none !important;
+}
+
+.leaderboard-page, 
+.rules-page, 
+.prizes-page {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch !important;
+  z-index: 1000;
+  overscroll-behavior: contain;
+}
+
+/* Make sure page content is fully visible with scrolling */
+.rules-content,
+.prizes-content,
+.lBoard,
+.leaderboard-note {
+  padding-bottom: 100px;
+}
+
+/* Back button styles */
+.back-button {
+  /* Ensure this has no effect on zooming */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prioritize this fix for special pages content scrolling */
+.leaderboard-page,
+.rules-page,
+.prizes-page {
+  /* Override any conflicting styles */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+/* Mobile-specific scrolling fix for special pages */
+
+/* Special page containers */
+.leaderboard-page, 
+.rules-page, 
+.prizes-page {
+  /* Enable momentum scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  /* Make scrollable but keep fixed positioning */
+  overflow-y: auto !important;
+  /* Ensure content takes up full height */
+  min-height: 100vh;
+  /* Prevent horizontal scrolling */
+  overflow-x: hidden;
+  /* Prevent rubber-banding/overscroll effects */
+  overscroll-behavior-y: contain;
+  /* Make sure pointer events work properly */
+  touch-action: pan-y;
+}
+
+/* Add extra padding to ensure all content is visible and scrollable */
+.leaderboard-page .leaderboard-note,
+.rules-content > :last-child, 
+.prizes-content > :last-child {
+  margin-bottom: 80px;
+}
+
+/* Avoid any collisions with the fixed body/html styling */
+@media (max-width: 768px) {
+  /* Mobile-specific adjustments */
+  .leaderboard-page, 
+  .rules-page, 
+  .prizes-page {
+    /* Ensure absolute positioning takes precedence over fixed */
+    position: absolute !important;
+    inset: 0 !important;
+    /* Explicitly enable touch scrolling with higher specificity */
+    overflow-y: scroll !important;
+  }
+}
+
+/* Specific adjustment for iOS devices */
+@supports (-webkit-touch-callout: none) {
+  .leaderboard-page, 
+  .rules-page, 
+  .prizes-page {
+    /* iOS-specific scroll fixes */
+    height: -webkit-fill-available;
+  }
+}
+.carousel-nav-button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.carousel-nav-button {
+  font-size: 16px; /* Minimum font size to prevent zoom on Safari */
+}
+.scrollable {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on iOS */
+  touch-action: auto; /* Allows default touch gestures like scroll */
 }

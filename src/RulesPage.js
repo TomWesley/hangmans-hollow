@@ -1,7 +1,51 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { GiArrowDunk } from 'react-icons/gi';
 
 const RulesPage = ({ onBack }) => {
+  // Enable scrolling when this component mounts
+  useEffect(() => {
+    // Reference to the page container element
+    const pageElement = document.querySelector('.rules-page') || 
+                        document.querySelector('.prizes-page') || 
+                        document.querySelector('.leaderboard-page');
+    
+    if (!pageElement) return;
+    
+    // Handle touch start
+    const handleTouchStart = (e) => {
+      // Allow default touch behavior on these pages
+      // This is crucial for scrolling to work
+    };
+    
+    // Handle touch move
+    const handleTouchMove = (e) => {
+      // Allow default touch behavior for scrolling
+      // Do not call preventDefault() here
+    };
+    
+    // Add event listeners with passive: true
+    // This tells the browser we won't call preventDefault()
+    pageElement.addEventListener('touchstart', handleTouchStart, { passive: true });
+    pageElement.addEventListener('touchmove', handleTouchMove, { passive: true });
+    
+    // Clean up
+    return () => {
+      pageElement.removeEventListener('touchstart', handleTouchStart);
+      pageElement.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, []);
+  useEffect(() => {
+    // Enable scrolling on the page
+    document.documentElement.classList.add('special-page-active');
+    document.body.classList.add('special-page-active');
+    
+    // Clean up when unmounting
+    return () => {
+      document.documentElement.classList.remove('special-page-active');
+      document.body.classList.remove('special-page-active');
+    };
+  }, []);
+
   return (
     <div className="rules-page">
       <div className="rules-header">
