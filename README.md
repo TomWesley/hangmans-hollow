@@ -6,9 +6,9 @@
 
 A modern, mobile-optimized word guessing game with a unique budget-based twist on the classic Hangman formula.
 
-<p align="center">
-  <img src="/src/HangmansHollowLogo.png" alt="Hangman's Hollow Logo" />
-</p>
+<!-- <p align="center">
+  <img src="/src/HangmansHollowLogo.png" alt="Hangman's Hollow Logo"  />
+</p> -->
 
 ## 🎮 Game Overview
 
