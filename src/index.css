@@ -1479,3 +1479,341 @@ body {
     height: -webkit-fill-available;
   }
 }
+/* Desktop Responsive Styles for Hangman's Hollow
+ * These styles only apply to larger screens (tablets and desktops)
+ * Place this at the end of your index.css file
+ */
+
+/* Medium screens and up (tablets, small laptops) */
+@media (min-width: 768px) {
+  /* Basic font size increases */
+  body {
+    font-size: 18px;
+  }
+
+  /* Main container stays scrollable */
+  html, body {
+    overflow: auto !important;
+    position: static;
+    height: 100%;
+  }
+  
+  main {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+  
+  /* Game container modifications */
+  .game-container {
+    padding: 20px;
+    margin-top: 90px; /* Space for header */
+    height: auto;
+    min-height: calc(100vh - 90px);
+    overflow-y: auto;
+    display: block; /* Reset flexbox */
+  }
+  
+  /* Main menu larger sizing */
+  .menu {
+    height: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+  }
+  
+  .menu h1 {
+    font-size: 2.5rem;
+  }
+  
+  .menuButton {
+    font-size: 1.8rem;
+    margin: 10px;
+  }
+  
+  /* Puzzle letters - simply make them bigger */
+  .answer-letters-container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto 60px;
+    padding-top: 0px;
+    height: 65px;
+  }
+  
+  .puzzle {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .puzzleLetter, .puzzleLetterHidden {
+    width: 70px;
+    height: 100px;
+    font-size: 4rem;
+    border-width: 3px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Ensure letter scaling based on word length */
+  .puzzle.puzzle-3 .puzzleLetter, .puzzle.puzzle-3 .puzzleLetterHidden,
+  .puzzle.puzzle-4 .puzzleLetter, .puzzle.puzzle-4 .puzzleLetterHidden {
+    width: 90px;
+    height: 120px;
+    font-size: 4.5rem;
+  }
+  
+  /* Seven and more letters should be a bit smaller */
+  .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+  .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden,
+  .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
+  .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
+    width: 60px;
+    height: 90px;
+    font-size: 3.5rem;
+  }
+  
+  /* Better gap sizing based on word length */
+  .puzzle-3, .puzzle-4 {
+    gap: 16px;
+  }
+  
+  .puzzle-5, .puzzle-6 {
+    gap: 14px;
+  }
+  
+  .puzzle-7, .puzzle-8, .puzzle-9, .puzzle-10 {
+    gap: 10px;
+  }
+  
+  /* BatMeter scaling */
+  .bat-meter-container {
+    width: 300px;
+    height: 230px;
+    margin: 0 auto 80px;
+    padding-top: 30px;
+    transform: scale(2);
+    transform-origin: center center;
+  }
+  
+  .budget-text {
+    font-size: 1.6rem;
+    margin-top: 0px;
+  }
+  
+  /* Letter carousel improvements */
+  .letter-carousel-container {
+    width: 90%;
+    max-width: 700px;
+    margin: 0 auto 80px;
+  }
+  
+  .carousel-nav-container {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .letter-carousel {
+    height: 100px;
+    border-radius: 15px;
+  }
+  
+  .carousel-item {
+    width: 70px;
+    margin: 0 15px;
+  }
+  
+  /* Carousel letter styling */
+  .carousel-letter-btn {
+    width: 70px;
+    height: 100px;
+    border-radius: 12px;
+    box-shadow: 5px 5px 0px 0px rgba(5, 0, 0, 0.7);
+  }
+  
+  .letter-character {
+    font-size: 3rem;
+  }
+  
+  .letter-cost {
+    top: 6px;
+    right: 6px;
+    font-size: 1.2rem;
+    min-width: 24px;
+    padding: 2px 4px;
+  }
+  
+  /* Navigation buttons */
+  .carousel-nav-button {
+    width: 50px;
+    height: 100px;
+  }
+  
+  .carousel-nav-button.left-arrow {
+    left: -60px;
+  }
+  
+  .carousel-nav-button.right-arrow {
+    right: -60px;
+  }
+  
+  .arrow-icon {
+    font-size: 3rem;
+  }
+  
+  /* Confirm button */
+  .confirm {
+    min-width: 400px;
+    height: 70px;
+    font-size: 1.8rem;
+    margin: 40px auto;
+  }
+  
+  /* Used letters section */
+  .used-letters-section {
+    max-width: 900px;
+    margin: 0 auto 60px;
+  }
+  
+  .used-letters-section h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .used-letters-grid {
+    grid-template-columns: repeat(13, 1fr);
+    gap: 10px;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .used-letter {
+    width: 50px;
+    height: 70px;
+    font-size: 1.5rem;
+  }
+  
+  /* Title screen, victory and defeat screens need height adjustments */
+  .title-screen-container,
+  .victory,
+  .defeat {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+  
+  /* Reset button positioning */
+  .dev-reset-button {
+    width: 70px;
+    height: 70px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Large desktop screens */
+@media (min-width: 1200px) {
+  body {
+    font-size: 20px;
+  }
+  
+  .game-container {
+    padding: 40px;
+    margin-top: 90px;
+  }
+  
+  /* Puzzle letters - even bigger */
+  .answer-letters-container {
+    margin: 0 auto 80px;
+  }
+  
+  .puzzleLetter, .puzzleLetterHidden {
+    width: 90px;
+    height: 120px;
+    font-size: 5rem;
+  }
+  
+  .puzzle.puzzle-3 .puzzleLetter, .puzzle.puzzle-3 .puzzleLetterHidden,
+  .puzzle.puzzle-4 .puzzleLetter, .puzzle.puzzle-4 .puzzleLetterHidden {
+    width: 120px;
+    height: 160px;
+    font-size: 6rem;
+  }
+  
+  .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+  .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden,
+  .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
+  .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
+    width: 80px;
+    height: 110px;
+    font-size: 4.5rem;
+  }
+  
+  /* BatMeter scaling */
+  .bat-meter-container {
+    
+    transform: scale(2.5);
+    height: 200px;
+  
+    margin-top:130px;
+    margin-bottom: 100px;
+  }
+  
+  /* Carousel enhancements */
+  .letter-carousel {
+    height: 160px;
+  }
+  
+  .carousel-letter-btn {
+    width: 80px;
+    height: 120px;
+  }
+  
+  .letter-character {
+    font-size: 3.5rem;
+  }
+  
+  /* Used letters section */
+  .used-letters-grid {
+    max-width: 1100px;
+    gap: 12px;
+  }
+  
+  .used-letter {
+    width: 60px;
+    height: 80px;
+    font-size: 1.8rem;
+  }
+  
+  /* Victory/defeat screens */
+  .victorywords h4, .defeatwords h4 {
+    font-size: 2.5rem;
+    margin: 40px 0;
+  }
+  
+  .stats-summary {
+    font-size: 1.8rem;
+    margin: 40px auto;
+    max-width: 800px;
+  }
+  
+  .btnReset {
+    font-size: 2rem;
+    padding: 20px 40px;
+    min-width: 300px;
+    margin: 40px auto;
+  }
+}
+
+/* Special rules for really tall screens to prevent excessive spacing */
+@media (min-width: 768px) and (min-height: 1000px) {
+  .answer-letters-container,
+  .bat-meter-container,
+  .letter-carousel-container,
+  .used-letters-section {
+    margin-bottom: 5vh; /* Use viewport height for spacing */
+  }
+}
