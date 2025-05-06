@@ -7,7 +7,7 @@
 A modern, mobile-optimized word guessing game with a unique budget-based twist on the classic Hangman formula.
 
 <p align="center">
-  <img src="/api/placeholder/400/200" alt="Hangman's Hollow Logo" />
+  <img src="/src/HangmansHollowLogo.png" alt="Hangman's Hollow Logo" />
 </p>
 
 ## 🎮 Game Overview
