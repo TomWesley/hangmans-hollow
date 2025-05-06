@@ -19,7 +19,7 @@ if (!encryptedPuzzle) {
 }
 
 // Log the word for debugging (you can remove this in production)
-console.log('Current puzzle word:', w);
+
 
 // Convert the word to an array of characters
 const word = Array.from(w);

@@ -1395,3 +1395,87 @@ body.special-page-active {
   -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on iOS */
   touch-action: auto; /* Allows default touch gestures like scroll */
 }
+
+/* Global Mobile Scrolling Fix */
+
+/* Create a global class that can be toggled to enable scrolling */
+.scrolling-enabled {
+  overflow: auto !important;
+  position: static !important;
+  height: auto !important;
+  width: 100% !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: auto !important;
+}
+
+/* When scrolling is enabled, make sure html and body allow it */
+html, 
+body {
+  overflow: auto !important;
+  position: static !important;
+  height: auto !important;
+  touch-action: auto !important;
+}
+
+/* Special pages should be styled for good scrolling */
+.leaderboard-page, 
+.rules-page, 
+.prizes-page {
+  /* Full height with scrolling */
+  min-height: 100vh;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  
+  /* iOS momentum scrolling */
+  -webkit-overflow-scrolling: touch !important;
+  
+  /* Ensure scrolling works on touch */
+  touch-action: pan-y !important;
+  
+  /* Prevent rubber-banding but allow scrolling */
+  overscroll-behavior: contain;
+  
+  /* Ensure position doesn't interfere */
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  
+  /* Extra spacing at bottom to ensure scrollability */
+  padding-bottom: 60px;
+  
+  /* Fixed z-index to stay on top */
+  z-index: 1000;
+}
+
+/* Add bottom spacing to content for better scrolling experience */
+.leaderboard-page .leaderboard-note,
+.rules-content > :last-child, 
+.prizes-content > :last-child {
+  margin-bottom: 80px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .leaderboard-page, 
+  .rules-page, 
+  .prizes-page {
+    /* Ensure high specificity for mobile */
+    overflow-y: scroll !important;
+  }
+}
+
+/* iOS-specific optimizations */
+@supports (-webkit-touch-callout: none) {
+  html, body {
+    /* iOS height fix */
+    height: -webkit-fill-available;
+  }
+  
+  .leaderboard-page, 
+  .rules-page, 
+  .prizes-page {
+    height: -webkit-fill-available;
+  }
+}
