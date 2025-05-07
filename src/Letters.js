@@ -271,16 +271,23 @@ const Letters = ({ casualMode = false, username = '' }) => {
         />
       </section>
     )
-  } else if (gameStateCurrent.status === 'victory') {
+  } 
+  else if (gameStateCurrent.status === 'victory') {
     return (
       <section className="game-container">
         <div>
           <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         </div>
-        <div className='container victorywords'>
-          <h4>
-            Congratulations - You won with {gameStateCurrent.maxBudget - gameStateCurrent.score} budget to spare
-          </h4>
+        
+        {/* Important: Structure this exactly like in the solving state */}
+        <BatMeter 
+          currentSpent={gameStateCurrent.score} 
+          maxBudget={gameStateCurrent.maxBudget} 
+        />
+        
+        {/* New victory message replacing the letter carousel */}
+        <div className="victory-message">
+          <h3>The Hollow is Friendly to Those Who Win</h3>
           
           {!casualMode && localStats && (
             <div className="stats-summary">
@@ -292,6 +299,17 @@ const Letters = ({ casualMode = false, username = '' }) => {
             </div>
           )}
         </div>
+        
+        {/* Play Again button replacing the confirm button */}
+        <button
+          className='play-again-btn-victory'
+          onClick={() => {
+            ResetGame()
+          }}
+        >
+          Play Again
+        </button>
+        
         <div>
           <h3>Your Guesses In Order:</h3>
         </div>
@@ -308,20 +326,9 @@ const Letters = ({ casualMode = false, username = '' }) => {
             );
           })}
         </div>
-        <div className='reset-button-container'>
-          <button
-            className='btnReset'
-            onClick={() => {
-              ResetGame()
-            }}
-          >
-            Try Another
-          </button>
-        </div>
       </section>
     )
-    
-  } 
+  }
   else {
     return (
       <section className="game-container">

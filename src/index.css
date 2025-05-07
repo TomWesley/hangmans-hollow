@@ -1995,3 +1995,238 @@ body {
     }
   }
 }
+/* Victory Screen Styles for Hangman's Hollow
+ * These styles create a celebratory victory screen with green glowing elements
+ * Place this at the end of your index.css file after the defeat styles
+ */
+
+/* Victory Screen Styling - Puzzle Letters */
+.victory .puzzleLetter {
+  background-color: rgb(32, 78, 40); /* Bright green background */
+  color: rgb(220, 255, 220); /* Light green text */
+  animation: greenLetterPulse 2s infinite alternate;
+  box-shadow: 0 0 10px 2px rgba(67, 158, 67, 0.5); /* Base green glow */
+  border-color: rgb(37, 86, 37);
+  position: relative;
+  margin-bottom: 0px;
+}
+
+/* Individual letter pulsing effect for victory */
+@keyframes greenLetterPulse {
+  from {
+    box-shadow: 0 0 8px 2px rgba(32, 80, 32, 0.5);
+    text-shadow: 0 0 5px rgba(57, 113, 57, 0.8);
+  }
+  to {
+    box-shadow: 0 0 15px 5px rgba(32, 80, 32, 0.8);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* Victory styling for bat meter */
+.victory .bat-image {
+  
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%) !important;
+
+}
+
+.victory .bat-outline {
+  
+  background-color: rgba(230, 255, 230, 0.4);
+  border-color: rgba(0, 200, 0, 0.6);
+}
+
+.victory .bat-meter-container {
+  
+  animation: greenContainerPulse 2.5s infinite alternate;
+}
+
+/* Container pulsing effect */
+@keyframes greenContainerPulse {
+  from {
+    box-shadow: 0 0 10px 5px rgba(25, 93, 25, 0.3);
+  }
+  to {
+    box-shadow: 0 0 25px 15px rgba(32, 95, 32, 0.6);
+  }
+}
+
+/* Hide the default victory content */
+.container.victorywords {
+  display: none;
+}
+
+/* Create new victory message that replaces the letter carousel */
+.victory-message {
+  width: 90%;
+  max-width: 700px;
+  margin: 40px auto;
+  text-align: center;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  border: 2px solid rgb(25, 61, 25);
+  color: white;
+  box-shadow: 0 0 20px rgba(41, 91, 41, 0.5);
+}
+
+.victory-message h3 {
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: rgb(150, 255, 150);
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+/* Play Again button for victory */
+.play-again-btn-victory {
+  display: block;
+  min-width: 300px;
+  height: 40px;
+  font-size: 1.5rem;
+  margin: 00px auto;
+  background: linear-gradient(145deg, rgb(0, 80, 0), rgb(0, 150, 0));
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  padding: 0 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.3);
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.play-again-btn-victory:hover {
+  background: linear-gradient(145deg, rgb(0, 100, 0), rgb(0, 180, 0));
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+.play-again-btn-victory:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.3);
+}
+
+/* Styling for the guesses history in victory state */
+.victory .used-letters-grid {
+  background-color: rgba(0, 50, 0, 0.3);
+  border: 1px solid rgba(0, 100, 0, 0.5);
+}
+
+.victory .used-letter.hit {
+  background-color: rgb(7, 53, 7);
+  box-shadow: 0 0 8px rgba(18, 96, 18, 0.5);
+}
+
+/* Desktop Responsive Adjustments */
+@media (min-width: 768px) {
+  .victory-message h3 {
+    font-size: 2.5rem;
+  }
+  
+  .play-again-btn-victory {
+    min-width: 400px;
+    height: 70px;
+    font-size: 1.8rem;
+  }
+  
+  /* Enhanced pulse effect for larger screens */
+  @keyframes greenLetterPulse {
+    from {
+      box-shadow: 0 0 10px 3px rgba(0, 255, 0, 0.5);
+      text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+    }
+    to {
+      box-shadow: 0 0 20px 8px rgba(0, 255, 0, 0.8);
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .victory-message {
+    padding: 50px;
+    max-width: 800px;
+  }
+  
+  .victory-message h3 {
+    font-size: 3rem;
+  }
+  
+  .play-again-btn-victory {
+    min-width: 500px;
+    height: 80px;
+    font-size: 2.2rem;
+    margin: 50px auto;
+  }
+  
+  /* Even more dramatic pulse effect for large screens */
+  @keyframes greenLetterPulse {
+    from {
+      box-shadow: 0 0 15px 5px rgba(44, 106, 44, 0.5);
+      text-shadow: 0 0 10px rgba(11, 71, 11, 0.8);
+    }
+    to {
+      box-shadow: 0 0 30px 10px rgba(10, 79, 10, 0.8);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    }
+  }
+}
+/* Victory Bat Meter CSS Reset
+ * This explicitly resets the bat meter to its original game state size
+ */
+
+/* Reset bat meter container in victory state */
+.victory .bat-meter-container {
+  transform: scale(1) !important;
+  height: var(--height-batmeter) !important;
+  width: 90% !important;
+  max-width: 300px !important;
+  margin: var(--margin-batmeter-top) auto var(--margin-batmeter-bottom) !important;
+  animation: greenContainerPulse 2.5s infinite alternate;
+}
+
+/* Ensure the bat wrapper has consistent size */
+.victory .bat-wrapper {
+  position: relative;
+  width: 70px !important;
+  height: 100px !important;
+  margin: 0 auto !important;
+  transform: none !important;
+}
+
+/* Override any desktop media query transformations */
+@media (min-width: 768px) {
+  .victory .bat-meter-container {
+    transform: scale(1) !important;
+    height: var(--height-batmeter) !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .victory .bat-meter-container {
+    transform: scale(1) !important;
+    height: var(--height-batmeter) !important;
+  }
+}
+
+/* Just color changes for the bat in victory state */
+.victory .bat-image {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%) !important;
+}
+
+.victory .bat-outline {
+  background-color: rgba(230, 255, 230, 0.4);
+  border-color: rgba(0, 200, 0, 0.6);
+}
+
+/* Make sure the container pulse doesn't affect the size */
+@keyframes greenContainerPulse {
+  from {
+    box-shadow: 0 0 10px 5px rgba(0, 255, 0, 0.3);
+  }
+  to {
+    box-shadow: 0 0 25px 15px rgba(4, 38, 4, 0.6);
+  }
+}
