@@ -1817,3 +1817,181 @@ body {
     margin-bottom: 5vh; /* Use viewport height for spacing */
   }
 }
+
+/* Defeat Screen Styles for Hangman's Hollow
+ * These styles create a simpler, more atmospheric defeat screen
+ * Place this at the end of your index.css file after the desktop styles
+ */
+
+/* Defeat Screen Styling */
+.defeat .answer-letters-container {
+  /* animation: redPulse 2s infinite alternate;
+  background: rgba(255, 0, 0, 0.574); */
+
+  margin-bottom: 100px;
+  padding: 0px;
+  padding-left: 10px;;
+  
+}
+
+.defeat .bat-meter-container {
+  animation: redPulse 2s infinite alternate;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+}
+
+@keyframes redPulse {
+  from {
+    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.3);
+  }
+  to {
+    box-shadow: 0 0 25px 15px rgba(255, 0, 0, 0.6);
+  }
+}
+
+/* Hide the default defeat content */
+.container.defeatwords {
+  display: none;
+  
+}
+
+/* Create new defeat message that replaces the letter carousel */
+.defeat-message {
+  width: 90%;
+  max-width: 700px;
+  margin: 0px auto;
+  text-align: center;
+  padding: 20px;
+  background-color: rgb(0, 0, 0);
+  border-radius: 15px;
+  border: 2px solid #500;
+  color: white;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  margin-top: 70px;
+}
+
+.defeat-message h3 {
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  font-size: 1.5rem;
+  margin-bottom: 0px;
+  color: #ff3333;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+}
+
+/* Play Again button that replaces the confirm button */
+.play-again-btn {
+  display: block;
+  min-width: 300px;
+  height: 60px;
+  font-size: 1.5rem;
+  margin: 30px auto;
+  background: linear-gradient(145deg, #500, #800);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  padding: 0 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.play-again-btn:hover {
+  background: linear-gradient(145deg, #700, #a00);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+.play-again-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 0, 0, 0.3);
+}
+
+/* Desktop Responsive Adjustments */
+@media (min-width: 768px) {
+  .defeat-message h3 {
+    font-size: 2.5rem;
+  }
+  
+  .play-again-btn {
+    min-width: 400px;
+    height: 70px;
+    font-size: 1.8rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .defeat-message {
+    padding: 50px;
+    max-width: 800px;
+  }
+  
+  .defeat-message h3 {
+    font-size: 3rem;
+  }
+  
+  .play-again-btn {
+    min-width: 500px;
+    height: 80px;
+    font-size: 2.2rem;
+    margin: 50px auto;
+  }
+}
+
+/* Puzzle letter styling for defeat state */
+.defeat .puzzleLetter {
+  background-color: rgb(120, 10, 10); /* Dark red background instead of green */
+  color: rgb(255, 200, 200); /* Light red text */
+  animation: letterPulse 1.5s infinite alternate;
+  box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.5); /* Base red glow */
+  border-color: rgb(200, 0, 0);
+  position: relative;
+}
+
+/* Keep hidden letter styling similar but with red tint */
+.defeat .puzzleLetterHidden {
+  background-color: rgb(70, 10, 10); /* Darker red */
+  box-shadow: 0 0 5px 1px rgba(150, 0, 0, 0.4);
+  border-color: rgb(100, 0, 0);
+}
+
+/* Individual letter pulsing effect */
+@keyframes letterPulse {
+  from {
+    box-shadow: 0 0 8px 2px rgba(255, 0, 0, 0.5);
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
+  }
+  to {
+    box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.8);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* Enhanced pulse effect for larger screens */
+@media (min-width: 768px) {
+  @keyframes letterPulse {
+    from {
+      box-shadow: 0 0 10px 3px rgba(255, 0, 0, 0.5);
+      text-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+    }
+    to {
+      box-shadow: 0 0 20px 8px rgba(255, 0, 0, 0.8);
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    }
+  }
+}
+
+/* Even more dramatic pulse effect for large screens */
+@media (min-width: 1200px) {
+  @keyframes letterPulse {
+    from {
+      box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.5);
+      text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+    }
+    to {
+      box-shadow: 0 0 30px 10px rgba(255, 0, 0, 0.8);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    }
+  }
+}

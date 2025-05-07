@@ -321,17 +321,20 @@ const Letters = ({ casualMode = false, username = '' }) => {
       </section>
     )
     
-  } else {
+  } 
+  else {
     return (
       <section className="game-container">
         <div className='defeat'>
           <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         </div>
-        <div className='container defeatwords'>
-          <h4>
-            Sorry, You exceeded your budget. Come back to the Hollow Tomorrow.
-          </h4>
-          
+        <div className='bat-meter-container'>
+          <BatMeter currentSpent={gameStateCurrent.score} maxBudget={gameStateCurrent.maxBudget} />
+        </div>
+        
+        {/* New defeat message replacing the letter carousel */}
+        <div className="defeat-message">
+          <h3>The Hollow Has Claimed Another Victim</h3>
           {!casualMode && localStats && (
             <div className="stats-summary">
               <p>Games played: {localStats.gamesPlayed}</p>
@@ -342,6 +345,17 @@ const Letters = ({ casualMode = false, username = '' }) => {
             </div>
           )}
         </div>
+        
+        {/* Play Again button replacing the confirm button */}
+        <button
+          className='play-again-btn'
+          onClick={() => {
+            ResetGame()
+          }}
+        >
+          Play Again
+        </button>
+        
         <div>
           <h3>Your Guesses In Order:</h3>
         </div>
@@ -357,16 +371,6 @@ const Letters = ({ casualMode = false, username = '' }) => {
               </div>
             );
           })}
-        </div>
-        <div className='reset-button-container'>
-          <button
-            className='btnReset'
-            onClick={() => {
-              ResetGame()
-            }}
-          >
-            Try Another
-          </button>
         </div>
       </section>
     )
