@@ -175,7 +175,7 @@ Puzzle Letters
 */
 
 .answer-letters-container {
-  width: 90%;
+  width: 100%;
   max-width: 600px;
   margin: var(--margin-puzzle-top) auto var(--margin-puzzle-bottom);
   height: var(--height-puzzle);
@@ -1535,11 +1535,10 @@ body {
   
   /* Puzzle letters - simply make them bigger */
   .answer-letters-container {
-    width: 90%;
+    
+    width: 100%;
     max-width: 1000px;
-    margin: 0 auto 60px;
-    padding-top: 0px;
-    height: 65px;
+    
   }
   
   .puzzle {
@@ -2228,5 +2227,149 @@ body {
   }
   to {
     box-shadow: 0 0 25px 15px rgba(4, 38, 4, 0.6);
+  }
+}
+/* Desktop Layout Improvements
+ * Fixes puzzle position and increases letter size on wide screens
+ * Add this to the end of your index.css file
+ */
+
+/* Desktop specific layouts - only apply to larger screens */
+@media (min-width: 768px) {
+  /* Fixed puzzle position - just below nav bar */
+  .answer-letters-container {
+    position: fixed;
+    top: 50px;
+    align-self: center;
+    margin-bottom: 0px !important; /* Small spacing below nav */
+    padding-top: 10px !important;
+    order: -1; /* Ensure it's always first */
+  }
+  
+  /* Make sure the game container uses flexbox for ordering */
+  .game-container {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Adjust spacing between elements */
+  .bat-meter-container {
+    margin-top: 30px !important;
+  }
+  
+  /* Extra space for other elements */
+  .letter-carousel-container,
+  .defeat-message,
+  .victory-message {
+    margin-top: 40px !important;
+  }
+  
+  /* Bigger letters for wider screens */
+  @media (min-width: 1400px) {
+    .puzzleLetter, .puzzleLetterHidden {
+      width: 100px !important;
+      height: 130px !important;
+      font-size: 5rem !important;
+    }
+    
+    .puzzle.puzzle-3 .puzzleLetter, .puzzle.puzzle-3 .puzzleLetterHidden,
+    .puzzle.puzzle-4 .puzzleLetter, .puzzle.puzzle-4 .puzzleLetterHidden {
+      width: 130px !important;
+      height: 170px !important;
+      font-size: 6.5rem !important;
+    }
+    
+    .puzzle.puzzle-5 .puzzleLetter, .puzzle.puzzle-5 .puzzleLetterHidden,
+    .puzzle.puzzle-6 .puzzleLetter, .puzzle.puzzle-6 .puzzleLetterHidden {
+      width: 110px !important;
+      height: 150px !important;
+      font-size: 6rem !important;
+    }
+    
+    .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+    .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden {
+      width: 90px !important;
+      height: 130px !important;
+      font-size: 5.5rem !important;
+    }
+    
+    .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
+    .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
+      width: 80px !important;
+      height: 110px !important;
+      font-size: 4.5rem !important;
+    }
+    
+    /* Adjust gap between letters for better spacing */
+    .puzzle-3, .puzzle-4 {
+      gap: 20px !important;
+    }
+    
+    .puzzle-5, .puzzle-6 {
+      gap: 18px !important;
+    }
+    
+    .puzzle-7, .puzzle-8 {
+      gap: 15px !important;
+    }
+    
+    .puzzle-9, .puzzle-10 {
+      gap: 12px !important;
+    }
+  }
+  
+  /* Even bigger letters for ultra-wide screens */
+  @media (min-width: 1800px) {
+    .puzzleLetter, .puzzleLetterHidden {
+      width: 120px !important;
+      height: 160px !important;
+      font-size: 6rem !important;
+    }
+    
+    .puzzle.puzzle-3 .puzzleLetter, .puzzle.puzzle-3 .puzzleLetterHidden,
+    .puzzle.puzzle-4 .puzzleLetter, .puzzle.puzzle-4 .puzzleLetterHidden {
+      width: 150px !important;
+      height: 200px !important;
+      font-size: 7.5rem !important;
+    }
+    
+    .puzzle.puzzle-5 .puzzleLetter, .puzzle.puzzle-5 .puzzleLetterHidden,
+    .puzzle.puzzle-6 .puzzleLetter, .puzzle.puzzle-6 .puzzleLetterHidden {
+      width: 130px !important;
+      height: 180px !important;
+      font-size: 7rem !important;
+    }
+    
+    .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+    .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden {
+      width: 110px !important;
+      height: 160px !important;
+      font-size: 6.5rem !important;
+    }
+    
+    .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
+    .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
+      width: 100px !important;
+      height: 140px !important;
+      font-size: 5.5rem !important;
+    }
+    
+    /* Increase gap further for ultra-wide screens */
+    .puzzle-3, .puzzle-4 {
+      gap: 25px !important;
+    }
+    
+    .puzzle-5, .puzzle-6 {
+      gap: 22px !important;
+    }
+    
+    .puzzle-7, .puzzle-8 {
+      gap: 18px !important;
+    }
+    
+    .puzzle-9, .puzzle-10 {
+      gap: 15px !important;
+    }
   }
 }
