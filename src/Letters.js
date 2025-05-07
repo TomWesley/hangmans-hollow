@@ -260,8 +260,11 @@ const Letters = ({ casualMode = false, username = '' }) => {
     return (
       <section className="game-container">
         <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
-        <BatMeter currentSpent={gameStateCurrent.score} maxBudget={gameStateCurrent.maxBudget} />
-        
+        <BatMeter 
+  currentSpent={gameStateCurrent.score} 
+  maxBudget={gameStateCurrent.maxBudget}
+  gameStatus={gameStateCurrent.status} 
+/>        
         <LetterCarousel 
           letters={letters}
           usedLetters={usedLetters}
@@ -281,9 +284,10 @@ const Letters = ({ casualMode = false, username = '' }) => {
         
         {/* Important: Structure this exactly like in the solving state */}
         <BatMeter 
-          currentSpent={gameStateCurrent.score} 
-          maxBudget={gameStateCurrent.maxBudget} 
-        />
+  currentSpent={gameStateCurrent.score} 
+  maxBudget={gameStateCurrent.maxBudget} 
+  gameStatus={gameStateCurrent.status}
+/>
         
         {/* New victory message replacing the letter carousel */}
         <div className="victory-message">
@@ -336,8 +340,11 @@ const Letters = ({ casualMode = false, username = '' }) => {
           <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         </div>
         <div className='bat-meter-container'>
-          <BatMeter currentSpent={gameStateCurrent.score} maxBudget={gameStateCurrent.maxBudget} />
-        </div>
+        <BatMeter 
+  currentSpent={gameStateCurrent.score} 
+  maxBudget={gameStateCurrent.maxBudget}
+  gameStatus={gameStateCurrent.status}  
+/>        </div>
         
         {/* New defeat message replacing the letter carousel */}
         <div className="defeat-message">

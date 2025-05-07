@@ -1,3 +1,1000 @@
+.rules-content > :last-child, 
+.prizes-content > :last-child {
+  margin-bottom: 60px; /* Add space at bottom for better scrolling experience */
+}
+
+/* Improve scrollbar appearance */
+.leaderboard-page::-webkit-scrollbar,
+.rules-page::-webkit-scrollbar,
+.prizes-page::-webkit-scrollbar {
+  width: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-page::-webkit-scrollbar-thumb,
+.rules-page::-webkit-scrollbar-thumb,
+.prizes-page::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.leaderboard-page::-webkit-scrollbar-thumb:hover,
+.rules-page::-webkit-scrollbar-thumb:hover,
+.prizes-page::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/*
+===============
+Responsive Adjustments
+===============
+*/
+
+/* Small mobile devices */
+@media (min-width: 768px) {
+  .victory .bat-meter-container {
+    transform: scale(1.8) !important;
+    margin: 60px auto;
+  }
+  
+  .defeat-message,
+  .victory-message {
+    padding: 30px;
+    margin: 30px auto;
+  }
+  
+  .defeat-message h3,
+  .victory-message h3 {
+    font-size: 2.2rem;
+  }
+  
+  .play-again-btn,
+  .play-again-btn-victory {
+    min-width: 350px;
+    height: 70px;
+    font-size: 1.8rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .victory .bat-meter-container {
+    transform: scale(2) !important;
+    margin: 80px auto;
+  }
+  
+  .defeat-message,
+  .victory-message {
+    padding: 40px;
+    max-width: 800px;
+  }
+  
+  .defeat-message h3,
+  .victory-message h3 {
+    font-size: 2.8rem;
+  }
+  
+  .play-again-btn,
+  .play-again-btn-victory {
+    min-width: 400px;
+    height: 80px;
+    font-size: 2rem;
+  }
+}
+
+/* Stats summary for victory/defeat screens */
+.stats-summary {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.stats-summary p {
+  margin: 5px 0;
+}
+
+@media (min-width: 768px) {
+  .stats-summary {
+    font-size: 1.1rem;
+    padding: 15px;
+    margin: 20px 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .stats-summary {
+    font-size: 1.3rem;
+    padding: 20px;
+    margin: 25px 0;
+  }
+}
+@media (max-width: 320px) {
+  :root {
+    --margin-puzzle-top: 2px;
+    --margin-puzzle-bottom: 2px;
+    --margin-batmeter-top: 5px;
+    --margin-batmeter-bottom: 5px;
+    --margin-carousel-top: 2px;
+    --margin-carousel-bottom: 2px;
+    --margin-confirm-top: 2px;
+    --margin-confirm-bottom: 2px;
+    --margin-used-letters-top: 2px;
+    --margin-used-letters-bottom: 2px;
+    --height-batmeter: 120px;
+  }
+  
+  .bat-meter-container {
+    transform: scale(1.3);
+  }
+  
+  .puzzleLetter, .puzzleLetterHidden {
+    width: 32px;
+    height: 45px;
+    font-size: 1.8rem;
+  }
+  
+  /* Further adjustments for small screens */
+  .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+  .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden {
+    width: 28px;
+    height: 45px;
+    font-size: 1.7rem;
+  }
+  
+  .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
+  .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
+    width: 25px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+  
+  /* Reduce all gaps */
+  .puzzle {
+    gap: 4px;
+  }
+  
+  .puzzle-7, .puzzle-8, .puzzle-9, .puzzle-10 {
+    gap: 2px;
+  }
+  
+  .used-letters-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Medium mobile devices */
+@media (min-width: 321px) and (max-width: 350px) {
+  :root {
+    --margin-puzzle-top: 3px;
+    --margin-puzzle-bottom: 3px;
+    --margin-batmeter-top: 7px;
+    --margin-batmeter-bottom: 7px;
+    --margin-carousel-top: 3px;
+    --margin-carousel-bottom: 3px;
+    --height-batmeter: 130px;
+  }
+  
+  .bat-meter-container {
+    transform: scale(1.4);
+  }
+  
+  .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+  .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden {
+    width: 35px;
+    height: 58px;
+    font-size: 1.7rem;
+  }
+  
+  .used-letters-grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+/* Landscape mode */
+@media (orientation: landscape) and (max-height: 500px) {
+  .game-container {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: auto auto;
+    gap: 5px;
+    height: 100vh;
+    padding: 5px;
+  }
+  
+  .answer-letters-container {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 5px;
+  }
+  
+  .bat-meter-container {
+    grid-column: 2;
+    grid-row: 1;
+    transform: scale(1);
+    height: auto;
+    margin: 5px;
+  }
+  
+  .letter-carousel-container {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+    width: 95%;
+    margin: 5px auto;
+  }
+  
+  .used-letters-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin: 5px auto;
+    max-width: none;
+    width: 95%;
+  }
+  
+  .used-letters-section h3 {
+    width: auto;
+    margin: 0;
+  }
+  
+  .used-letters-grid {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: none;
+  }
+  
+  .used-letter {
+    margin: 2px;
+  }
+  
+  /* Puzzle letter adjustments for landscape */
+  .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+  .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden {
+    width: 36px;
+    height: 52px;
+    font-size: 2.2rem;
+  }
+}
+
+/* Mobile responsive styles for leaderboard */
+@media (max-width: 768px) {
+  .leaderboard-page .lBoard {
+    overflow-x: auto;
+  }
+  
+  .leaderboard-page .columnHeaders,
+  .leaderboard-page .leaderboard {
+    min-width: 600px;
+  }
+  
+  .leaderboard-page .leaderboard-note p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .leaderboard-page {
+    padding: 10px;
+  }
+  
+  .leaderboard-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .rules-header h1, .prizes-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .rule-section h2, .prize-section h2 {
+    font-size: 1.1rem;
+  }
+  
+  .rule-section p, .prize-section p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Add these CSS rules to prevent zoom and touch issues */
+
+/* Global touch action to prevent unwanted gestures */
+* {
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+}
+
+/* Prevent text/element selection */
+.letter-carousel,
+.carousel-nav-button,
+.carousel-track,
+.carousel-item,
+.carousel-letter-btn,
+.letter-character,
+.letter-cost,
+.confirm,
+.used-letter {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Prevent double-tap zoom on iOS */
+.carousel-nav-button, 
+.letter-carousel,
+.confirm {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+/* Specific touch behavior for carousel */
+.letter-carousel, 
+.carousel-track {
+  touch-action: pan-x;
+  -ms-touch-action: pan-x;
+}
+
+/* Safari-specific fix for preventing zoom */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .carousel-nav-button,
+  .carousel-letter-btn,
+  .confirm {
+    font-size: 16px; /* Minimum font size to prevent zoom on Safari */
+  }
+}
+
+/* Specific scrolling styles for special pages */
+html.special-page-active, 
+body.special-page-active {
+  overflow: auto !important;
+  position: static !important;
+  height: auto !important;
+  width: 100% !important;
+  overscroll-behavior: none !important;
+}
+
+.leaderboard-page, 
+.rules-page, 
+.prizes-page {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch !important;
+  z-index: 1000;
+  overscroll-behavior: contain;
+}
+
+/* Make sure page content is fully visible with scrolling */
+.rules-content,
+.prizes-content,
+.lBoard,
+.leaderboard-note {
+  padding-bottom: 100px;
+}
+
+/* Back button styles */
+.back-button {
+  /* Ensure this has no effect on zooming */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prioritize this fix for special pages content scrolling */
+.leaderboard-page,
+.rules-page,
+.prizes-page {
+  /* Override any conflicting styles */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Mobile-specific scrolling fix for special pages */
+/* Special page containers */
+.leaderboard-page, 
+.rules-page, 
+.prizes-page {
+  /* Enable momentum scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  /* Make scrollable but keep fixed positioning */
+  overflow-y: auto !important;
+  /* Ensure content takes up full height */
+  min-height: 100vh;
+  /* Prevent horizontal scrolling */
+  overflow-x: hidden;
+  /* Prevent rubber-banding/overscroll effects */
+  overscroll-behavior-y: contain;
+  /* Make sure pointer events work properly */
+  touch-action: pan-y;
+}
+
+/* Add extra padding to ensure all content is visible and scrollable */
+.leaderboard-page .leaderboard-note,
+.rules-content > :last-child, 
+.prizes-content > :last-child {
+  margin-bottom: 80px;
+}
+
+/* Avoid any collisions with the fixed body/html styling */
+@media (max-width: 768px) {
+  /* Mobile-specific adjustments */
+  .leaderboard-page, 
+  .rules-page, 
+  .prizes-page {
+    /* Ensure absolute positioning takes precedence over fixed */
+    position: absolute !important;
+    inset: 0 !important;
+    /* Explicitly enable touch scrolling with higher specificity */
+    overflow-y: scroll !important;
+  }
+}
+
+/* Specific adjustment for iOS devices */
+@supports (-webkit-touch-callout: none) {
+  .leaderboard-page, 
+  .rules-page, 
+  .prizes-page {
+    /* iOS-specific scroll fixes */
+    height: -webkit-fill-available;
+  }
+}
+
+.carousel-nav-button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.carousel-nav-button {
+  font-size: 16px; /* Minimum font size to prevent zoom on Safari */
+}
+
+.scrollable {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on iOS */
+  touch-action: auto; /* Allows default touch gestures like scroll */
+}
+
+/* Global Mobile Scrolling Fix */
+
+/* Create a global class that can be toggled to enable scrolling */
+.scrolling-enabled {
+  overflow: auto !important;
+  position: static !important;
+  height: auto !important;
+  width: 100% !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: auto !important;
+}
+
+/* When scrolling is enabled, make sure html and body allow it */
+.scrolling-enabled html, 
+.scrolling-enabled body {
+  overflow: auto !important;
+  position: static !important;
+  height: auto !important;
+  touch-action: auto !important;
+}
+
+/* Special pages should be styled for good scrolling */
+.leaderboard-page, 
+.rules-page, 
+.prizes-page {
+  /* Full height with scrolling */
+  min-height: 100vh;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  
+  /* iOS momentum scrolling */
+  -webkit-overflow-scrolling: touch !important;
+  
+  /* Ensure scrolling works on touch */
+  touch-action: pan-y !important;
+  
+  /* Prevent rubber-banding but allow scrolling */
+  overscroll-behavior: contain;
+  
+  /* Ensure position doesn't interfere */
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  
+  /* Extra spacing at bottom to ensure scrollability */
+  padding-bottom: 60px;
+  
+  /* Fixed z-index to stay on top */
+  z-index: 1000;
+}
+
+/* iOS-specific optimizations */
+@supports (-webkit-touch-callout: none) {
+  html, body {
+    /* iOS height fix */
+    height: -webkit-fill-available;
+  }
+  
+  .leaderboard-page, 
+  .rules-page, 
+  .prizes-page {
+    height: -webkit-fill-available;
+  }
+}
+
+/*
+=============== 
+Desktop Styles - REVISED
+===============
+*/
+
+/* Medium screens and up (tablets, small laptops) */
+@media (min-width: 768px) {
+  /* Basic font size increases */
+  body {
+    font-size: 18px;
+  }
+
+  /* Maintain vertical layout */
+  main {
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    padding: 0 20px;
+    overflow-y: auto;
+  }
+  
+  /* Header styling */
+  .menu {
+    height: 60px;
+    width: 100%;
+  }
+  
+  .menu h1 {
+    font-size: 2rem;
+  }
+  
+  .menuButton {
+    font-size: 1.5rem;
+  }
+  
+  /* Puzzle letters */
+  .answer-letters-container {
+    width: 90%;
+    max-width: 800px;
+    margin: var(--margin-puzzle-top) auto var(--margin-puzzle-bottom);
+  }
+  
+  .puzzleLetter, .puzzleLetterHidden {
+    width: 50px;
+    height: 70px;
+    font-size: 2.8rem;
+  }
+  
+  /* Sizing for different word lengths */
+  .puzzle.puzzle-3 .puzzleLetter, .puzzle.puzzle-3 .puzzleLetterHidden,
+  .puzzle.puzzle-4 .puzzleLetter, .puzzle.puzzle-4 .puzzleLetterHidden {
+    width: 60px;
+    height: 80px;
+    font-size: 3.2rem;
+  }
+  
+  .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+  .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden,
+  .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
+  .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
+    width: 45px;
+    height: 65px;
+    font-size: 2.5rem;
+  }
+  
+  /* BatMeter - keep original proportions */
+  .bat-meter-container {
+    max-width: 350px;
+    transform: scale(1.8);
+    margin: 60px auto;
+  }
+  
+  .budget-text {
+    font-size: 1.4rem;
+    margin-top: 10px;
+  }
+  
+  /* Letter carousel */
+  .letter-carousel-container {
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  
+  .letter-carousel {
+    height: 100px;
+  }
+  
+  .carousel-nav-button {
+    width: 40px;
+    height: 80px;
+  }
+  
+  .carousel-nav-button.left-arrow {
+    left: -50px;
+  }
+  
+  .carousel-nav-button.right-arrow {
+    right: -50px;
+  }
+  
+  .carousel-letter-btn {
+    width: 50px;
+    height: 80px;
+  }
+  
+  .letter-character {
+    font-size: 2.2rem;
+  }
+  
+  /* Confirm button */
+  .confirm {
+    min-width: 300px;
+    height: 50px;
+    font-size: 1.5rem;
+    margin: 20px auto;
+  }
+  
+  /* Used letters section */
+  .used-letters-section {
+    max-width: 600px;
+    margin: 20px auto 40px;
+  }
+  
+  .used-letters-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .used-letters-grid {
+    grid-template-columns: repeat(13, 1fr);
+    gap: 8px;
+    padding: 15px;
+  }
+  
+  .used-letter {
+    width: 40px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  /* Reset button */
+  .dev-reset-button {
+    width: 60px;
+    height: 60px;
+    font-size: 1rem;
+  }
+}
+
+/* Large desktop screens */
+@media (min-width: 1200px) {
+  body {
+    font-size: 20px;
+  }
+  
+  /* Maintain vertical layout */
+  .game-container {
+    padding: 0 30px;
+  }
+  
+  /* Puzzle letters */
+  .answer-letters-container {
+    max-width: 1000px;
+  }
+  
+  .puzzleLetter, .puzzleLetterHidden {
+    width: 60px;
+    height: 85px;
+    font-size: 3.5rem;
+  }
+  
+  .puzzle.puzzle-3 .puzzleLetter, .puzzle.puzzle-3 .puzzleLetterHidden,
+  .puzzle.puzzle-4 .puzzleLetter, .puzzle.puzzle-4 .puzzleLetterHidden {
+    width: 75px;
+    height: 100px;
+    font-size: 4rem;
+  }
+  
+  .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
+  .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden,
+  .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
+  .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
+    width: 55px;
+    height: 75px;
+    font-size: 3rem;
+  }
+  
+  /* BatMeter - maintain vertical layout and spacing */
+  .bat-meter-container {
+    transform: scale(2);
+    margin: 80px auto;
+  }
+  
+  /* Letter carousel */
+  .letter-carousel-container {
+    max-width: 700px;
+  }
+  
+  .letter-carousel {
+    height: 120px;
+  }
+  
+  .carousel-letter-btn {
+    width: 60px;
+    height: 90px;
+  }
+  
+  .letter-character {
+    font-size: 2.5rem;
+  }
+  
+  /* Confirm button */
+  .confirm {
+    min-width: 350px;
+    height: 60px;
+    font-size: 1.8rem;
+  }
+  
+  /* Used letters section */
+  .used-letters-section {
+    max-width: 800px;
+  }
+  
+  .used-letters-grid {
+    gap: 10px;
+  }
+  
+  .used-letter {
+    width: 45px;
+    height: 60px;
+    font-size: 1.4rem;
+  }
+}
+
+/*
+=============== 
+Victory and Defeat Styles
+===============
+*/
+
+/* Defeat Screen Styling */
+.defeat .answer-letters-container {
+  margin-bottom: 30px;
+  padding: 10px;
+}
+
+.defeat .bat-meter-container {
+  animation: redPulse 2s infinite alternate;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+}
+
+@keyframes redPulse {
+  from {
+    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.3);
+  }
+  to {
+    box-shadow: 0 0 25px 15px rgba(255, 0, 0, 0.6);
+  }
+}
+
+/* Create new defeat message that replaces the letter carousel */
+.defeat-message {
+  width: 90%;
+  max-width: 700px;
+  margin: 20px auto;
+  text-align: center;
+  padding: 20px;
+  background-color: rgb(0, 0, 0);
+  border-radius: 15px;
+  border: 2px solid #500;
+  color: white;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+}
+
+.defeat-message h3 {
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #ff3333;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+}
+
+/* Play Again button that replaces the confirm button */
+.play-again-btn {
+  display: block;
+  min-width: 300px;
+  height: 60px;
+  font-size: 1.5rem;
+  margin: 30px auto;
+  background: linear-gradient(145deg, #500, #800);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  padding: 0 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.play-again-btn:hover {
+  background: linear-gradient(145deg, #700, #a00);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+.play-again-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 0, 0, 0.3);
+}
+
+/* Puzzle letter styling for defeat state */
+.defeat .puzzleLetter {
+  background-color: rgb(120, 10, 10); /* Dark red background instead of green */
+  color: rgb(255, 200, 200); /* Light red text */
+  animation: letterPulse 1.5s infinite alternate;
+  box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.5); /* Base red glow */
+  border-color: rgb(200, 0, 0);
+  position: relative;
+}
+
+/* Keep hidden letter styling similar but with red tint */
+.defeat .puzzleLetterHidden {
+  background-color: rgb(70, 10, 10); /* Darker red */
+  box-shadow: 0 0 5px 1px rgba(150, 0, 0, 0.4);
+  border-color: rgb(100, 0, 0);
+}
+
+/* Individual letter pulsing effect */
+@keyframes letterPulse {
+  from {
+    box-shadow: 0 0 8px 2px rgba(255, 0, 0, 0.5);
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
+  }
+  to {
+    box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.8);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* Victory Screen Styling - Puzzle Letters */
+.victory .puzzleLetter {
+  background-color: rgb(32, 78, 40); /* Bright green background */
+  color: rgb(220, 255, 220); /* Light green text */
+  animation: greenLetterPulse 2s infinite alternate;
+  box-shadow: 0 0 10px 2px rgba(67, 158, 67, 0.5); /* Base green glow */
+  border-color: rgb(37, 86, 37);
+  position: relative;
+  margin-bottom: 0px;
+}
+
+/* Individual letter pulsing effect for victory */
+@keyframes greenLetterPulse {
+  from {
+    box-shadow: 0 0 8px 2px rgba(32, 80, 32, 0.5);
+    text-shadow: 0 0 5px rgba(57, 113, 57, 0.8);
+  }
+  to {
+    box-shadow: 0 0 15px 5px rgba(32, 80, 32, 0.8);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* Victory styling for bat meter */
+.victory .bat-image {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%) !important;
+}
+
+.victory .bat-outline {
+  background-color: rgba(230, 255, 230, 0.4);
+  border-color: rgba(0, 200, 0, 0.6);
+}
+
+.victory .bat-meter-container {
+  animation: greenContainerPulse 2.5s infinite alternate;
+}
+
+/* Container pulsing effect */
+@keyframes greenContainerPulse {
+  from {
+    box-shadow: 0 0 10px 5px rgba(25, 93, 25, 0.3);
+  }
+  to {
+    box-shadow: 0 0 25px 15px rgba(32, 95, 32, 0.6);
+  }
+}
+
+/* Create new victory message that replaces the letter carousel */
+.victory-message {
+  width: 90%;
+  max-width: 700px;
+  margin: 20px auto;
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  border: 2px solid rgb(25, 61, 25);
+  color: white;
+  box-shadow: 0 0 20px rgba(41, 91, 41, 0.5);
+}
+
+.victory-message h3 {
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: rgb(150, 255, 150);
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+/* Play Again button for victory */
+.play-again-btn-victory {
+  display: block;
+  min-width: 300px;
+  height: 60px;
+  font-size: 1.5rem;
+  margin: 30px auto;
+  background: linear-gradient(145deg, rgb(0, 80, 0), rgb(0, 150, 0));
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
+  padding: 0 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.play-again-btn-victory:hover {
+  background: linear-gradient(145deg, rgb(0, 100, 0), rgb(0, 180, 0));
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+.play-again-btn-victory:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.3);
+}
+
+/* Styling for the guesses history in victory state */
+.victory .used-letters-grid {
+  background-color: rgba(0, 50, 0, 0.3);
+  border: 1px solid rgba(0, 100, 0, 0.5);
+}
+
+.victory .used-letter.hit {
+  background-color: rgb(7, 53, 7);
+  box-shadow: 0 0 8px rgba(18, 96, 18, 0.5);
+}
+
+/* Victory Bat Meter - reset scaling for consistent display */
+.victory .bat-meter-container {
+  transform: scale(1.5) !important; /* Match mobile default scale */
+  margin: 30px auto;
+}
+
+/* Make sure bat meter is properly sized on larger screens */
 /*
 =============== 
 Variables
@@ -175,7 +1172,7 @@ Puzzle Letters
 */
 
 .answer-letters-container {
-  width: 100%;
+  width: 90%;
   max-width: 600px;
   margin: var(--margin-puzzle-top) auto var(--margin-puzzle-bottom);
   height: var(--height-puzzle);
@@ -988,20 +1985,11 @@ Leaderboard Page
   margin: 20px auto;
   padding: 15px;
   max-width: 700px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.leaderboard-page .leaderboard-note p {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
-  margin: 0;
 }
 
 /* Add padding to bottom of scrollable pages to ensure content isn't cut off */
 .leaderboard-page .leaderboard-note,
-.rules-content > :last-child, 
+.rules-content > :last-child,
 .prizes-content > :last-child {
   margin-bottom: 60px; /* Add space at bottom for better scrolling experience */
 }
@@ -1183,18 +2171,6 @@ Responsive Adjustments
   }
 }
 
-/* Tablet and larger screens */
-@media (min-width: 768px) {
-  .used-letters-grid {
-    grid-template-columns: repeat(8, 1fr);
-  }
-  
-  .leaderboard-page .columnHeaders,
-  .leaderboard-page .leaderboard {
-    min-width: auto;
-  }
-}
-
 /* Mobile responsive styles for leaderboard */
 @media (max-width: 768px) {
   .leaderboard-page .lBoard {
@@ -1232,6 +2208,7 @@ Responsive Adjustments
     font-size: 0.9rem;
   }
 }
+
 /* Add these CSS rules to prevent zoom and touch issues */
 
 /* Global touch action to prevent unwanted gestures */
@@ -1333,8 +2310,8 @@ body.special-page-active {
   overflow-y: auto !important;
   overflow-x: hidden !important;
 }
-/* Mobile-specific scrolling fix for special pages */
 
+/* Mobile-specific scrolling fix for special pages */
 /* Special page containers */
 .leaderboard-page, 
 .rules-page, 
@@ -1383,13 +2360,16 @@ body.special-page-active {
     height: -webkit-fill-available;
   }
 }
+
 .carousel-nav-button {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
+
 .carousel-nav-button {
   font-size: 16px; /* Minimum font size to prevent zoom on Safari */
 }
+
 .scrollable {
   overflow: auto;
   -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on iOS */
@@ -1409,8 +2389,8 @@ body.special-page-active {
 }
 
 /* When scrolling is enabled, make sure html and body allow it */
-html, 
-body {
+.scrolling-enabled html, 
+.scrolling-enabled body {
   overflow: auto !important;
   position: static !important;
   height: auto !important;
@@ -1449,23 +2429,6 @@ body {
   z-index: 1000;
 }
 
-/* Add bottom spacing to content for better scrolling experience */
-.leaderboard-page .leaderboard-note,
-.rules-content > :last-child, 
-.prizes-content > :last-child {
-  margin-bottom: 80px;
-}
-
-/* Mobile optimizations */
-@media (max-width: 768px) {
-  .leaderboard-page, 
-  .rules-page, 
-  .prizes-page {
-    /* Ensure high specificity for mobile */
-    overflow-y: scroll !important;
-  }
-}
-
 /* iOS-specific optimizations */
 @supports (-webkit-touch-callout: none) {
   html, body {
@@ -1479,10 +2442,12 @@ body {
     height: -webkit-fill-available;
   }
 }
-/* Desktop Responsive Styles for Hangman's Hollow
- * These styles only apply to larger screens (tablets and desktops)
- * Place this at the end of your index.css file
- */
+
+/*
+=============== 
+Desktop Styles - REVISED
+===============
+*/
 
 /* Medium screens and up (tablets, small laptops) */
 @media (min-width: 768px) {
@@ -1491,225 +2456,146 @@ body {
     font-size: 18px;
   }
 
-  /* Main container stays scrollable */
-  html, body {
-    overflow: auto !important;
-    position: static;
-    height: 100%;
-  }
-  
+  /* Maintain vertical layout */
   main {
-    height: auto;
-    min-height: 100vh;
+    height: 100vh;
     overflow-y: auto;
   }
   
-  /* Game container modifications */
   .game-container {
-    padding: 20px;
-    margin-top: 90px; /* Space for header */
-    height: auto;
-    min-height: calc(100vh - 90px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    padding: 0 20px;
     overflow-y: auto;
-    display: block; /* Reset flexbox */
   }
   
-  /* Main menu larger sizing */
+  /* Header styling */
   .menu {
-    height: 80px;
-    position: fixed;
-    top: 0;
-    left: 0;
+    height: 60px;
     width: 100%;
-    z-index: 100;
   }
   
   .menu h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
   
   .menuButton {
-    font-size: 1.8rem;
-    margin: 10px;
+    font-size: 1.5rem;
   }
   
-  /* Puzzle letters - simply make them bigger */
+  /* Puzzle letters */
   .answer-letters-container {
-    
-    width: 100%;
-    max-width: 1000px;
-    
-  }
-  
-  .puzzle {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+    width: 90%;
+    max-width: 800px;
+    margin: var(--margin-puzzle-top) auto var(--margin-puzzle-bottom);
   }
   
   .puzzleLetter, .puzzleLetterHidden {
-    width: 70px;
-    height: 100px;
-    font-size: 4rem;
-    border-width: 3px;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+    width: 50px;
+    height: 70px;
+    font-size: 2.8rem;
   }
   
-  /* Ensure letter scaling based on word length */
+  /* Sizing for different word lengths */
   .puzzle.puzzle-3 .puzzleLetter, .puzzle.puzzle-3 .puzzleLetterHidden,
   .puzzle.puzzle-4 .puzzleLetter, .puzzle.puzzle-4 .puzzleLetterHidden {
-    width: 90px;
-    height: 120px;
-    font-size: 4.5rem;
+    width: 60px;
+    height: 80px;
+    font-size: 3.2rem;
   }
   
-  /* Seven and more letters should be a bit smaller */
   .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
   .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden,
   .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
   .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
-    width: 60px;
-    height: 90px;
-    font-size: 3.5rem;
+    width: 45px;
+    height: 65px;
+    font-size: 2.5rem;
   }
   
-  /* Better gap sizing based on word length */
-  .puzzle-3, .puzzle-4 {
-    gap: 16px;
-  }
-  
-  .puzzle-5, .puzzle-6 {
-    gap: 14px;
-  }
-  
-  .puzzle-7, .puzzle-8, .puzzle-9, .puzzle-10 {
-    gap: 10px;
-  }
-  
-  /* BatMeter scaling */
+  /* BatMeter - keep original proportions */
   .bat-meter-container {
-    width: 300px;
-    height: 230px;
-    margin: 0 auto 80px;
-    padding-top: 30px;
-    transform: scale(2);
-    transform-origin: center center;
+    max-width: 350px;
+    transform: scale(1.8);
+    margin: 60px auto;
   }
   
   .budget-text {
-    font-size: 1.6rem;
-    margin-top: 0px;
+    font-size: 1.4rem;
+    margin-top: 10px;
   }
   
-  /* Letter carousel improvements */
+  /* Letter carousel */
   .letter-carousel-container {
     width: 90%;
-    max-width: 700px;
-    margin: 0 auto 80px;
-  }
-  
-  .carousel-nav-container {
     max-width: 600px;
-    margin: 0 auto;
-    position: relative;
+    margin: 20px auto;
   }
   
   .letter-carousel {
     height: 100px;
-    border-radius: 15px;
   }
   
-  .carousel-item {
-    width: 70px;
-    margin: 0 15px;
-  }
-  
-  /* Carousel letter styling */
-  .carousel-letter-btn {
-    width: 70px;
-    height: 100px;
-    border-radius: 12px;
-    box-shadow: 5px 5px 0px 0px rgba(5, 0, 0, 0.7);
-  }
-  
-  .letter-character {
-    font-size: 3rem;
-  }
-  
-  .letter-cost {
-    top: 6px;
-    right: 6px;
-    font-size: 1.2rem;
-    min-width: 24px;
-    padding: 2px 4px;
-  }
-  
-  /* Navigation buttons */
   .carousel-nav-button {
-    width: 50px;
-    height: 100px;
+    width: 40px;
+    height: 80px;
   }
   
   .carousel-nav-button.left-arrow {
-    left: -60px;
+    left: -50px;
   }
   
   .carousel-nav-button.right-arrow {
-    right: -60px;
+    right: -50px;
   }
   
-  .arrow-icon {
-    font-size: 3rem;
+  .carousel-letter-btn {
+    width: 50px;
+    height: 80px;
+  }
+  
+  .letter-character {
+    font-size: 2.2rem;
   }
   
   /* Confirm button */
   .confirm {
-    min-width: 400px;
-    height: 70px;
-    font-size: 1.8rem;
-    margin: 40px auto;
+    min-width: 300px;
+    height: 50px;
+    font-size: 1.5rem;
+    margin: 20px auto;
   }
   
   /* Used letters section */
   .used-letters-section {
-    max-width: 900px;
-    margin: 0 auto 60px;
+    max-width: 600px;
+    margin: 20px auto 40px;
   }
   
   .used-letters-section h3 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
   }
   
   .used-letters-grid {
     grid-template-columns: repeat(13, 1fr);
-    gap: 10px;
-    padding: 20px;
-    max-width: 900px;
-    margin: 0 auto;
+    gap: 8px;
+    padding: 15px;
   }
   
   .used-letter {
-    width: 50px;
-    height: 70px;
-    font-size: 1.5rem;
-  }
-  
-  /* Title screen, victory and defeat screens need height adjustments */
-  .title-screen-container,
-  .victory,
-  .defeat {
-    height: auto;
-    min-height: 100vh;
-    overflow-y: auto;
-  }
-  
-  /* Reset button positioning */
-  .dev-reset-button {
-    width: 70px;
-    height: 70px;
+    width: 40px;
+    height: 50px;
     font-size: 1.2rem;
+  }
+  
+  /* Reset button */
+  .dev-reset-button {
+    width: 60px;
+    height: 60px;
+    font-size: 1rem;
   }
 }
 
@@ -1719,118 +2605,95 @@ body {
     font-size: 20px;
   }
   
+  /* Maintain vertical layout */
   .game-container {
-    padding: 40px;
-    margin-top: 90px;
+    padding: 0 30px;
   }
   
-  /* Puzzle letters - even bigger */
+  /* Puzzle letters */
   .answer-letters-container {
-    margin: 0 auto 80px;
+    max-width: 1000px;
   }
   
   .puzzleLetter, .puzzleLetterHidden {
-    width: 90px;
-    height: 120px;
-    font-size: 5rem;
+    width: 60px;
+    height: 85px;
+    font-size: 3.5rem;
   }
   
   .puzzle.puzzle-3 .puzzleLetter, .puzzle.puzzle-3 .puzzleLetterHidden,
   .puzzle.puzzle-4 .puzzleLetter, .puzzle.puzzle-4 .puzzleLetterHidden {
-    width: 120px;
-    height: 160px;
-    font-size: 6rem;
+    width: 75px;
+    height: 100px;
+    font-size: 4rem;
   }
   
   .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
   .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden,
   .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
   .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
-    width: 80px;
-    height: 110px;
-    font-size: 4.5rem;
+    width: 55px;
+    height: 75px;
+    font-size: 3rem;
   }
   
-  /* BatMeter scaling */
+  /* BatMeter - maintain vertical layout and spacing */
   .bat-meter-container {
-    
-    transform: scale(2.5);
-    height: 200px;
-  
-    margin-top:130px;
-    margin-bottom: 100px;
+    transform: scale(2);
+    margin: 80px auto;
   }
   
-  /* Carousel enhancements */
+  /* Letter carousel */
+  .letter-carousel-container {
+    max-width: 700px;
+  }
+  
   .letter-carousel {
-    height: 160px;
-  }
-  
-  .carousel-letter-btn {
-    width: 80px;
     height: 120px;
   }
   
+  .carousel-letter-btn {
+    width: 60px;
+    height: 90px;
+  }
+  
   .letter-character {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
+  }
+  
+  /* Confirm button */
+  .confirm {
+    min-width: 350px;
+    height: 60px;
+    font-size: 1.8rem;
   }
   
   /* Used letters section */
-  .used-letters-grid {
-    max-width: 1100px;
-    gap: 12px;
-  }
-  
-  .used-letter {
-    width: 60px;
-    height: 80px;
-    font-size: 1.8rem;
-  }
-  
-  /* Victory/defeat screens */
-  .victorywords h4, .defeatwords h4 {
-    font-size: 2.5rem;
-    margin: 40px 0;
-  }
-  
-  .stats-summary {
-    font-size: 1.8rem;
-    margin: 40px auto;
+  .used-letters-section {
     max-width: 800px;
   }
   
-  .btnReset {
-    font-size: 2rem;
-    padding: 20px 40px;
-    min-width: 300px;
-    margin: 40px auto;
+  .used-letters-grid {
+    gap: 10px;
+  }
+  
+  .used-letter {
+    width: 45px;
+    height: 60px;
+    font-size: 1.4rem;
   }
 }
 
-/* Special rules for really tall screens to prevent excessive spacing */
-@media (min-width: 768px) and (min-height: 1000px) {
-  .answer-letters-container,
-  .bat-meter-container,
-  .letter-carousel-container,
-  .used-letters-section {
-    margin-bottom: 5vh; /* Use viewport height for spacing */
-  }
-}
-
-/* Defeat Screen Styles for Hangman's Hollow
- * These styles create a simpler, more atmospheric defeat screen
- * Place this at the end of your index.css file after the desktop styles
- */
+/*
+=============== 
+Victory and Defeat Styles
+===============
+*/
 
 /* Defeat Screen Styling */
 .defeat .answer-letters-container {
-  /* animation: redPulse 2s infinite alternate;
-  background: rgba(255, 0, 0, 0.574); */
-
-  margin-bottom: 100px;
-  padding: 0px;
-  padding-left: 10px;;
-  
+  margin-bottom: 30px;
+  padding: 10px;
 }
 
 .defeat .bat-meter-container {
@@ -1849,17 +2712,11 @@ body {
   }
 }
 
-/* Hide the default defeat content */
-.container.defeatwords {
-  display: none;
-  
-}
-
 /* Create new defeat message that replaces the letter carousel */
 .defeat-message {
   width: 90%;
   max-width: 700px;
-  margin: 0px auto;
+  margin: 20px auto;
   text-align: center;
   padding: 20px;
   background-color: rgb(0, 0, 0);
@@ -1867,13 +2724,12 @@ body {
   border: 2px solid #500;
   color: white;
   box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-  margin-top: 70px;
 }
 
 .defeat-message h3 {
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
   font-size: 1.5rem;
-  margin-bottom: 0px;
+  margin-bottom: 10px;
   color: #ff3333;
   text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
 }
@@ -1907,37 +2763,6 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 0, 0, 0.3);
 }
 
-/* Desktop Responsive Adjustments */
-@media (min-width: 768px) {
-  .defeat-message h3 {
-    font-size: 2.5rem;
-  }
-  
-  .play-again-btn {
-    min-width: 400px;
-    height: 70px;
-    font-size: 1.8rem;
-  }
-}
-
-@media (min-width: 1200px) {
-  .defeat-message {
-    padding: 50px;
-    max-width: 800px;
-  }
-  
-  .defeat-message h3 {
-    font-size: 3rem;
-  }
-  
-  .play-again-btn {
-    min-width: 500px;
-    height: 80px;
-    font-size: 2.2rem;
-    margin: 50px auto;
-  }
-}
-
 /* Puzzle letter styling for defeat state */
 .defeat .puzzleLetter {
   background-color: rgb(120, 10, 10); /* Dark red background instead of green */
@@ -1967,38 +2792,6 @@ body {
   }
 }
 
-/* Enhanced pulse effect for larger screens */
-@media (min-width: 768px) {
-  @keyframes letterPulse {
-    from {
-      box-shadow: 0 0 10px 3px rgba(255, 0, 0, 0.5);
-      text-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
-    }
-    to {
-      box-shadow: 0 0 20px 8px rgba(255, 0, 0, 0.8);
-      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-    }
-  }
-}
-
-/* Even more dramatic pulse effect for large screens */
-@media (min-width: 1200px) {
-  @keyframes letterPulse {
-    from {
-      box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.5);
-      text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
-    }
-    to {
-      box-shadow: 0 0 30px 10px rgba(255, 0, 0, 0.8);
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-    }
-  }
-}
-/* Victory Screen Styles for Hangman's Hollow
- * These styles create a celebratory victory screen with green glowing elements
- * Place this at the end of your index.css file after the defeat styles
- */
-
 /* Victory Screen Styling - Puzzle Letters */
 .victory .puzzleLetter {
   background-color: rgb(32, 78, 40); /* Bright green background */
@@ -2023,22 +2816,11 @@ body {
 }
 
 /* Victory styling for bat meter */
-.victory .bat-image {
-  
-  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%) !important;
 
-}
 
-.victory .bat-outline {
-  
-  background-color: rgba(230, 255, 230, 0.4);
-  border-color: rgba(0, 200, 0, 0.6);
-}
 
-.victory .bat-meter-container {
-  
-  animation: greenContainerPulse 2.5s infinite alternate;
-}
+
+
 
 /* Container pulsing effect */
 @keyframes greenContainerPulse {
@@ -2050,16 +2832,11 @@ body {
   }
 }
 
-/* Hide the default victory content */
-.container.victorywords {
-  display: none;
-}
-
 /* Create new victory message that replaces the letter carousel */
 .victory-message {
   width: 90%;
   max-width: 700px;
-  margin: 40px auto;
+  margin: 20px auto;
   text-align: center;
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.5);
@@ -2071,7 +2848,7 @@ body {
 
 .victory-message h3 {
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin-bottom: 20px;
   color: rgb(150, 255, 150);
   text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
@@ -2081,19 +2858,18 @@ body {
 .play-again-btn-victory {
   display: block;
   min-width: 300px;
-  height: 40px;
+  height: 60px;
   font-size: 1.5rem;
-  margin: 00px auto;
+  margin: 10px auto;
   background: linear-gradient(145deg, rgb(0, 80, 0), rgb(0, 150, 0));
   color: white;
   border: none;
   border-radius: 30px;
   cursor: pointer;
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
-  padding: 0 30px;
+  padding: 0 0px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.3);
   transition: all 0.3s ease;
-  margin-bottom: 20px;
 }
 
 .play-again-btn-victory:hover {
@@ -2118,258 +2894,185 @@ body {
   box-shadow: 0 0 8px rgba(18, 96, 18, 0.5);
 }
 
-/* Desktop Responsive Adjustments */
+/* Victory Bat Meter - reset scaling for consistent display */
+.victory .bat-meter-container {
+  transform: scale(1.5) !important; /* Match mobile default scale */
+  margin: 30px auto;
+}
+
+/* Make sure bat meter is properly sized on larger screens */
 @media (min-width: 768px) {
-  .victory-message h3 {
-    font-size: 2.5rem;
+  .victory .bat-meter-container {
+    transform: scale(1.8) !important;
+    margin: 60px auto;
   }
   
+  .defeat-message,
+  .victory-message {
+    padding: 30px;
+    margin: 30px auto;
+  }
+  
+  .defeat-message h3,
+  .victory-message h3 {
+    font-size: 2.2rem;
+  }
+  
+  .play-again-btn,
   .play-again-btn-victory {
-    min-width: 400px;
+    min-width: 350px;
     height: 70px;
     font-size: 1.8rem;
   }
-  
-  /* Enhanced pulse effect for larger screens */
-  @keyframes greenLetterPulse {
-    from {
-      box-shadow: 0 0 10px 3px rgba(0, 255, 0, 0.5);
-      text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
-    }
-    to {
-      box-shadow: 0 0 20px 8px rgba(0, 255, 0, 0.8);
-      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-    }
-  }
 }
 
 @media (min-width: 1200px) {
+  .victory .bat-meter-container {
+    transform: scale(2) !important;
+    margin: 80px auto;
+  }
+  
+  .defeat-message,
   .victory-message {
-    padding: 50px;
+    padding: 40px;
     max-width: 800px;
   }
   
+  .defeat-message h3,
   .victory-message h3 {
-    font-size: 3rem;
+    font-size: 2.8rem;
   }
   
+  .play-again-btn,
   .play-again-btn-victory {
-    min-width: 500px;
-    height: 80px;
-    font-size: 2.2rem;
-    margin: 50px auto;
-  }
-  
-  /* Even more dramatic pulse effect for large screens */
-  @keyframes greenLetterPulse {
-    from {
-      box-shadow: 0 0 15px 5px rgba(44, 106, 44, 0.5);
-      text-shadow: 0 0 10px rgba(11, 71, 11, 0.8);
-    }
-    to {
-      box-shadow: 0 0 30px 10px rgba(10, 79, 10, 0.8);
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-    }
+    min-width: 400px;
+    height: 50px;
+    font-size: 2rem;
   }
 }
-/* Victory Bat Meter CSS Reset
- * This explicitly resets the bat meter to its original game state size
- */
 
-/* Reset bat meter container in victory state */
-.victory .bat-meter-container {
-  transform: scale(1) !important;
-  height: var(--height-batmeter) !important;
-  width: 90% !important;
-  max-width: 300px !important;
-  margin: var(--margin-batmeter-top) auto var(--margin-batmeter-bottom) !important;
-  animation: greenContainerPulse 2.5s infinite alternate;
+/* Stats summary for victory/defeat screens */
+.stats-summary {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-size: 0.9rem;
 }
 
-/* Ensure the bat wrapper has consistent size */
-.victory .bat-wrapper {
-  position: relative;
-  width: 70px !important;
-  height: 100px !important;
-  margin: 0 auto !important;
-  transform: none !important;
+.stats-summary p {
+  margin: 5px 0;
 }
 
-/* Override any desktop media query transformations */
 @media (min-width: 768px) {
-  .victory .bat-meter-container {
-    transform: scale(1) !important;
-    height: var(--height-batmeter) !important;
+  .stats-summary {
+    font-size: 1.1rem;
+    padding: 15px;
+    margin: 20px 0;
   }
 }
 
 @media (min-width: 1200px) {
-  .victory .bat-meter-container {
-    transform: scale(1) !important;
-    height: var(--height-batmeter) !important;
+  .stats-summary {
+    font-size: 1.3rem;
+    padding: 20px;
+    margin: 25px 0;
   }
 }
 
-/* Just color changes for the bat in victory state */
-.victory .bat-image {
-  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%) !important;
+/* Add this to your index.css file */
+
+/* Debug buttons container */
+.debug-buttons {
+  position: fixed;
+  bottom: 15px;
+  right: 75px; /* Positioned to the left of the reset button */
+  display: flex;
+  gap: 10px;
+  z-index: 9999;
 }
 
-.victory .bat-outline {
-  background-color: rgba(230, 255, 230, 0.4);
-  border-color: rgba(0, 200, 0, 0.6);
+/* Shared button styles */
+.debug-btn {
+  width: 70px;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Make sure the container pulse doesn't affect the size */
-@keyframes greenContainerPulse {
-  from {
-    box-shadow: 0 0 10px 5px rgba(0, 255, 0, 0.3);
-  }
-  to {
-    box-shadow: 0 0 25px 15px rgba(4, 38, 4, 0.6);
-  }
+/* Victory debug button */
+.victory-debug {
+  background-color: #008800;
 }
-/* Desktop Layout Improvements
- * Fixes puzzle position and increases letter size on wide screens
- * Add this to the end of your index.css file
- */
 
-/* Desktop specific layouts - only apply to larger screens */
+.victory-debug:hover {
+  background-color: #00aa00;
+  transform: translateY(-2px);
+}
+
+/* Defeat debug button */
+.defeat-debug {
+  background-color: #880000;
+}
+
+.defeat-debug:hover {
+  background-color: #aa0000;
+  transform: translateY(-2px);
+}
+
+/* Active state for both buttons */
+.debug-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Media query for larger screens */
 @media (min-width: 768px) {
-  /* Fixed puzzle position - just below nav bar */
-  .answer-letters-container {
-    position: fixed;
-    top: 50px;
-    align-self: center;
-    margin-bottom: 0px !important; /* Small spacing below nav */
-    padding-top: 10px !important;
-    order: -1; /* Ensure it's always first */
+  .debug-buttons {
+    right: 85px;
   }
   
-  /* Make sure the game container uses flexbox for ordering */
-  .game-container {
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
+  .debug-btn {
+    width: 80px;
+    height: 60px;
+    font-size: 1rem;
   }
-  
-  /* Adjust spacing between elements */
-  .bat-meter-container {
-    margin-top: 30px !important;
-  }
-  
-  /* Extra space for other elements */
-  .letter-carousel-container,
-  .defeat-message,
-  .victory-message {
-    margin-top: 40px !important;
-  }
-  
-  /* Bigger letters for wider screens */
-  @media (min-width: 1400px) {
-    .puzzleLetter, .puzzleLetterHidden {
-      width: 100px !important;
-      height: 130px !important;
-      font-size: 5rem !important;
-    }
-    
-    .puzzle.puzzle-3 .puzzleLetter, .puzzle.puzzle-3 .puzzleLetterHidden,
-    .puzzle.puzzle-4 .puzzleLetter, .puzzle.puzzle-4 .puzzleLetterHidden {
-      width: 130px !important;
-      height: 170px !important;
-      font-size: 6.5rem !important;
-    }
-    
-    .puzzle.puzzle-5 .puzzleLetter, .puzzle.puzzle-5 .puzzleLetterHidden,
-    .puzzle.puzzle-6 .puzzleLetter, .puzzle.puzzle-6 .puzzleLetterHidden {
-      width: 110px !important;
-      height: 150px !important;
-      font-size: 6rem !important;
-    }
-    
-    .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
-    .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden {
-      width: 90px !important;
-      height: 130px !important;
-      font-size: 5.5rem !important;
-    }
-    
-    .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
-    .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
-      width: 80px !important;
-      height: 110px !important;
-      font-size: 4.5rem !important;
-    }
-    
-    /* Adjust gap between letters for better spacing */
-    .puzzle-3, .puzzle-4 {
-      gap: 20px !important;
-    }
-    
-    .puzzle-5, .puzzle-6 {
-      gap: 18px !important;
-    }
-    
-    .puzzle-7, .puzzle-8 {
-      gap: 15px !important;
-    }
-    
-    .puzzle-9, .puzzle-10 {
-      gap: 12px !important;
-    }
-  }
-  
-  /* Even bigger letters for ultra-wide screens */
-  @media (min-width: 1800px) {
-    .puzzleLetter, .puzzleLetterHidden {
-      width: 120px !important;
-      height: 160px !important;
-      font-size: 6rem !important;
-    }
-    
-    .puzzle.puzzle-3 .puzzleLetter, .puzzle.puzzle-3 .puzzleLetterHidden,
-    .puzzle.puzzle-4 .puzzleLetter, .puzzle.puzzle-4 .puzzleLetterHidden {
-      width: 150px !important;
-      height: 200px !important;
-      font-size: 7.5rem !important;
-    }
-    
-    .puzzle.puzzle-5 .puzzleLetter, .puzzle.puzzle-5 .puzzleLetterHidden,
-    .puzzle.puzzle-6 .puzzleLetter, .puzzle.puzzle-6 .puzzleLetterHidden {
-      width: 130px !important;
-      height: 180px !important;
-      font-size: 7rem !important;
-    }
-    
-    .puzzle.puzzle-7 .puzzleLetter, .puzzle.puzzle-7 .puzzleLetterHidden,
-    .puzzle.puzzle-8 .puzzleLetter, .puzzle.puzzle-8 .puzzleLetterHidden {
-      width: 110px !important;
-      height: 160px !important;
-      font-size: 6.5rem !important;
-    }
-    
-    .puzzle.puzzle-9 .puzzleLetter, .puzzle.puzzle-9 .puzzleLetterHidden,
-    .puzzle.puzzle-10 .puzzleLetter, .puzzle.puzzle-10 .puzzleLetterHidden {
-      width: 100px !important;
-      height: 140px !important;
-      font-size: 5.5rem !important;
-    }
-    
-    /* Increase gap further for ultra-wide screens */
-    .puzzle-3, .puzzle-4 {
-      gap: 25px !important;
-    }
-    
-    .puzzle-5, .puzzle-6 {
-      gap: 22px !important;
-    }
-    
-    .puzzle-7, .puzzle-8 {
-      gap: 18px !important;
-    }
-    
-    .puzzle-9, .puzzle-10 {
-      gap: 15px !important;
-    }
-  }
+}
+
+.victory .current-spent {
+  color: #0a5f0a; /* Dark green color replacing the red */
+  font-weight: bold;
+}
+
+/* Update bat-image filter to use green tones instead of red for victory screen */
+.victory .bat-image {
+  /* Original filter was already replaced in the existing victory styles, but we'll make it more specific */
+  filter: brightness(0) saturate(100%) invert(27%) sepia(88%) saturate(1011%) hue-rotate(100deg) brightness(55%) contrast(101%) !important;
+}
+
+/* Ensure all budget-related elements in victory screen use green tones */
+.victory .budget-text {
+  color: #114911; /* Dark green text for all budget information */
+}
+
+.victory .budget-indicator {
+  color: #216e21; /* Medium green for the separator */
+}
+
+.victory .max-budget {
+  color: #114911; /* Dark green for max budget value */
+}
+
+/* If the budget label is present, style it as well */
+.victory .budget-label {
+  color: #216e21; /* Medium green for label text */
 }

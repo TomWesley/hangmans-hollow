@@ -6,6 +6,7 @@ import {
   GiAbstract009,
 } from 'react-icons/gi'
 import ResetButton from './ResetButton'
+import DebugButtons from './DebugButtons'
 import NavigationMenu from './NavigationMenu'
 import RulesPage from './RulesPage'
 import PrizesPage from './PrizesPage'
@@ -204,7 +205,10 @@ function App() {
             />
           </section>
         </div>
-        <ResetButton />
+        <>
+  <DebugButtons />
+  <ResetButton />
+</>
       </main>
     );
   } else {
