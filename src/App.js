@@ -1,4 +1,4 @@
-// Updated App.js with getLocalStorageUsername function
+// Updated App.js with improved styling
 import React from 'react'
 import Letters from './Letters'
 import { useState, useEffect } from 'react'
@@ -206,17 +206,16 @@ function App() {
           </section>
         </div>
         <>
-  <DebugButtons />
-  <ResetButton />
-</>
+          <DebugButtons />
+          <ResetButton />
+        </>
       </main>
     );
   } else {
     // Mode selection screen
     if (playMode === '') {
       return (
-        <div className="title-screen-container">
-          
+        <div className="play-mode-container">
           <img src={logo} alt="HH Logo" className='game-logo' />
           <h1 className="game-title">Hangman's Hollow</h1>
           
@@ -241,43 +240,51 @@ function App() {
     // Competitive mode login flow
     else if (playMode === 'competitive') {
       return (
-        <form onSubmit={handleLoginStep}>
-          {loginStep === 'username' ? (
-            <>
-              <label className='alias'>
-                Enter An Alias
-                <input
-                  className='userName'
-                  type='text'
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  maxLength={10}
-                />
-              </label>
-            </>
-          ) : (
-            <>
-              <label className='alias'>
-                {pendingUsername ? `Email for ${pendingUsername}` : 'Enter Your Email'}
-                <input
-                  className='userName'
-                  type='email'
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                />
-              </label>
-            </>
-          )}
+        <div className="login-container">
+          <h1 className="login-title">Hangman's Hollow</h1>
           
-          {loginError && (
-            <div className="login-error">
-              {loginError}
-            </div>
-          )}
-          
-          <button className='enter' type='submit'>
-            {loginStep === 'username' ? 'Continue' : 'Submit'}
-          </button>
+          <form className="login-form" onSubmit={handleLoginStep}>
+            {loginStep === 'username' ? (
+              <>
+                <label className="login-label">
+                  Enter Your Alias
+                  <input
+                    className="login-input"
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    maxLength={10}
+                    placeholder="Your username"
+                    autoComplete="username"
+                  />
+                </label>
+              </>
+            ) : (
+              <>
+                <label className="login-label">
+                  {pendingUsername ? `Email for ${pendingUsername}` : 'Enter Your Email'}
+                  <input
+                    className="login-input"
+                    type="email"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    placeholder="your.email@example.com"
+                    autoComplete="email"
+                  />
+                </label>
+              </>
+            )}
+            
+            {loginError && (
+              <div className="login-error">
+                {loginError}
+              </div>
+            )}
+            
+            <button className="login-button" type="submit">
+              {loginStep === 'username' ? 'Continue' : 'Submit'}
+            </button>
+          </form>
           
           <ResetButton />
           <NavigationMenu 
@@ -285,8 +292,8 @@ function App() {
             onRules={handleShowRules}
             onPrizes={handleShowPrizes}
           />
-        </form>
-      )
+        </div>
+      );
     }
     
     // Fallback view
