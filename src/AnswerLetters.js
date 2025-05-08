@@ -18,7 +18,8 @@ const getLocalStoragePuzzleLetters = () => {
 
 const AnswerLetters = (props) => {
   const u = props.u
-  const fa = props.s === 'victory'
+  // Changed: Use gameStateClass instead of just checking for victory
+  const gameStateClass = props.s === 'victory' ? 'victory' : (props.s === 'defeat' ? 'defeat' : '')
   
   // Use the puzzle letters from localStorage (decrypted) or the imported puzzle
   const [puzzleLetters, setPuzzleLetters] = useState(getLocalStoragePuzzleLetters)
@@ -32,8 +33,8 @@ const AnswerLetters = (props) => {
   // Calculate the number of letters to determine responsive layout
   const letterCount = puzzleLetters.length
   
-  // Create a dynamic class name based on the number of letters
-  const puzzleClass = `puzzle puzzle-${letterCount} ${fa ? 'victory' : ''}`
+  // Changed: Use gameStateClass for the puzzle class
+  const puzzleClass = `puzzle puzzle-${letterCount} ${gameStateClass}`
 
   return (
     <div className="answer-letters-container">

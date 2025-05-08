@@ -260,11 +260,13 @@ const Letters = ({ casualMode = false, username = '' }) => {
     return (
       <section className="game-container">
         <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
+        
         <BatMeter 
-  currentSpent={gameStateCurrent.score} 
-  maxBudget={gameStateCurrent.maxBudget}
-  gameStatus={gameStateCurrent.status} 
-/>        
+          currentSpent={gameStateCurrent.score} 
+          maxBudget={gameStateCurrent.maxBudget}
+          gameStatus={gameStateCurrent.status} 
+        />        
+        
         <LetterCarousel 
           letters={letters}
           usedLetters={usedLetters}
@@ -278,18 +280,14 @@ const Letters = ({ casualMode = false, username = '' }) => {
   else if (gameStateCurrent.status === 'victory') {
     return (
       <section className="game-container">
-        <div>
-          <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
-        </div>
+        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         
-        {/* Important: Structure this exactly like in the solving state */}
         <BatMeter 
-  currentSpent={gameStateCurrent.score} 
-  maxBudget={gameStateCurrent.maxBudget} 
-  gameStatus={gameStateCurrent.status}
-/>
+          currentSpent={gameStateCurrent.score} 
+          maxBudget={gameStateCurrent.maxBudget} 
+          gameStatus={gameStateCurrent.status}
+        />
         
-        {/* New victory message replacing the letter carousel */}
         <div className="victory-message">
           <h3>The Hollow is Friendly to Those Who Win</h3>
           
@@ -304,7 +302,6 @@ const Letters = ({ casualMode = false, username = '' }) => {
           )}
         </div>
         
-        {/* Play Again button replacing the confirm button */}
         <button
           className='play-again-btn-victory'
           onClick={() => {
@@ -319,7 +316,6 @@ const Letters = ({ casualMode = false, username = '' }) => {
         </div>
         <div className="used-letters-grid">
           {finalChosenLetters.map((letter, index) => {
-            // Check if the letter is in the puzzle to determine the class
             const isCorrect = isLetterInPuzzle(letter);
             const letterClass = isCorrect ? "used-letter hit" : "used-letter";
             
@@ -336,17 +332,14 @@ const Letters = ({ casualMode = false, username = '' }) => {
   else {
     return (
       <section className="game-container">
-        <div className='defeat'>
-          <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
-        </div>
-        <div className='bat-meter-container'>
-        <BatMeter 
-  currentSpent={gameStateCurrent.score} 
-  maxBudget={gameStateCurrent.maxBudget}
-  gameStatus={gameStateCurrent.status}  
-/>        </div>
+        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
         
-        {/* New defeat message replacing the letter carousel */}
+        <BatMeter 
+          currentSpent={gameStateCurrent.score} 
+          maxBudget={gameStateCurrent.maxBudget}
+          gameStatus={gameStateCurrent.status}  
+        />
+        
         <div className="defeat-message">
           <h3>The Hollow Has Claimed Another Victim</h3>
           {!casualMode && localStats && (
@@ -360,7 +353,6 @@ const Letters = ({ casualMode = false, username = '' }) => {
           )}
         </div>
         
-        {/* Play Again button replacing the confirm button */}
         <button
           className='play-again-btn'
           onClick={() => {
@@ -375,7 +367,6 @@ const Letters = ({ casualMode = false, username = '' }) => {
         </div>
         <div className="used-letters-grid">
           {finalChosenLetters.map((letter, index) => {
-            // Check if the letter is in the puzzle to determine the class
             const isCorrect = isLetterInPuzzle(letter);
             const letterClass = isCorrect ? "used-letter hit" : "used-letter";
             
