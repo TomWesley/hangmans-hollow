@@ -177,6 +177,27 @@ export const updateUserStats = async (
   }
 };
 /**
+ * Get user stats without updating
+ * @param {string} username - Username to get stats for
+ * @returns {Promise<Object|null>} - User stats or null if user not found
+ */
+export const getUserStats = async (username) => {
+    try {
+      const userRef = doc(db, 'users', username);
+      const userDoc = await getDoc(userRef);
+      
+      if (userDoc.exists()) {
+        // Return user stats
+        return userDoc.data();
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error getting user stats:', error);
+      return null;
+    }
+  };
+/**
  * Get leaderboard data
  * @param {number} limitCount - Maximum number of results to return
  * @returns {Promise<Array>} - Array of leaderboard entries

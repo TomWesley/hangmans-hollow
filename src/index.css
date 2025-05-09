@@ -301,8 +301,8 @@ Responsive Adjustments
 
 /* Global touch action to prevent unwanted gestures */
 * {
-  touch-action: manipulation;
-  -ms-touch-action: manipulation;
+  touch-action: auto;
+  -ms-touch-action: auto;
 }
 
 /* Prevent text/element selection */
@@ -390,7 +390,7 @@ body.special-page-active {
 .rules-page,
 .prizes-page {
   /* Override any conflicting styles */
-  position: fixed !important;
+  /* position: fixed !important; */
   top: 0 !important;
   left: 0 !important;
   bottom: 0 !important;
@@ -1795,7 +1795,7 @@ Rules and Prizes Pages
 */
 
 .rules-page, .prizes-page, .leaderboard-page {
-  position: fixed;
+  
   top: 0;
   left: 0;
   width: 100%;
@@ -2213,10 +2213,6 @@ Responsive Adjustments
 /* Add these CSS rules to prevent zoom and touch issues */
 
 /* Global touch action to prevent unwanted gestures */
-* {
-  touch-action: manipulation;
-  -ms-touch-action: manipulation;
-}
 
 /* Prevent text/element selection */
 .letter-carousel,
@@ -2303,7 +2299,7 @@ body.special-page-active {
 .rules-page,
 .prizes-page {
   /* Override any conflicting styles */
-  position: fixed !important;
+  
   top: 0 !important;
   left: 0 !important;
   bottom: 0 !important;
@@ -3801,5 +3797,21 @@ Victory and Defeat Styles
   height: auto;
   width: 100%;
   position: relative;
+}
+button,
+.carousel-nav-button,
+.carousel-letter-btn,
+.confirm,
+.play-option-btn {
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+}
+.leaderboard-page, 
+.rules-page, 
+.prizes-page,
+.game-container {
+  touch-action: pan-y !important;
+  -ms-touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
 }
 

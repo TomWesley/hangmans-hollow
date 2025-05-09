@@ -9,16 +9,6 @@ export const removeTouchDelay = () => {
 };
 
 // Prevent elastic scrolling/bounce effect on iOS
-export const preventElasticScroll = () => {
-  document.body.addEventListener('touchmove', function(e) {
-    if (e.target.closest('.letter-carousel')) {
-      // Allow scrolling within the carousel
-      return;
-    }
-    // Prevent scrolling outside of carousels
-    e.preventDefault();
-  }, { passive: false });
-};
 
 // Add active touch state for buttons to provide visual feedback
 export const addActiveTouchState = () => {
@@ -84,7 +74,7 @@ export const vibrate = (duration = 20) => {
 // Initialize all touch utilities
 export const initTouchUtils = () => {
   removeTouchDelay();
-  preventElasticScroll();
+  
   addActiveTouchState();
   handleCarouselWraparound();
   
@@ -106,7 +96,7 @@ export const initTouchUtils = () => {
 
 export default {
   removeTouchDelay,
-  preventElasticScroll,
+  
   addActiveTouchState,
   vibrate,
   handleCarouselWraparound,

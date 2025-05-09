@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { GiArrowDunk } from 'react-icons/gi';
 import { getLeaderboard } from './userManagement';
 
+// Helper function to truncate text with ellipsis
+const truncateText = (text, maxLength) => {
+  if (!text) return '';
+  return text.length <= maxLength ? text : text.substring(0, maxLength) + '...';
+};
+
 const LeaderboardPage = ({ onBack }) => {
   const [leaderboard, setLeaderboard] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +44,7 @@ const LeaderboardPage = ({ onBack }) => {
       pageElement.removeEventListener('touchmove', handleTouchMove);
     };
   }, []);
+
   useEffect(() => {
     // Enable scrolling on the page
     document.documentElement.classList.add('special-page-active');
@@ -56,7 +63,13 @@ const LeaderboardPage = ({ onBack }) => {
       setIsLoading(true);
       try {
         const data = await getLeaderboard(10);
-        setLeaderboard(data);
+        // Process data to enforce character limits
+        const processedData = data.map(player => ({
+          ...player,
+          name: truncateText(player.name, 10), // Limit username to 10 characters
+          commonLetters: player.commonLetters ? player.commonLetters.slice(0, 5) : [] // Limit to 3 favorite letters
+        }));
+        setLeaderboard(processedData);
       } catch (error) {
         console.error("Error fetching leaderboard:", error);
       } finally {
@@ -87,34 +100,38 @@ const LeaderboardPage = ({ onBack }) => {
       ) : (
         <>
           <div className='lBoard'>
+            {/* Add divider elements - they use ::before and ::after for the first two dividers */}
+            <div className="vertical-divider-1"></div>
+            <div className="vertical-divider-2"></div>
+            
             <div className='columnHeaders'>
-              <span>Rank</span>
-              <span>Username</span>
-              <span>Win %</span>
-              <span>Average Remaining Budget</span>
-              <span>Favorite Letters</span>
+              <span className="header-cell">Rank</span>
+              <span className="header-cell">Username</span>
+              <span className="header-cell">Win %</span>
+              <span className="header-cell">Avg Budget</span>
+              <span className="header-cell">Favorite Letters</span>
             </div>
             
             {leaderboard.length > 0 ? (
               // Display real leaderboard data
               leaderboard.map((player, index) => (
                 <div key={index} className='leaderboard'>
-                  <span>#{index + 1}</span>
-                  <span>{player.name}</span>
-                  <span>{player.winningPercentage}%</span>
-                  <span>{player.averageScore}</span>
-                  <span>{player.commonLetters ? player.commonLetters.slice(0, 5).join(', ') : 'N/A'}</span>
+                  <span className="data-cell">#{index + 1}</span>
+                  <span className="data-cell">{player.name}</span>
+                  <span className="data-cell">{player.winningPercentage}%</span>
+                  <span className="data-cell">{player.averageScore}</span>
+                  <span className="data-cell">{player.commonLetters ? player.commonLetters.join(', ') : 'N/A'}</span>
                 </div>
               ))
             ) : (
               // Display placeholder rows when there's no data
               Array.from({ length: 10 }, (_, index) => (
                 <div key={index} className='leaderboard empty-row'>
-                  <span>#{index + 1}</span>
-                  <span>--</span>
-                  <span>--</span>
-                  <span>--</span>
-                  <span>--</span>
+                  <span className="data-cell">#{index + 1}</span>
+                  <span className="data-cell">--</span>
+                  <span className="data-cell">--</span>
+                  <span className="data-cell">--</span>
+                  <span className="data-cell">--</span>
                 </div>
               ))
             )}
@@ -123,17 +140,17 @@ const LeaderboardPage = ({ onBack }) => {
               // Fill remaining slots if we have some data but less than 10 players
               Array.from({ length: 10 - leaderboard.length }, (_, index) => (
                 <div key={`empty-${index}`} className='leaderboard empty-row'>
-                  <span>#{leaderboard.length + index + 1}</span>
-                  <span>--</span>
-                  <span>--</span>
-                  <span>--</span>
-                  <span>--</span>
+                  <span className="data-cell">#{leaderboard.length + index + 1}</span>
+                  <span className="data-cell">--</span>
+                  <span className="data-cell">--</span>
+                  <span className="data-cell">--</span>
+                  <span className="data-cell">--</span>
                 </div>
               ))
             )}
           </div>
           
-          <div className="leaderboard-note">
+          {/* <div className="leaderboard-note">
             {leaderboard.length === 0 ? (
               <p>No players have completed any games yet. Be the first to make the leaderboard!</p>
             ) : leaderboard.length < 10 ? (
@@ -141,7 +158,7 @@ const LeaderboardPage = ({ onBack }) => {
             ) : (
               <p>These are our top players based on winning percentage. Keep playing to climb the ranks!</p>
             )}
-          </div>
+          </div> */}
         </>
       )}
     </div>
