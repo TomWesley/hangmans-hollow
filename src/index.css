@@ -1928,6 +1928,7 @@ Leaderboard Page
   margin: 20px auto;
   max-width: 800px;
   overflow: hidden;
+  
 }
 
 .columnHeaders {
@@ -1938,11 +1939,15 @@ Leaderboard Page
   grid-template-columns: 12vw 22vw 12vw 18vw 26vw;
   text-align: center;
   padding: 10px 5px;
+  
 }
 
 .columnHeaders span {
   padding: 10px 5px;
   font-weight: bold;
+  font-size: 10px;
+  align-content: center;
+  
 }
 
 .leaderboard-page .leaderboard {
@@ -1954,6 +1959,8 @@ Leaderboard Page
   padding: 10px 5px;
   color: white;
   transition: all 0.2s ease;
+  font-size: 11px;
+  
 }
 
 .leaderboard-page .leaderboard:hover {
@@ -2776,7 +2783,7 @@ Victory and Defeat Styles
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
   }
 }
- .defeat-letter {
+ s.defeat-letter {
   background-color: rgb(120, 10, 10) !important; /* Dark red background instead of green */
   color: rgb(255, 200, 200); /* Light red text */
   /* animation: letterPulse 1.5s infinite alternate; */
