@@ -1,3 +1,4 @@
+// Updated App.js with improved login flow and separate puzzles for casual/competitive play
 import React from 'react'
 import Letters from './Letters'
 import { useState, useEffect } from 'react'
@@ -12,6 +13,7 @@ import RulesPage from './RulesPage'
 import PrizesPage from './PrizesPage'
 import LeaderboardPage from './LeaderboardPage'
 import { initializeUser, verifyUserEmail } from './userManagement'
+import { resetPuzzleWord } from './puzzle' // Import the resetPuzzleWord function
 import logo from './HangmansHollowLogo.png';
 
 // Helper function to get username from localStorage
@@ -52,8 +54,11 @@ function App() {
   const [pendingUsername, setPendingUsername] = useState('')
   const [loginError, setLoginError] = useState('')
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+  
+  // Derived state - is the current user in casual mode?
+  const isCasualMode = userName === 'casual_player'
 
-  // Save username to localStorage when it changes
+  // Save username to localStorage ONLY for competitive players
   useEffect(() => {
     // Only update localStorage for competitive players, not casual players
     if (userName && userName !== 'casual_player') {
@@ -197,13 +202,16 @@ function App() {
     }
   };
 
-  // Handle play mode selection
+  // Handle play mode selection with skip login for existing users
   const handlePlayModeSelection = (mode) => {
     setPlayMode(mode);
     
     if (mode === 'casual') {
       // Set temporary username for casual play, but DON'T store in localStorage
       setUserName('casual_player');
+      
+      // Make sure we're using the casual puzzle
+      // We specifically do NOT clear competitive localStorage here
     } 
     else if (mode === 'competitive') {
       // Check if user is already logged in (has username in localStorage)
@@ -213,6 +221,9 @@ function App() {
         // User is already logged in, use their stored credentials
         console.log("User already logged in, skipping login screens");
         setUserName(storedUsername);
+        
+        // Make sure we're using the competitive puzzle
+        // We specifically do NOT clear casual localStorage here
         
         // Fetch user stats if needed
         if (!userStats) {
@@ -247,9 +258,17 @@ function App() {
     setUserEmail('');
     setUserStats(null);
     
-    // Clear localStorage
+    // Clear localStorage for competitive data
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('competitivePuzzleWord');
+    localStorage.removeItem('competitivePuzzleLetters');
+    localStorage.removeItem('competitiveGameStateCurrent');
+    localStorage.removeItem('competitiveFinalChosenLetters');
+    localStorage.removeItem('competitiveUsedLetters');
+    
+    // Reset competitive puzzle
+    resetPuzzleWord('competitive');
     
     // Reset UI state
     setShowLogoutConfirm(false);
@@ -288,8 +307,8 @@ function App() {
             
             {/* Logout button */}
             <button className="logout-button" onClick={handleLogoutClick}>
-  <FiLogOut className="logout-icon" /> Log Out
-</button>
+              <FiLogOut className="logout-icon" /> Log Out
+            </button>
           </div>
           
           {/* Logout confirmation */}
@@ -352,7 +371,7 @@ function App() {
         <div>
           <section>
             <Letters 
-              casualMode={userName === 'casual_player'} 
+              casualMode={isCasualMode} 
               username={userName}
             />
           </section>
@@ -389,7 +408,7 @@ function App() {
         </div>
       )
     }
-    // Competitive mode login flow
+    // Competitive mode login flow - only shown for new users
     else if (playMode === 'competitive') {
       // Get stored username (returns '' if not found)
       const storedUsername = getLocalStorageUsername();

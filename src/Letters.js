@@ -4,58 +4,73 @@ import Letter from './Letter'
 import { useState, useEffect } from 'react'
 import data from './data'
 import AnswerLetters from './AnswerLetters'
-import puz from './puzzle'
+import { getPuzzle, resetPuzzleWord } from './puzzle';
 import gamestate from './gamestate'
 import BatMeter from './BatMeter'
 import LetterCarousel from './LetterCarousel'
-import { resetPuzzleWord } from './puzzle'
 import { encrypt, decrypt, encryptObject, decryptObject } from './encryption'
 import { updateUserStats } from './userManagement'
 
 
 // Updated ResetGame function
-const ResetGame = () => {
-  localStorage.removeItem('gameStateCurrent')
-  localStorage.removeItem('puzzleLetters')
-  localStorage.removeItem('finalChosenLetters')
-  localStorage.removeItem('usedLetters')
-  localStorage.removeItem('letters')
-  localStorage.removeItem('preselected')
+const ResetGame = (mode = 'both') => {
+  // Reset the appropriate localStorage items
+  if (mode === 'competitive' || mode === 'both') {
+    localStorage.removeItem('competitiveGameStateCurrent');
+    localStorage.removeItem('competitivePuzzleLetters');
+    localStorage.removeItem('competitiveFinalChosenLetters');
+    localStorage.removeItem('competitiveUsedLetters');
+  }
   
-  // Reset the puzzle word
-  resetPuzzleWord();
+  if (mode === 'casual' || mode === 'both') {
+    localStorage.removeItem('casualGameStateCurrent');
+    localStorage.removeItem('casualPuzzleLetters');
+    localStorage.removeItem('casualFinalChosenLetters');
+    localStorage.removeItem('casualUsedLetters');
+  }
+  
+  // Always reset these
+  localStorage.removeItem('letters');
+  localStorage.removeItem('preselected');
+  
+  // Reset the puzzle word(s)
+  resetPuzzleWord(mode);
   
   // Reload the page to start fresh
-  window.location.reload(false)
-}
+  window.location.reload(false);
+};
 
 // Local storage helper functions
-const getLocalStorageUsedLetters = () => {
-  const encryptedUsedLetters = localStorage.getItem('usedLetters')
+const getLocalStorageUsedLetters = (casualMode) => {
+  const key = casualMode ? 'casualUsedLetters' : 'competitiveUsedLetters';
+  const encryptedUsedLetters = localStorage.getItem(key);
   if (encryptedUsedLetters) {
-    return decryptObject(encryptedUsedLetters) || []
+    return decryptObject(encryptedUsedLetters) || [];
   } else {
-    return []
+    return [];
   }
-}
+};
 
-const getLocalStorageGameState = () => {
-  const encryptedGameState = localStorage.getItem('gameStateCurrent')
+
+const getLocalStorageGameState = (casualMode) => {
+  const key = casualMode ? 'casualGameStateCurrent' : 'competitiveGameStateCurrent';
+  const encryptedGameState = localStorage.getItem(key);
   if (encryptedGameState) {
-    return decryptObject(encryptedGameState) || gamestate
+    return decryptObject(encryptedGameState) || gamestate;
   } else {
-    return gamestate
+    return gamestate;
   }
-}
+};
 
-const getLocalStorageFinalChosenLetters = () => {
-  const encryptedFinalLetters = localStorage.getItem('finalChosenLetters')
+const getLocalStorageFinalChosenLetters = (casualMode) => {
+  const key = casualMode ? 'casualFinalChosenLetters' : 'competitiveFinalChosenLetters';
+  const encryptedFinalLetters = localStorage.getItem(key);
   if (encryptedFinalLetters) {
-    return decryptObject(encryptedFinalLetters) || []
+    return decryptObject(encryptedFinalLetters) || [];
   } else {
-    return []
+    return [];
   }
-}
+};
 
 const getLocalStorageLetters = () => {
   const encryptedLetters = localStorage.getItem('letters')
@@ -86,102 +101,68 @@ const getLocalStoragePreselected = () => {
 var scoreInc = 0
 
 const Letters = ({ casualMode = false, username = '' }) => {
+  // Get the mode as a string for easier referencing
+  const mode = casualMode ? 'casual' : 'competitive';
+  
+  // Initialize puzzle for this mode (replace static import with dynamic function)
+  const [puzzle, setPuzzle] = useState(() => getPuzzle(mode));
+  
+  // Use mode-specific localStorage
   const [gameStateCurrent, setGameStateCurrent] = useState(
-    getLocalStorageGameState()
-  )
-  const [localStats, setLocalStats] = useState({ 
-    averageBudgetRemaining: 0, 
-    winningPercentage: 0 
-  })
+    getLocalStorageGameState(casualMode)
+  );
+  const [localStats, setLocalStats] = useState({ averageBudgetRemaining: 0, winningPercentage: 0 });
   const [finalChosenLetters, setfinalChosenLetters] = useState(
-    getLocalStorageFinalChosenLetters
-  )
-  const [letters, setLetters] = useState(getLocalStorageLetters())
-  const [usedLetters, setUsedLetters] = useState(getLocalStorageUsedLetters())
-  const [preselected, setPreselected] = useState(getLocalStoragePreselected())
-  const [gameEnded, setGameEnded] = useState(false) // Track if game has ended for stats update
-  const [hasUpdatedStats, setHasUpdatedStats] = useState(false) // Prevent multiple stat updates
+    getLocalStorageFinalChosenLetters(casualMode)
+  );
+  const [letters, setLetters] = useState(getLocalStorageLetters());
+  const [usedLetters, setUsedLetters] = useState(getLocalStorageUsedLetters(casualMode));
+  const [preselected, setPreselected] = useState(getLocalStoragePreselected());
+  const [hasUpdatedStats, setHasUpdatedStats] = useState(false);
 
+  // Save state to localStorage with mode-specific keys
   useEffect(() => {
-    localStorage.setItem('letters', encryptObject(letters))
-  }, [letters])
+    localStorage.setItem('letters', encryptObject(letters));
+  }, [letters]);
   
   useEffect(() => {
-    // Save current game state to localStorage
-    localStorage.setItem('finalChosenLetters', encryptObject(finalChosenLetters))
-    localStorage.setItem('preselected', encryptObject(preselected))
-    localStorage.setItem('usedLetters', encryptObject(usedLetters))
-    localStorage.setItem('gameStateCurrent', encryptObject(gameStateCurrent))
+    // Save state to localStorage using mode-specific keys
+    const finalChosenKey = casualMode ? 'casualFinalChosenLetters' : 'competitiveFinalChosenLetters';
+    const usedLettersKey = casualMode ? 'casualUsedLetters' : 'competitiveUsedLetters';
+    const gameStateKey = casualMode ? 'casualGameStateCurrent' : 'competitiveGameStateCurrent';
+    
+    localStorage.setItem(finalChosenKey, encryptObject(finalChosenLetters));
+    localStorage.setItem('preselected', encryptObject(preselected));
+    localStorage.setItem(usedLettersKey, encryptObject(usedLetters));
+    localStorage.setItem(gameStateKey, encryptObject(gameStateCurrent));
     
     // Check for defeat
     if (gameStateCurrent.status === 'solving' && gameStateCurrent.score >= gameStateCurrent.maxBudget) {
-      setfinalChosenLetters(usedLetters)
-      setGameStateCurrent({ ...gameStateCurrent, status: 'defeat' })
-      writeToDatabase('defeat')
+      setfinalChosenLetters(usedLetters);
+      setGameStateCurrent({ ...gameStateCurrent, status: 'defeat' });
+      writeToDatabase('defeat');
       setUsedLetters([
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-      ])
+      ]);
     }
     
     // Check for victory
     if (gameStateCurrent.status === 'solving') {
       let victoryTracker = 0;
-      puz.forEach((l) => {
+      puzzle.forEach((l) => {
         if (usedLetters.indexOf(l.name) > -1) {
           victoryTracker += 1;
         }
       });
 
-      if (victoryTracker === puz.length) {
+      if (victoryTracker === puzzle.length) {
         setfinalChosenLetters(usedLetters);
         setGameStateCurrent({ ...gameStateCurrent, status: 'victory' });
         writeToDatabase('victory');
       }
     }
-  }, [gameStateCurrent, usedLetters, preselected, finalChosenLetters]);
-  
-  // Effect to update stats when game ends
-  useEffect(() => {
-    const updateStats = async () => {
-      // Only update stats once per game and only in competitive mode
-      if (hasUpdatedStats || casualMode || username === 'casual_player') {
-        return;
-      }
-      
-      // Check if game has ended (victory or defeat)
-      if (gameStateCurrent.status === 'victory' || gameStateCurrent.status === 'defeat') {
-        try {
-          // Calculate budget remaining
-          const budgetRemaining = gameStateCurrent.maxBudget - gameStateCurrent.score;
-          
-          // Get puzzle length
-          const puzzleLength = puz.length;
-          
-          // Update user stats
-          const updatedStats = await updateUserStats(
-            username,
-            gameStateCurrent.status === 'victory',
-            budgetRemaining,
-            puzzleLength,
-            usedLetters
-          );
-          
-          if (updatedStats) {
-            setLocalStats(updatedStats);
-          }
-          
-          // Mark stats as updated
-          setHasUpdatedStats(true);
-        } catch (error) {
-          console.error('Error updating stats:', error);
-        }
-      }
-    };
-    
-    updateStats();
-  }, [gameStateCurrent.status, casualMode, username, gameStateCurrent.score, 
-      gameStateCurrent.maxBudget, usedLetters, hasUpdatedStats]);
+  }, [gameStateCurrent, usedLetters, preselected, finalChosenLetters, puzzle, casualMode]);
   
   // Function to write game results to the database
   async function writeToDatabase(gameResult) {
@@ -196,7 +177,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
     let isCorrectGuess = false;
     
     // Check if the letter is in the puzzle
-    puz.forEach((puzLetter) => {
+    puzzle.forEach((puzLetter) => {
       if (puzLetter.name === letters[i].name) {
         isCorrectGuess = true;
       }
@@ -252,14 +233,14 @@ const Letters = ({ casualMode = false, username = '' }) => {
   
   // Helper function to check if a letter is in the puzzle
   const isLetterInPuzzle = (letter) => {
-    return puz.some(puzzleLetter => puzzleLetter.name === letter);
+    return puzzle.some(puzzleLetter => puzzleLetter.name === letter);
   }
 
   // Render game based on current status
   if (gameStateCurrent.status === 'solving') {
     return (
       <section className="game-container">
-        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
+        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} casualMode={casualMode} />
         
         <BatMeter 
           currentSpent={gameStateCurrent.score} 
