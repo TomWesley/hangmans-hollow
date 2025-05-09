@@ -13,7 +13,9 @@ import { updateUserStats } from './userManagement'
 
 
 // Updated ResetGame function
-const ResetGame = (mode = 'both') => {
+const ResetGame = (mode = 'both', shouldReload = true) => {
+  console.log(`Resetting game for mode: ${mode}, shouldReload: ${shouldReload}`);
+  
   // Reset the appropriate localStorage items
   if (mode === 'competitive' || mode === 'both') {
     localStorage.removeItem('competitiveGameStateCurrent');
@@ -21,6 +23,7 @@ const ResetGame = (mode = 'both') => {
     localStorage.removeItem('competitiveFinalChosenLetters');
     localStorage.removeItem('competitiveUsedLetters');
     localStorage.removeItem('competitiveLetters');
+    localStorage.removeItem('competitivePuzzleWord');
   }
   
   if (mode === 'casual' || mode === 'both') {
@@ -29,17 +32,20 @@ const ResetGame = (mode = 'both') => {
     localStorage.removeItem('casualFinalChosenLetters');
     localStorage.removeItem('casualUsedLetters');
     localStorage.removeItem('casualLetters');
+    localStorage.removeItem('casualPuzzleWord');
   }
   
   // Always reset these shared state items
-  localStorage.removeItem('letters');
   localStorage.removeItem('preselected');
   
   // Reset the puzzle word(s)
   resetPuzzleWord(mode);
   
-  // Reload the page to start fresh
-  window.location.reload(false);
+  // If shouldReload is true, refresh the page
+  // Otherwise, we'll handle the reset in the component
+  if (shouldReload) {
+    window.location.reload(false);
+  }
 };
 
 // Local storage helper functions
@@ -176,6 +182,23 @@ const Letters = ({ casualMode = false, username = '' }) => {
   );
   
   const [hasUpdatedStats, setHasUpdatedStats] = useState(false);
+
+  // Function to reset the game and start a new one
+  const resetAndStartNewGame = () => {
+    console.log("Starting a new game...");
+    
+    // Reset localStorage for the current mode without page reload
+    ResetGame(mode, false);
+    
+    // Reset all component state to start a new game
+    setPuzzle(getPuzzle(mode));
+    setGameStateCurrent(gamestate);
+    setfinalChosenLetters([]);
+    setLetters(JSON.parse(JSON.stringify(data)));
+    setUsedLetters([]);
+    setPreselected({ value: '', status: false, key: '' });
+    setHasUpdatedStats(false);
+  };
 
   // Critical: Update state when mode changes
   useEffect(() => {
@@ -331,20 +354,43 @@ const Letters = ({ casualMode = false, username = '' }) => {
     // Make a copy of the letters array
     const newArray = [...letters];
     
+    // Add debug logging
+    console.log(`changeHover called with index: ${index}`);
+    
+    if (index >= 0 && index < newArray.length) {
+      console.log(`Letter at index ${index}: ${newArray[index].name} (id: ${newArray[index].id})`);
+    }
+    
     // Reset any previously hovered letter
     newArray.forEach(letter => {
-      letter.isHovered = false;
+      if (letter.isHovered) {
+        console.log(`Resetting hover on letter: ${letter.name} (id: ${letter.id})`);
+        letter.isHovered = false;
+      }
     });
     
     // Set the new hovered letter if index is valid
     if (index >= 0 && index < newArray.length && !newArray[index].isUsed) {
-      newArray[index].isHovered = true;
+      const letter = newArray[index];
+      console.log(`Setting hover on letter: ${letter.name} (id: ${letter.id})`);
+      
+      letter.isHovered = true;
       setPreselected({ 
-        value: newArray[index].name, 
+        value: letter.name, 
         status: true, 
         key: index 
       });
     } else {
+      if (index >= 0) {
+        console.log(`Cannot hover letter at index ${index}. ${
+          index >= newArray.length 
+            ? `Index out of bounds (max: ${newArray.length - 1})` 
+            : newArray[index].isUsed 
+              ? `Letter is already used`
+              : `Unknown reason`
+        }`);
+      }
+      
       setPreselected({ value: '', status: false, key: '' });
     }
     
@@ -395,10 +441,10 @@ const Letters = ({ casualMode = false, username = '' }) => {
           
           {!casualMode && localStats && (
             <div className="stats-summary">
-              <p>Games Won: {localStats.gamesWon} ({localStats.winningPercentage}%)</p>
-              <p>Avg. Budget Remaining: {localStats.averageBudgetRemaining}</p>
+              <p>Games won: {localStats.gamesWon} ({localStats.winningPercentage}%)</p>
+              <p>Avg. budget remaining: {localStats.averageBudgetRemaining}</p>
               {localStats.commonLetters && localStats.commonLetters.length > 0 && (
-                <p>Your Favorite Letters: {localStats.commonLetters.join(', ')}</p>
+                <p>Your favorite letters: {localStats.commonLetters.join(', ')}</p>
               )}
             </div>
           )}
@@ -406,9 +452,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
         
         <button
           className='play-again-btn-victory'
-          onClick={() => {
-            ResetGame(mode) // Only reset the current mode
-          }}
+          onClick={resetAndStartNewGame}
         >
           Play Again
         </button>
@@ -446,10 +490,10 @@ const Letters = ({ casualMode = false, username = '' }) => {
           <h3>The Hollow Has Claimed Another Victim</h3>
           {!casualMode && localStats && (
             <div className="stats-summary">
-              <p>Games Won: {localStats.gamesWon} ({localStats.winningPercentage}%)</p>
-              <p>Avg. Budget Remaining: {localStats.averageBudgetRemaining}</p>
+              <p>Games played: {localStats.gamesPlayed}</p>
+              <p>Win rate: {localStats.winningPercentage}%</p>
               {localStats.commonLetters && localStats.commonLetters.length > 0 && (
-                <p>Your Favorite Letters: {localStats.commonLetters.join(', ')}</p>
+                <p>Your favorite letters: {localStats.commonLetters.join(', ')}</p>
               )}
             </div>
           )}
@@ -457,9 +501,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
         
         <button
           className='play-again-btn'
-          onClick={() => {
-            ResetGame(mode) // Only reset the current mode
-          }}
+          onClick={resetAndStartNewGame}
         >
           Play Again
         </button>

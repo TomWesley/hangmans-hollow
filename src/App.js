@@ -393,8 +393,8 @@ function App() {
           </section>
         </div>
         <>
-          <DebugButtons />
-          <ResetButton />
+          {/* <DebugButtons />
+          <ResetButton /> */}
         </>
       </main>
     );
