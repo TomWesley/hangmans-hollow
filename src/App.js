@@ -361,7 +361,7 @@ function App() {
               Play Casually
             </button>
           </div>
-          <ResetButton />
+          {/* <ResetButton /> */}
         </div>
       );
     }
@@ -420,7 +420,7 @@ function App() {
               Play Casually
             </button>
           </div>
-          <ResetButton />
+          {/* <ResetButton /> */}
         </div>
       )
     }
@@ -486,7 +486,7 @@ function App() {
               </button>
             </form>
             
-            <ResetButton />
+            {/* <ResetButton /> */}
             <NavigationMenu 
               onMainMenu={handleMainMenu}
               onRules={handleShowRules}
@@ -501,7 +501,7 @@ function App() {
     return (
       <div className="loading-container">
         <h1>Something went wrong</h1>
-        <ResetButton />
+        {/* <ResetButton /> */}
         <NavigationMenu 
           onMainMenu={handleMainMenu}
           onRules={handleShowRules}

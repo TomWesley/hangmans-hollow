@@ -1057,11 +1057,13 @@ Global Reset
 
 /* Prevent scrolling on entire document */
 html, body {
-  overflow: auto;
-  position: fixed;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* position: fixed; */
   height: 100%;
   width: 100%;
-  max-height: 100vh;
+  /* max-height: 100vh; */
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
   -webkit-tap-highlight-color: transparent;
@@ -1108,8 +1110,9 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-y: auto;
+  /* overflow: hidden; */
   padding: 0 var(--spacing-sm);
 }
 
@@ -2783,7 +2786,7 @@ Victory and Defeat Styles
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
   }
 }
- s.defeat-letter {
+ .defeat-letter {
   background-color: rgb(120, 10, 10) !important; /* Dark red background instead of green */
   color: rgb(255, 200, 200); /* Light red text */
   /* animation: letterPulse 1.5s infinite alternate; */
@@ -3548,7 +3551,7 @@ Victory and Defeat Styles
 
 .play-option-btn.casual {
   background: linear-gradient(45deg, #ffb302, #000000);
-  border-left: 4px solid #44aaff;
+  border-left: 4px solid #ffffff;
 }
 
 .play-option-btn:hover {
@@ -3770,5 +3773,33 @@ Victory and Defeat Styles
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 3px;
   padding: 1px 3px;
+}
+
+@supports (-webkit-touch-callout: none) {
+  /* iOS-specific optimization */
+  html, body {
+    height: -webkit-fill-available;
+  }
+  
+  .leaderboard-page, 
+  .rules-page, 
+  .prizes-page {
+    height: -webkit-fill-available;
+    overflow-y: auto !important; /* Ensure iOS scroll works */
+  }
+  
+  /* Fix for iOS Safari's overflow behavior */
+  .game-container {
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* 5. Add this class to solve iOS scrolling issues in specific sections */
+.scrollable-ios {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  height: auto;
+  width: 100%;
+  position: relative;
 }
 
