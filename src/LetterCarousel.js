@@ -1,12 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Letter from './Letter';
+import { getPuzzle } from './puzzle';
 
-const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm, preselected }) => {
+const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm, preselected, casualMode }) => {
   const carouselRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [startX, setStartX] = useState(null);
   const [lastX, setLastX] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [currentPuzzle, setCurrentPuzzle] = useState([]);
+  
+  // Get the current puzzle when the component mounts or when the mode changes
+  useEffect(() => {
+    const puzzle = getPuzzle(casualMode ? 'casual' : 'competitive');
+    setCurrentPuzzle(puzzle);
+  }, [casualMode]);
   
   // Filter out used letters from the carousel
   const availableLetters = letters.filter(letter => 
@@ -39,15 +47,10 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
   
   // Helper function to check if a letter is in the puzzle
   const isLetterInPuzzle = (letter) => {
-    // Import the puzzle (assuming it's an array of letter objects)
-    try {
-      // We need to dynamically import the puzzle here to avoid circular dependency issues
-      const puzzle = require('./puzzle').default;
-      return puzzle.some(puzzleLetter => puzzleLetter.name === letter);
-    } catch (error) {
-      console.error("Error checking if letter is in puzzle:", error);
-      return false;
+    if (currentPuzzle && currentPuzzle.length > 0) {
+      return currentPuzzle.some(puzzleLetter => puzzleLetter.name === letter);
     }
+    return false;
   };
   
   // Move in a direction (positive = right, negative = left)
@@ -118,6 +121,11 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
     };
   }, [isDragging]);
   
+  // Reset current index when available letters change
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [availableLetters.length]);
+  
   return (
     <div className="letter-carousel-container">
       <div className="carousel-nav-container">
@@ -125,6 +133,7 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
           className="carousel-nav-button left-arrow" 
           onClick={() => moveDirection(-1)}
           aria-label="Previous letter"
+          disabled={availableLetters.length <= 5}
         >
           <span className="arrow-icon">&lsaquo;</span>
         </button>
@@ -159,6 +168,7 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
           className="carousel-nav-button right-arrow" 
           onClick={() => moveDirection(1)}
           aria-label="Next letter"
+          disabled={availableLetters.length <= 5}
         >
           <span className="arrow-icon">&rsaquo;</span>
         </button>
@@ -188,7 +198,7 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
               );
             })
           ) : (
-            <div className="no-letters-used"></div>
+            <div className="no-letters-used">No letters used yet</div>
           )}
         </div>
       </div>

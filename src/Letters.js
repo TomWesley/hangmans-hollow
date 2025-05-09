@@ -249,12 +249,13 @@ const Letters = ({ casualMode = false, username = '' }) => {
         />        
         
         <LetterCarousel 
-          letters={letters}
-          usedLetters={usedLetters}
-          onLetterSelect={changeHover}
-          onLetterConfirm={changeUsed}
-          preselected={preselected}
-        />
+  letters={letters}
+  usedLetters={usedLetters}
+  onLetterSelect={changeHover}
+  onLetterConfirm={changeUsed}
+  preselected={preselected}
+  casualMode={casualMode} // Add this prop
+/>
       </section>
     )
   } 
