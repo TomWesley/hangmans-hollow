@@ -20,6 +20,7 @@ const ResetGame = (mode = 'both') => {
     localStorage.removeItem('competitivePuzzleLetters');
     localStorage.removeItem('competitiveFinalChosenLetters');
     localStorage.removeItem('competitiveUsedLetters');
+    localStorage.removeItem('competitiveLetters');
   }
   
   if (mode === 'casual' || mode === 'both') {
@@ -27,9 +28,10 @@ const ResetGame = (mode = 'both') => {
     localStorage.removeItem('casualPuzzleLetters');
     localStorage.removeItem('casualFinalChosenLetters');
     localStorage.removeItem('casualUsedLetters');
+    localStorage.removeItem('casualLetters');
   }
   
-  // Always reset these
+  // Always reset these shared state items
   localStorage.removeItem('letters');
   localStorage.removeItem('preselected');
   
@@ -45,10 +47,16 @@ const getLocalStorageUsedLetters = (casualMode) => {
   const key = casualMode ? 'casualUsedLetters' : 'competitiveUsedLetters';
   const encryptedUsedLetters = localStorage.getItem(key);
   if (encryptedUsedLetters) {
-    return decryptObject(encryptedUsedLetters) || [];
-  } else {
-    return [];
+    try {
+      const decrypted = decryptObject(encryptedUsedLetters);
+      if (decrypted) {
+        return decrypted;
+      }
+    } catch (e) {
+      console.error("Error decrypting used letters:", e);
+    }
   }
+  return [];
 };
 
 
@@ -56,85 +64,143 @@ const getLocalStorageGameState = (casualMode) => {
   const key = casualMode ? 'casualGameStateCurrent' : 'competitiveGameStateCurrent';
   const encryptedGameState = localStorage.getItem(key);
   if (encryptedGameState) {
-    return decryptObject(encryptedGameState) || gamestate;
-  } else {
-    return gamestate;
+    try {
+      const decrypted = decryptObject(encryptedGameState);
+      if (decrypted) {
+        return decrypted;
+      }
+    } catch (e) {
+      console.error("Error decrypting game state:", e);
+    }
   }
+  return gamestate;
 };
 
 const getLocalStorageFinalChosenLetters = (casualMode) => {
   const key = casualMode ? 'casualFinalChosenLetters' : 'competitiveFinalChosenLetters';
   const encryptedFinalLetters = localStorage.getItem(key);
   if (encryptedFinalLetters) {
-    return decryptObject(encryptedFinalLetters) || [];
-  } else {
-    return [];
+    try {
+      const decrypted = decryptObject(encryptedFinalLetters);
+      if (decrypted) {
+        return decrypted;
+      }
+    } catch (e) {
+      console.error("Error decrypting final chosen letters:", e);
+    }
   }
+  return [];
 };
 
-const getLocalStorageLetters = () => {
-  const encryptedLetters = localStorage.getItem('letters')
-  if (encryptedLetters) {
-    return decryptObject(encryptedLetters) || data
-  } else {
-    return data
+// Updated to use mode-specific letters
+const getLocalStorageLetters = (casualMode) => {
+  // Get the correct mode-specific key
+  const modeKey = casualMode ? 'casualLetters' : 'competitiveLetters';
+  const encryptedModeLetters = localStorage.getItem(modeKey);
+  
+  // If we have mode-specific letters stored, use those
+  if (encryptedModeLetters) {
+    try {
+      const decrypted = decryptObject(encryptedModeLetters);
+      if (decrypted && Array.isArray(decrypted)) {
+        return decrypted;
+      }
+    } catch (e) {
+      console.error("Error decrypting mode-specific letters:", e);
+    }
   }
-}
+  
+  // If we reach here, we don't have valid mode-specific letters
+  // Return a fresh copy of the letters data
+  return JSON.parse(JSON.stringify(data));
+};
 
 const getLocalStoragePreselected = () => {
   const encryptedPreselected = localStorage.getItem('preselected')
   if (encryptedPreselected) {
-    return decryptObject(encryptedPreselected) || {
-      status: false,
-      value: '',
-      key: '',
-    }
-  } else {
-    return {
-      status: false,
-      value: '',
-      key: '',
+    try {
+      const decrypted = decryptObject(encryptedPreselected);
+      if (decrypted) {
+        return decrypted;
+      }
+    } catch (e) {
+      console.error("Error decrypting preselected:", e);
     }
   }
+  
+  return {
+    status: false,
+    value: '',
+    key: '',
+  };
 }
 
 var scoreInc = 0
 
 const Letters = ({ casualMode = false, username = '' }) => {
+  console.log(`Rendering Letters component with casualMode: ${casualMode}`);
+  
   // Get the mode as a string for easier referencing
   const mode = casualMode ? 'casual' : 'competitive';
   
-  // Initialize puzzle for this mode (replace static import with dynamic function)
+  // Initialize puzzle for this mode
   const [puzzle, setPuzzle] = useState(() => getPuzzle(mode));
   
   // Use mode-specific localStorage
-  const [gameStateCurrent, setGameStateCurrent] = useState(
+  const [gameStateCurrent, setGameStateCurrent] = useState(() => 
     getLocalStorageGameState(casualMode)
   );
+  
   const [localStats, setLocalStats] = useState({ averageBudgetRemaining: 0, winningPercentage: 0 });
-  const [finalChosenLetters, setfinalChosenLetters] = useState(
+  
+  const [finalChosenLetters, setfinalChosenLetters] = useState(() => 
     getLocalStorageFinalChosenLetters(casualMode)
   );
-  const [letters, setLetters] = useState(getLocalStorageLetters());
-  const [usedLetters, setUsedLetters] = useState(getLocalStorageUsedLetters(casualMode));
-  const [preselected, setPreselected] = useState(getLocalStoragePreselected());
+  
+  const [letters, setLetters] = useState(() => 
+    getLocalStorageLetters(casualMode)
+  );
+  
+  const [usedLetters, setUsedLetters] = useState(() => 
+    getLocalStorageUsedLetters(casualMode)
+  );
+  
+  const [preselected, setPreselected] = useState(() =>
+    getLocalStoragePreselected()
+  );
+  
   const [hasUpdatedStats, setHasUpdatedStats] = useState(false);
 
-  // Save state to localStorage with mode-specific keys
+  // Critical: Update state when mode changes
   useEffect(() => {
-    localStorage.setItem('letters', encryptObject(letters));
-  }, [letters]);
+    console.log(`Mode changed to: ${casualMode ? 'casual' : 'competitive'}`);
+    setPuzzle(getPuzzle(mode));
+    setGameStateCurrent(getLocalStorageGameState(casualMode));
+    setfinalChosenLetters(getLocalStorageFinalChosenLetters(casualMode));
+    setLetters(getLocalStorageLetters(casualMode));
+    setUsedLetters(getLocalStorageUsedLetters(casualMode));
+  }, [casualMode, mode]);
+
+  // Save letters to mode-specific localStorage
+  useEffect(() => {
+    if (letters) {
+      const modeKey = casualMode ? 'casualLetters' : 'competitiveLetters';
+      localStorage.setItem(modeKey, encryptObject(letters));
+    }
+  }, [letters, casualMode]);
   
   useEffect(() => {
     // Save state to localStorage using mode-specific keys
-    const finalChosenKey = casualMode ? 'casualFinalChosenLetters' : 'competitiveFinalChosenLetters';
-    const usedLettersKey = casualMode ? 'casualUsedLetters' : 'competitiveUsedLetters';
-    const gameStateKey = casualMode ? 'casualGameStateCurrent' : 'competitiveGameStateCurrent';
-    
-    localStorage.setItem(finalChosenKey, encryptObject(finalChosenLetters));
-    localStorage.setItem('preselected', encryptObject(preselected));
-    localStorage.setItem(usedLettersKey, encryptObject(usedLetters));
-    localStorage.setItem(gameStateKey, encryptObject(gameStateCurrent));
+    if (finalChosenLetters && usedLetters && gameStateCurrent) {
+      const finalChosenKey = casualMode ? 'casualFinalChosenLetters' : 'competitiveFinalChosenLetters';
+      const usedLettersKey = casualMode ? 'casualUsedLetters' : 'competitiveUsedLetters';
+      const gameStateKey = casualMode ? 'casualGameStateCurrent' : 'competitiveGameStateCurrent';
+      
+      localStorage.setItem(finalChosenKey, encryptObject(finalChosenLetters));
+      localStorage.setItem('preselected', encryptObject(preselected));
+      localStorage.setItem(usedLettersKey, encryptObject(usedLetters));
+      localStorage.setItem(gameStateKey, encryptObject(gameStateCurrent));
+    }
     
     // Check for defeat
     if (gameStateCurrent.status === 'solving' && gameStateCurrent.score >= gameStateCurrent.maxBudget) {
@@ -148,7 +214,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
     }
     
     // Check for victory
-    if (gameStateCurrent.status === 'solving') {
+    if (gameStateCurrent.status === 'solving' && puzzle && puzzle.length > 0) {
       let victoryTracker = 0;
       puzzle.forEach((l) => {
         if (usedLetters.indexOf(l.name) > -1) {
@@ -190,10 +256,6 @@ const Letters = ({ casualMode = false, username = '' }) => {
     
     var s = gameStateCurrent.score + scoreInc;
     setGameStateCurrent({ ...gameStateCurrent, score: s });
-  }
-
-  function handleClick() {
-    // Placeholder for any click handling
   }
 
   const changeUsed = (index) => {
@@ -249,20 +311,20 @@ const Letters = ({ casualMode = false, username = '' }) => {
         />        
         
         <LetterCarousel 
-  letters={letters}
-  usedLetters={usedLetters}
-  onLetterSelect={changeHover}
-  onLetterConfirm={changeUsed}
-  preselected={preselected}
-  casualMode={casualMode} // Add this prop
-/>
+          letters={letters}
+          usedLetters={usedLetters}
+          onLetterSelect={changeHover}
+          onLetterConfirm={changeUsed}
+          preselected={preselected}
+          casualMode={casualMode}
+        />
       </section>
     )
   } 
   else if (gameStateCurrent.status === 'victory') {
     return (
       <section className="game-container">
-        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
+        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} casualMode={casualMode} />
         
         <BatMeter 
           currentSpent={gameStateCurrent.score} 
@@ -287,7 +349,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
         <button
           className='play-again-btn-victory'
           onClick={() => {
-            ResetGame()
+            ResetGame(mode) // Only reset the current mode
           }}
         >
           Play Again
@@ -311,10 +373,10 @@ const Letters = ({ casualMode = false, username = '' }) => {
       </section>
     )
   }
-  else {
+  else { // Defeat state
     return (
       <section className="game-container">
-        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} />
+        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} casualMode={casualMode} />
         
         <BatMeter 
           currentSpent={gameStateCurrent.score} 
@@ -338,7 +400,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
         <button
           className='play-again-btn'
           onClick={() => {
-            ResetGame()
+            ResetGame(mode) // Only reset the current mode
           }}
         >
           Play Again

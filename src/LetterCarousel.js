@@ -17,6 +17,7 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
   }, [casualMode]);
   
   // Filter out used letters from the carousel
+  // Make sure we only filter letters marked as used in the current mode
   const availableLetters = letters.filter(letter => 
     !usedLetters.includes(letter.name) && !letter.isUsed
   );

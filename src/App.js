@@ -102,11 +102,19 @@ function App() {
     // Different behavior based on play mode
     if (userName === 'casual_player') {
       console.log("Casual player returning to main menu");
-      // For casual player, just clear the casual username from state
-      // but DON'T touch localStorage which might contain competitive credentials
+      // For casual player, clear the casual username from state
       setUserName('');
+      
+      // Remove casual mode class from body
+      document.body.classList.remove('casual-mode');
+    } else if (userName) {
+      // For competitive players who are logged in, we keep userName intact
+      // but we need to reset the game mode
+      document.body.classList.remove('competitive-mode');
     }
-    // For competitive players, we keep userName intact in both state and localStorage
+    
+    // Clear any preselected state
+    localStorage.removeItem('preselected');
     
     // Reset game state
     setPlayMode('');
@@ -203,17 +211,26 @@ function App() {
   };
 
   // Handle play mode selection with skip login for existing users
+  // Add this to your App.js file in the handlePlayModeSelection function
+
   const handlePlayModeSelection = (mode) => {
-    setPlayMode(mode);
+    console.log(`Selecting play mode: ${mode}`);
     
+    // Clear any existing preselected state to avoid state leak between modes
+    localStorage.removeItem('preselected');
+    
+    // Set body classes for current mode
     if (mode === 'casual') {
+      document.body.classList.remove('competitive-mode');
+      document.body.classList.add('casual-mode');
+      
       // Set temporary username for casual play, but DON'T store in localStorage
       setUserName('casual_player');
-      
-      // Make sure we're using the casual puzzle
-      // We specifically do NOT clear competitive localStorage here
     } 
     else if (mode === 'competitive') {
+      document.body.classList.remove('casual-mode');
+      document.body.classList.add('competitive-mode');
+      
       // Check if user is already logged in (has username in localStorage)
       const storedUsername = getLocalStorageUsername();
       
@@ -221,9 +238,6 @@ function App() {
         // User is already logged in, use their stored credentials
         console.log("User already logged in, skipping login screens");
         setUserName(storedUsername);
-        
-        // Make sure we're using the competitive puzzle
-        // We specifically do NOT clear casual localStorage here
         
         // Fetch user stats if needed
         if (!userStats) {
@@ -241,9 +255,10 @@ function App() {
           fetchUserStats();
         }
       }
-      // If not logged in already, the playMode will be set to 'competitive'
-      // and the render logic will show the login screens
     }
+    
+    // Set the play mode last, after other state updates
+    setPlayMode(mode);
   };
   
   // Handle logout button click
@@ -370,10 +385,11 @@ function App() {
         </div>
         <div>
           <section>
-            <Letters 
-              casualMode={isCasualMode} 
-              username={userName}
-            />
+          <Letters 
+  casualMode={isCasualMode} 
+  username={userName}
+  key={isCasualMode ? 'casual' : 'competitive'} // Add this key prop
+/>
           </section>
         </div>
         <>

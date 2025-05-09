@@ -1,4 +1,4 @@
-// src/puzzle.js with separate puzzles for casual and competitive play
+// src/puzzle.js with enhanced separation for casual and competitive play
 import { generate } from 'random-words';
 import { encrypt, decrypt } from './encryption';
 
@@ -69,11 +69,25 @@ export const resetPuzzleWord = (mode = 'both') => {
   if (mode === 'competitive' || mode === 'both') {
     localStorage.removeItem('competitivePuzzleWord');
     localStorage.removeItem('competitivePuzzleLetters');
+    localStorage.removeItem('competitiveGameStateCurrent');
+    localStorage.removeItem('competitiveFinalChosenLetters');
+    localStorage.removeItem('competitiveUsedLetters');
+    localStorage.removeItem('competitiveLetters');
   }
   
   if (mode === 'casual' || mode === 'both') {
     localStorage.removeItem('casualPuzzleWord');
     localStorage.removeItem('casualPuzzleLetters');
+    localStorage.removeItem('casualGameStateCurrent');
+    localStorage.removeItem('casualFinalChosenLetters');
+    localStorage.removeItem('casualUsedLetters');
+    localStorage.removeItem('casualLetters');
+  }
+  
+  // For backward compatibility
+  if (mode === 'both') {
+    localStorage.removeItem('letters');
+    localStorage.removeItem('preselected');
   }
 };
 
@@ -87,6 +101,27 @@ export const getPuzzle = (mode) => {
   
   // Create and return puzzle array
   return createPuzzleArray(word);
+};
+
+// Force refresh a puzzle (for testing or debugging)
+export const refreshPuzzle = (mode) => {
+  if (mode === 'competitive' || mode === 'both') {
+    localStorage.removeItem('competitivePuzzleWord');
+  }
+  
+  if (mode === 'casual' || mode === 'both') {
+    localStorage.removeItem('casualPuzzleWord');
+  }
+  
+  // Return a new puzzle for the specified mode
+  if (mode === 'competitive') {
+    return getPuzzle('competitive');
+  } else if (mode === 'casual') {
+    return getPuzzle('casual');
+  } else {
+    // If 'both', default to competitive
+    return getPuzzle('competitive');
+  }
 };
 
 // Export an empty default puzzle (will be replaced by the appropriate puzzle when mode is known)

@@ -8,6 +8,7 @@ import { encryptObject, decryptObject } from './encryption'
 
 // Update to use mode-specific keys
 const getLocalStoragePuzzleLetters = (casualMode) => {
+  // Use mode-specific key
   const key = casualMode ? 'casualPuzzleLetters' : 'competitivePuzzleLetters';
   const encryptedPuzzleLetters = localStorage.getItem(key);
   
@@ -32,6 +33,11 @@ const AnswerLetters = (props) => {
   const [puzzleLetters, setPuzzleLetters] = useState(() => 
     getLocalStoragePuzzleLetters(casualMode)
   );
+
+  // Re-fetch puzzle when mode changes
+  useEffect(() => {
+    setPuzzleLetters(getLocalStoragePuzzleLetters(casualMode));
+  }, [casualMode]);
 
   // Save encrypted puzzle letters to mode-specific localStorage key
   useEffect(() => {
