@@ -2757,14 +2757,6 @@ Victory and Defeat Styles
 }
 
 /* Puzzle letter styling for defeat state */
-.defeat .puzzleLetter {
-  background-color: rgb(120, 10, 10); /* Dark red background instead of green */
-  color: rgb(255, 200, 200); /* Light red text */
-  animation: letterPulse 1.5s infinite alternate;
-  box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.5); /* Base red glow */
-  border-color: rgb(200, 0, 0);
-  position: relative;
-}
 
 /* Keep hidden letter styling similar but with red tint */
 .defeat .puzzleLetterHidden {
@@ -2784,6 +2776,15 @@ Victory and Defeat Styles
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
   }
 }
+ .defeat-letter {
+  background-color: rgb(120, 10, 10) !important; /* Dark red background instead of green */
+  color: rgb(255, 200, 200); /* Light red text */
+  /* animation: letterPulse 1.5s infinite alternate; */
+  box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.5); /* Base red glow */
+  border-color: rgb(200, 0, 0);
+  position: relative;
+}
+
 
 /* Victory Screen Styling - Puzzle Letters */
 .victory .puzzleLetter {
@@ -3738,5 +3739,29 @@ Victory and Defeat Styles
     padding: 8px 12px;
     font-size: 0.9rem;
   }
+}
+.letter-cost {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: white;
+  padding: 1px 3px;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* Style for cost when letter is hovered/selected */
+.carousel-letter-btn.hovered .letter-cost {
+  color: black; /* Change to black when letter is hovered/selected */
+  font-weight: bold; /* Make it a bit bolder for better visibility */
+}
+
+/* Optional: add a slight background to make it even more visible */
+.carousel-letter-btn.hovered .letter-cost {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
+  padding: 1px 3px;
 }
 

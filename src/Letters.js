@@ -395,10 +395,10 @@ const Letters = ({ casualMode = false, username = '' }) => {
           
           {!casualMode && localStats && (
             <div className="stats-summary">
-              <p>Games won: {localStats.gamesWon} ({localStats.winningPercentage}%)</p>
-              <p>Avg. budget remaining: {localStats.averageBudgetRemaining}</p>
+              <p>Games Won: {localStats.gamesWon} ({localStats.winningPercentage}%)</p>
+              <p>Avg. Budget Remaining: {localStats.averageBudgetRemaining}</p>
               {localStats.commonLetters && localStats.commonLetters.length > 0 && (
-                <p>Your favorite letters: {localStats.commonLetters.join(', ')}</p>
+                <p>Your Favorite Letters: {localStats.commonLetters.join(', ')}</p>
               )}
             </div>
           )}
@@ -446,10 +446,10 @@ const Letters = ({ casualMode = false, username = '' }) => {
           <h3>The Hollow Has Claimed Another Victim</h3>
           {!casualMode && localStats && (
             <div className="stats-summary">
-              <p>Games played: {localStats.gamesPlayed}</p>
-              <p>Win rate: {localStats.winningPercentage}%</p>
+              <p>Games Won: {localStats.gamesWon} ({localStats.winningPercentage}%)</p>
+              <p>Avg. Budget Remaining: {localStats.averageBudgetRemaining}</p>
               {localStats.commonLetters && localStats.commonLetters.length > 0 && (
-                <p>Your favorite letters: {localStats.commonLetters.join(', ')}</p>
+                <p>Your Favorite Letters: {localStats.commonLetters.join(', ')}</p>
               )}
             </div>
           )}

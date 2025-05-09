@@ -244,7 +244,7 @@ const LetterCarousel = ({ letters, usedLetters, onLetterSelect, onLetterConfirm,
               );
             })
           ) : (
-            <div className="no-letters-used">No letters used yet</div>
+            <div className="no-letters-used"></div>
           )}
         </div>
       </div>
