@@ -3573,10 +3573,11 @@ Victory and Defeat Styles
 
 /* Logged in status display */
 .logged-in-status {
+  margin-top: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   background-color: rgba(255, 255, 255, 0.1);
   padding: 15px 25px;
   border-radius: 10px;
@@ -3598,13 +3599,14 @@ Victory and Defeat Styles
 
 /* Logout button */
 .logout-button {
-  display: flex;
+  bottom: 30%;
+  position: absolute;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 8px 16px;
-  background-color: rgba(255, 60, 60, 0.2);
-  border: 1px solid rgba(255, 60, 60, 0.4);
+  background-color: rgba(251, 174, 7, 0.731);
+  border: 1px solid rgb(255, 255, 255);
   color: white;
   border-radius: 6px;
   cursor: pointer;
@@ -3613,7 +3615,7 @@ Victory and Defeat Styles
 }
 
 .logout-button:hover {
-  background-color: rgba(255, 60, 60, 0.4);
+  background-color: rgba(47, 14, 52, 0.4);
   transform: translateY(-2px);
 }
 
@@ -3650,11 +3652,12 @@ Victory and Defeat Styles
   margin-bottom: 20px;
 }
 
-.logout-buttons {
-  display: flex;
+/* .logout-buttons {
+  position:fixed;
+  bottom: 30px;
   justify-content: center;
   gap: 15px;
-}
+} */
 
 .logout-confirm-button, 
 .logout-cancel-button {
