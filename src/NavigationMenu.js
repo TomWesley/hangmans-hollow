@@ -1,3 +1,4 @@
+// Updated NavigationMenu.js with debug and fix
 import React, { useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 
@@ -9,8 +10,16 @@ const NavigationMenu = ({ onMainMenu, onRules, onPrizes }) => {
   };
   
   const handleOptionClick = (handler) => {
+    console.log("Navigation option clicked");
     setIsOpen(false);
-    handler();
+    
+    // Ensure the handler exists before calling it
+    if (typeof handler === 'function') {
+      console.log("Calling handler function:", handler.name || "anonymous");
+      handler();
+    } else {
+      console.error("Handler is not a function:", handler);
+    }
   };
   
   return (
@@ -27,7 +36,10 @@ const NavigationMenu = ({ onMainMenu, onRules, onPrizes }) => {
         <div className="nav-menu-dropdown">
           <button 
             className="nav-menu-option"
-            onClick={() => handleOptionClick(onMainMenu)}
+            onClick={() => {
+              console.log("Main Menu button clicked");
+              handleOptionClick(onMainMenu);
+            }}
           >
             Main Menu
           </button>

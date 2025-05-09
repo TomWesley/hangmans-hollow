@@ -1,10 +1,10 @@
-// Updated App.js with improved styling
 import React from 'react'
 import Letters from './Letters'
 import { useState, useEffect } from 'react'
 import {
   GiAbstract009,
 } from 'react-icons/gi'
+import { FiLogOut } from 'react-icons/fi' // Using Feather icons for logout
 import ResetButton from './ResetButton'
 import DebugButtons from './DebugButtons'
 import NavigationMenu from './NavigationMenu'
@@ -28,9 +28,20 @@ const getLocalStorageUsername = () => {
   }
 }
 
+// Helper function to get stored user email
+const getLocalStorageEmail = () => {
+  let userEmail = localStorage.getItem('userEmail')
+  if (userEmail) {
+    return JSON.parse(localStorage.getItem('userEmail'))
+  } else {
+    return ''
+  }
+}
+
 function App() {
   // Existing state variables
   const [userName, setUserName] = useState(getLocalStorageUsername())
+  const [userEmail, setUserEmail] = useState(getLocalStorageEmail())
   const [currentView, setCurrentView] = useState('game') // 'game', 'rules', 'prizes', or 'leaderboard'
   const [playMode, setPlayMode] = useState('')
   const [userStats, setUserStats] = useState(null)
@@ -40,39 +51,66 @@ function App() {
   const [inputValue, setInputValue] = useState('')
   const [pendingUsername, setPendingUsername] = useState('')
   const [loginError, setLoginError] = useState('')
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   // Save username to localStorage when it changes
   useEffect(() => {
-    localStorage.setItem('userName', JSON.stringify(userName))
-    
-    // If user is logged in and we don't have their stats, fetch them
-    if (userName && userName !== 'casual_player' && !userStats) {
-      const fetchUserStats = async () => {
-        try {
-          const userDoc = await initializeUser(userName);
-          if (userDoc.exists) {
-            setUserStats(userDoc.data);
-          }
-        } catch (error) {
-          console.error('Failed to fetch user stats:', error);
-        }
-      };
+    // Only update localStorage for competitive players, not casual players
+    if (userName && userName !== 'casual_player') {
+      localStorage.setItem('userName', JSON.stringify(userName));
       
-      fetchUserStats();
+      // Fetch user stats if needed
+      if (!userStats) {
+        const fetchUserStats = async () => {
+          try {
+            const userDoc = await initializeUser(userName);
+            if (userDoc.exists) {
+              setUserStats(userDoc.data);
+              
+              // Also store the email if we have it
+              if (userDoc.data.email && userDoc.data.email !== userEmail) {
+                setUserEmail(userDoc.data.email);
+                localStorage.setItem('userEmail', JSON.stringify(userDoc.data.email));
+              }
+            }
+          } catch (error) {
+            console.error('Failed to fetch user stats:', error);
+          }
+        };
+        
+        fetchUserStats();
+      }
     }
-  }, [userName, userStats]);
+  }, [userName, userStats, userEmail]);
+  
+  // Save email to localStorage when it changes
+  useEffect(() => {
+    if (userEmail) {
+      localStorage.setItem('userEmail', JSON.stringify(userEmail));
+    }
+  }, [userEmail]);
   
   // Navigation handlers
   const handleMainMenu = () => {
+    console.log("handleMainMenu called");
+    
+    // Different behavior based on play mode
+    if (userName === 'casual_player') {
+      console.log("Casual player returning to main menu");
+      // For casual player, just clear the casual username from state
+      // but DON'T touch localStorage which might contain competitive credentials
+      setUserName('');
+    }
+    // For competitive players, we keep userName intact in both state and localStorage
+    
     // Reset game state
-    localStorage.removeItem('userName');
-    setUserName('');
     setPlayMode('');
     setCurrentView('game');
     setLoginStep('username');
     setInputValue('');
     setPendingUsername('');
     setLoginError('');
+    setShowLogoutConfirm(false);
   };
 
   const handleShowRules = () => {
@@ -134,6 +172,7 @@ function App() {
         if (isValid) {
           // Email matches - log in user
           setUserName(pendingUsername);
+          setUserEmail(inputValue);
           setLoginStep('username');
           setInputValue('');
           setLoginError('');
@@ -146,6 +185,7 @@ function App() {
         const newUser = await initializeUser(pendingUsername, inputValue);
         if (newUser.exists) {
           setUserName(pendingUsername);
+          setUserEmail(inputValue);
           setLoginStep('username');
           setInputValue('');
           setLoginError('');
@@ -160,10 +200,64 @@ function App() {
   // Handle play mode selection
   const handlePlayModeSelection = (mode) => {
     setPlayMode(mode);
+    
     if (mode === 'casual') {
-      // Set a temporary username for casual play
+      // Set temporary username for casual play, but DON'T store in localStorage
       setUserName('casual_player');
+    } 
+    else if (mode === 'competitive') {
+      // Check if user is already logged in (has username in localStorage)
+      const storedUsername = getLocalStorageUsername();
+      
+      if (storedUsername && storedUsername !== 'casual_player') {
+        // User is already logged in, use their stored credentials
+        console.log("User already logged in, skipping login screens");
+        setUserName(storedUsername);
+        
+        // Fetch user stats if needed
+        if (!userStats) {
+          const fetchUserStats = async () => {
+            try {
+              const userDoc = await initializeUser(storedUsername);
+              if (userDoc.exists) {
+                setUserStats(userDoc.data);
+              }
+            } catch (error) {
+              console.error('Failed to fetch user stats:', error);
+            }
+          };
+          
+          fetchUserStats();
+        }
+      }
+      // If not logged in already, the playMode will be set to 'competitive'
+      // and the render logic will show the login screens
     }
+  };
+  
+  // Handle logout button click
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true);
+  };
+  
+  // Handle logout confirmation
+  const handleLogoutConfirm = () => {
+    // Clear user data
+    setUserName('');
+    setUserEmail('');
+    setUserStats(null);
+    
+    // Clear localStorage
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    
+    // Reset UI state
+    setShowLogoutConfirm(false);
+  };
+  
+  // Handle logout cancellation
+  const handleLogoutCancel = () => {
+    setShowLogoutConfirm(false);
   };
 
   // Handle various views based on currentView state
@@ -181,6 +275,64 @@ function App() {
   
   // Main game views
   if (userName) {
+    // Check if we're on the main menu but the user is already logged in competitively
+    if (playMode === '' && userName !== 'casual_player') {
+      return (
+        <div className="play-mode-container">
+          <img src={logo} alt="HH Logo" className='game-logo' />
+          <h1 className="game-title">Hangman's Hollow</h1>
+          
+          {/* Show logged in status */}
+          <div className="logged-in-status">
+            <p>Logged in as: <span className="username-display">{userName}</span></p>
+            
+            {/* Logout button */}
+            <button className="logout-button" onClick={handleLogoutClick}>
+  <FiLogOut className="logout-icon" /> Log Out
+</button>
+          </div>
+          
+          {/* Logout confirmation */}
+          {showLogoutConfirm && (
+            <div className="logout-confirm">
+              <p>Are you sure you want to log out?</p>
+              <div className="logout-buttons">
+                <button 
+                  className="logout-confirm-button"
+                  onClick={handleLogoutConfirm}
+                >
+                  Yes, Log Out
+                </button>
+                <button 
+                  className="logout-cancel-button"
+                  onClick={handleLogoutCancel}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+          
+          <div className="play-options">
+            <button 
+              className="play-option-btn competitive" 
+              onClick={() => handlePlayModeSelection('competitive')}
+            >
+              Play Competitively
+            </button>
+            <button 
+              className="play-option-btn casual" 
+              onClick={() => handlePlayModeSelection('casual')}
+            >
+              Play Casually
+            </button>
+          </div>
+          <ResetButton />
+        </div>
+      );
+    }
+    
+    // Regular game view once in a game
     return (
       <main>
         <div className='menu'>
@@ -212,7 +364,7 @@ function App() {
       </main>
     );
   } else {
-    // Mode selection screen
+    // Mode selection screen for not logged in users
     if (playMode === '') {
       return (
         <div className="play-mode-container">
@@ -239,61 +391,75 @@ function App() {
     }
     // Competitive mode login flow
     else if (playMode === 'competitive') {
-      return (
-        <div className="login-container">
-          <h1 className="login-title">Hangman's Hollow</h1>
-          
-          <form className="login-form" onSubmit={handleLoginStep}>
-            {loginStep === 'username' ? (
-              <>
-                <label className="login-label">
-                  Enter Your Alias
-                  <input
-                    className="login-input"
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    maxLength={10}
-                    placeholder="Your username"
-                    autoComplete="username"
-                  />
-                </label>
-              </>
-            ) : (
-              <>
-                <label className="login-label">
-                  {pendingUsername ? `Email for ${pendingUsername}` : 'Enter Your Email'}
-                  <input
-                    className="login-input"
-                    type="email"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="your.email@example.com"
-                    autoComplete="email"
-                  />
-                </label>
-              </>
-            )}
+      // Get stored username (returns '' if not found)
+      const storedUsername = getLocalStorageUsername();
+      
+      // If we have a stored username and we're not showing the username field in state yet,
+      // we should update it (this can happen if useState initial value didn't pick it up)
+      if (storedUsername && storedUsername !== 'casual_player' && !userName) {
+        // Instead of showing login, set the username and return null for this render cycle
+        setUserName(storedUsername);
+        return null; // Return null for this render cycle, will re-render with userName set
+      }
+      
+      // If no stored username (or it's casual_player), show login
+      if (!storedUsername || storedUsername === 'casual_player') {
+        return (
+          <div className="login-container">
+            <h1 className="login-title">Hangman's Hollow</h1>
             
-            {loginError && (
-              <div className="login-error">
-                {loginError}
-              </div>
-            )}
+            <form className="login-form" onSubmit={handleLoginStep}>
+              {loginStep === 'username' ? (
+                <>
+                  <label className="login-label">
+                    Enter Your Alias
+                    <input
+                      className="login-input"
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      maxLength={10}
+                      placeholder="Your username"
+                      autoComplete="username"
+                    />
+                  </label>
+                </>
+              ) : (
+                <>
+                  <label className="login-label">
+                    {pendingUsername ? `Email for ${pendingUsername}` : 'Enter Your Email'}
+                    <input
+                      className="login-input"
+                      type="email"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      placeholder="your.email@example.com"
+                      autoComplete="email"
+                    />
+                  </label>
+                </>
+              )}
+              
+              {loginError && (
+                <div className="login-error">
+                  {loginError}
+                </div>
+              )}
+              
+              <button className="login-button" type="submit">
+                {loginStep === 'username' ? 'Continue' : 'Submit'}
+              </button>
+            </form>
             
-            <button className="login-button" type="submit">
-              {loginStep === 'username' ? 'Continue' : 'Submit'}
-            </button>
-          </form>
-          
-          <ResetButton />
-          <NavigationMenu 
-            onMainMenu={handleMainMenu}
-            onRules={handleShowRules}
-            onPrizes={handleShowPrizes}
-          />
-        </div>
-      );
+            <ResetButton />
+            <NavigationMenu 
+              onMainMenu={handleMainMenu}
+              onRules={handleShowRules}
+              onPrizes={handleShowPrizes}
+            />
+          </div>
+        );
+      }
     }
     
     // Fallback view

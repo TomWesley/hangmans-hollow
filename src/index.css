@@ -74,7 +74,8 @@ Responsive Adjustments
   }
   
   .play-again-btn,
-  .play-again-btn-victory {
+  .play-again-btn-victory 
+  .play-again-btn-defeat{
     min-width: 400px;
     height: 80px;
     font-size: 2rem;
@@ -2731,7 +2732,8 @@ Victory and Defeat Styles
   min-width: 300px;
   height: 60px;
   font-size: 1.5rem;
-  margin: 30px auto;
+  margin: 0px;
+  margin-bottom: 10px;
   background: linear-gradient(145deg, #500, #800);
   color: white;
   border: none;
@@ -3565,5 +3567,173 @@ Victory and Defeat Styles
   position: absolute;
   bottom: 20px;
   right: 20px;
+}
+
+/* Add these styles to your index.css file */
+
+/* Logged in status display */
+.logged-in-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 15px 25px;
+  border-radius: 10px;
+  min-width: 240px;
+}
+
+.logged-in-status p {
+  margin: 0 0 10px 0;
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.username-display {
+  font-weight: bold;
+  color: #ffcc00;
+  font-size: 1.2rem;
+}
+
+/* Logout button */
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: rgba(255, 60, 60, 0.2);
+  border: 1px solid rgba(255, 60, 60, 0.4);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: rgba(255, 60, 60, 0.4);
+  transform: translateY(-2px);
+}
+
+.logout-icon {
+  font-size: 1.1rem;
+}
+
+/* Logout confirmation box */
+.logout-confirm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  width: 90%;
+  max-width: 320px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -60%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.logout-confirm p {
+  color: white;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logout-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.logout-confirm-button, 
+.logout-cancel-button {
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-confirm-button {
+  background-color: #ff3333;
+  color: white;
+}
+
+.logout-confirm-button:hover {
+  background-color: #ff0000;
+  transform: translateY(-2px);
+}
+
+.logout-cancel-button {
+  background-color: #333333;
+  color: white;
+}
+
+.logout-cancel-button:hover {
+  background-color: #444444;
+  transform: translateY(-2px);
+}
+
+/* Add an overlay to darken the background when confirmation is showing */
+.play-mode-container {
+  position: relative;
+}
+
+.play-mode-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.play-mode-container:has(.logout-confirm)::after {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .logged-in-status {
+    padding: 10px 20px;
+  }
+  
+  .logout-confirm {
+    max-width: 280px;
+    padding: 15px;
+  }
+  
+  .logout-confirm p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+  
+  .logout-buttons {
+    gap: 10px;
+  }
+  
+  .logout-confirm-button, 
+  .logout-cancel-button {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
 }
 
