@@ -138,7 +138,7 @@ const getLocalStoragePreselected = () => {
 var scoreInc = 0
 
 const Letters = ({ casualMode = false, username = '' }) => {
-  console.log(`Rendering Letters component with casualMode: ${casualMode}`);
+  console.log(`Rendering Letters component with casualMode: ${casualMode}, username: ${username}`);
   
   // Get the mode as a string for easier referencing
   const mode = casualMode ? 'casual' : 'competitive';
@@ -151,7 +151,13 @@ const Letters = ({ casualMode = false, username = '' }) => {
     getLocalStorageGameState(casualMode)
   );
   
-  const [localStats, setLocalStats] = useState({ averageBudgetRemaining: 0, winningPercentage: 0 });
+  const [localStats, setLocalStats] = useState({ 
+    gamesPlayed: 0,
+    gamesWon: 0,
+    averageBudgetRemaining: 0, 
+    winningPercentage: 0,
+    commonLetters: []
+  });
   
   const [finalChosenLetters, setfinalChosenLetters] = useState(() => 
     getLocalStorageFinalChosenLetters(casualMode)
@@ -179,7 +185,67 @@ const Letters = ({ casualMode = false, username = '' }) => {
     setfinalChosenLetters(getLocalStorageFinalChosenLetters(casualMode));
     setLetters(getLocalStorageLetters(casualMode));
     setUsedLetters(getLocalStorageUsedLetters(casualMode));
+    setHasUpdatedStats(false); // Reset this when mode changes
   }, [casualMode, mode]);
+
+  // Function to write game results to the database
+  async function writeToDatabase(gameResult) {
+    // Skip if in casual mode or using casual_player username
+    if (casualMode || username === 'casual_player') {
+      console.log('Skipping database update for casual mode or casual player');
+      return;
+    }
+    
+    console.log(`Writing game result to database: ${gameResult} for user: ${username}`);
+    
+    try {
+      // Only update if we haven't already updated stats for this game
+      if (!hasUpdatedStats) {
+        // Calculate remaining budget
+        const remainingBudget = gameStateCurrent.maxBudget - gameStateCurrent.score;
+        
+        // Update user stats with game result
+        const updatedStats = await updateUserStats(
+          username, 
+          gameResult === 'victory', 
+          remainingBudget,
+          puzzle.length,
+          usedLetters
+        );
+        
+        // Update local state with new stats
+        if (updatedStats) {
+          setLocalStats({
+            gamesPlayed: updatedStats.gamesPlayed || 0,
+            gamesWon: updatedStats.gamesWon || 0,
+            winningPercentage: updatedStats.winningPercentage || 0,
+            averageBudgetRemaining: updatedStats.averageBudgetRemaining || 0,
+            commonLetters: updatedStats.commonLetters || []
+          });
+          
+          // Mark as updated to prevent multiple updates
+          setHasUpdatedStats(true);
+          
+          console.log('Successfully updated user stats:', updatedStats);
+        }
+      }
+    } catch (error) {
+      console.error('Error updating user stats:', error);
+    }
+  }
+
+  // Game completion tracking effect - this handles database updates
+  useEffect(() => {
+    // Only run for competitive mode and when status changes to victory or defeat
+    if (!casualMode && username !== 'casual_player' && 
+        (gameStateCurrent.status === 'victory' || gameStateCurrent.status === 'defeat')) {
+      
+      console.log(`Game completed with status: ${gameStateCurrent.status}`);
+      
+      // Call writeToDatabase with the appropriate result
+      writeToDatabase(gameStateCurrent.status);
+    }
+  }, [gameStateCurrent.status, casualMode, username]);
 
   // Save letters to mode-specific localStorage
   useEffect(() => {
@@ -206,7 +272,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
     if (gameStateCurrent.status === 'solving' && gameStateCurrent.score >= gameStateCurrent.maxBudget) {
       setfinalChosenLetters(usedLetters);
       setGameStateCurrent({ ...gameStateCurrent, status: 'defeat' });
-      writeToDatabase('defeat');
+      // Database write happens in the separate effect
       setUsedLetters([
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -225,18 +291,10 @@ const Letters = ({ casualMode = false, username = '' }) => {
       if (victoryTracker === puzzle.length) {
         setfinalChosenLetters(usedLetters);
         setGameStateCurrent({ ...gameStateCurrent, status: 'victory' });
-        writeToDatabase('victory');
+        // Database write happens in the separate effect
       }
     }
   }, [gameStateCurrent, usedLetters, preselected, finalChosenLetters, puzzle, casualMode]);
-  
-  // Function to write game results to the database
-  async function writeToDatabase(gameResult) {
-    // Game status is handled by the updateStats effect
-    if (casualMode || username === 'casual_player') {
-      return; // Don't update database for casual play
-    }
-  }
 
   const scoreChange = (i) => {
     scoreInc = 0;
