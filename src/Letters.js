@@ -1,7 +1,7 @@
-// src/Letters.js - Completely updated file with all fixes
+// src/Letters.js - Updated with puzzle synchronization fixes
 import React from 'react'
 import Letter from './Letter'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import data from './data'
 import AnswerLetters from './AnswerLetters'
 import { getPuzzle, resetPuzzleWord, forceNewPuzzle } from './puzzle';
@@ -69,6 +69,7 @@ const ResetGame = (mode = 'both', shouldReload = true) => {
   // Always reset these shared state items
   localStorage.removeItem('preselected');
   localStorage.removeItem('letters'); // Clear the legacy letters item too
+  localStorage.removeItem('currentGameMode'); // Clear the current game mode
   
   // Reset the puzzle word(s)
   resetPuzzleWord(mode);
@@ -175,26 +176,93 @@ const getLocalStoragePreselected = () => {
   };
 }
 
+// New function to ensure correct current game mode is stored
+const setCurrentGameMode = (casualMode) => {
+  localStorage.setItem('currentGameMode', encryptObject(casualMode));
+  console.log(`Set current game mode to: ${casualMode ? 'casual' : 'competitive'}`);
+};
+
+// New function to get current game mode
+const getCurrentGameMode = () => {
+  const encryptedMode = localStorage.getItem('currentGameMode');
+  if (encryptedMode) {
+    try {
+      return decryptObject(encryptedMode);
+    } catch (e) {
+      console.error("Error decrypting current game mode:", e);
+    }
+  }
+  return false; // Default to competitive mode
+};
+
 var scoreInc = 0
 
 const Letters = ({ casualMode = false, username = '' }) => {
+  // Add a version counter to force re-renders when needed
+  const [puzzleVersion, setPuzzleVersion] = useState(1);
   console.log(`Rendering Letters component with casualMode: ${casualMode}, username: ${username}`);
   
-  // Get the mode as a string for easier referencing
-  const mode = casualMode ? 'casual' : 'competitive';
+  // Track mode changes using a ref to detect when casualMode prop changes
+  const lastModeRef = useRef(casualMode);
   
-  // Initialize puzzle for this mode with clear debug logging
+  // Track if we've loaded a fresh puzzle for this render cycle
+  const freshPuzzleLoadedRef = useRef(false);
+  
+  // Store the actual mode used for data retrieval - may differ from prop
+  // if there's an issue with sync
+  const [effectiveMode, setEffectiveMode] = useState(casualMode);
+  
+  // Get the mode as a string for easier referencing
+  const mode = effectiveMode ? 'casual' : 'competitive';
+  
+  // Track whether we should force a new puzzle
+  const [forceNewPuzzleFlag, setForceNewPuzzleFlag] = useState(false);
+  
+  // Update localStorage with current game mode whenever it changes
+  useEffect(() => {
+    // Update localStorage with current game mode
+    setCurrentGameMode(casualMode);
+    
+    // Check if mode has changed from previous render
+    if (lastModeRef.current !== casualMode) {
+      console.log(`Mode changed from ${lastModeRef.current ? 'casual' : 'competitive'} to ${casualMode ? 'casual' : 'competitive'}`);
+      
+      // Update the ref to track the new mode
+      lastModeRef.current = casualMode;
+      
+      // Update effective mode state
+      setEffectiveMode(casualMode);
+      
+      // Set flag to force a new puzzle
+      setForceNewPuzzleFlag(true);
+      
+      // Reset freshPuzzleLoaded flag
+      freshPuzzleLoadedRef.current = false;
+    }
+  }, [casualMode]);
+  
+  // Initialize puzzle state with a function to ensure it's always the latest
+  // This is critical for syncing with the correct mode
   const [puzzle, setPuzzle] = useState(() => {
-    // Force a new puzzle when first rendering
-    const newPuzzle = getPuzzle(mode, Date.now());
+    // Force a new puzzle when first rendering if needed
+    const storedMode = getCurrentGameMode();
+    
+    // Make sure we use the correct mode for initialization
+    const initMode = storedMode !== undefined ? storedMode : casualMode;
+    const modeString = initMode ? 'casual' : 'competitive';
+    
+    const newPuzzle = getPuzzle(modeString, Date.now());
     const puzzleWord = newPuzzle.map(l => l.name).join('');
-    console.log(`Initial puzzle for ${mode}:`, puzzleWord, `(${puzzleWord.length} letters)`);
+    
+    console.log(`Initial puzzle for ${modeString} mode:`, puzzleWord, `(${puzzleWord.length} letters)`);
+    freshPuzzleLoadedRef.current = true;
+    
     return newPuzzle;
   });
   
   // Use mode-specific localStorage
   const [gameStateCurrent, setGameStateCurrent] = useState(() => 
-    getLocalStorageGameState(casualMode)
+    getLocalStorageGameState(effectiveMode)
   );
   
   const [localStats, setLocalStats] = useState({ 
@@ -206,15 +274,15 @@ const Letters = ({ casualMode = false, username = '' }) => {
   });
   
   const [finalChosenLetters, setfinalChosenLetters] = useState(() => 
-    getLocalStorageFinalChosenLetters(casualMode)
+    getLocalStorageFinalChosenLetters(effectiveMode)
   );
   
   const [letters, setLetters] = useState(() => 
-    getLocalStorageLetters(casualMode)
+    getLocalStorageLetters(effectiveMode)
   );
   
   const [usedLetters, setUsedLetters] = useState(() => 
-    getLocalStorageUsedLetters(casualMode)
+    getLocalStorageUsedLetters(effectiveMode)
   );
   
   const [preselected, setPreselected] = useState(() =>
@@ -226,7 +294,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
   // Function to load user stats without updating the database
   const loadUserStats = async () => {
     // Skip if in casual mode or using casual_player username
-    if (casualMode || username === 'casual_player') {
+    if (effectiveMode || username === 'casual_player') {
       console.log('Skipping stats loading for casual mode or casual player');
       return;
     }
@@ -262,8 +330,11 @@ const Letters = ({ casualMode = false, username = '' }) => {
   };
 
   // Function to reset the game and start a new one
+  // Updated Play Again button functionality in Letters.js
+  
+  // Function to reset the game and start a new one with proper puzzle refresh
   const resetAndStartNewGame = () => {
-    console.log("Starting a new game...");
+    console.log("Starting a new game with complete puzzle refresh...");
     
     // First, reset localStorage for the current mode without page reload
     ResetGame(mode, false);
@@ -271,15 +342,20 @@ const Letters = ({ casualMode = false, username = '' }) => {
     // Force a new puzzle to be generated by directly resetting in puzzle.js
     resetPuzzleWord(mode);
     
-    // Get a fresh puzzle for the current mode - with cache-busting
-    const timestamp = Date.now(); // Add timestamp to avoid any caching
-    const newPuzzle = getPuzzle(mode, timestamp);
-    console.log(`New puzzle generated for ${mode} mode:`, 
-                newPuzzle.map(l => l.name).join(''));
+    // Generate a unique timestamp to ensure a fresh puzzle
+    const timestamp = Date.now() + Math.floor(Math.random() * 1000); 
     
-    // Double-check the puzzle is actually new
+    // Get a fresh puzzle for the current mode with cache-busting
+    const newPuzzle = getPuzzle(mode, timestamp);
     const puzzleWord = newPuzzle.map(l => l.name).join('');
-    console.log(`New puzzle word: ${puzzleWord}, length: ${puzzleWord.length}`);
+    console.log(`New puzzle generated for ${mode} mode:`, puzzleWord, `(${puzzleWord.length} letters)`);
+    
+    // Store the new puzzle word to ensure AnswerLetters component can access it
+    const wordKey = effectiveMode ? 'casualPuzzleWord' : 'competitivePuzzleWord';
+    const letterKey = effectiveMode ? 'casualPuzzleLetters' : 'competitivePuzzleLetters';
+    
+    // Make sure puzzleLetters in localStorage is updated with the new puzzle
+    localStorage.setItem(letterKey, encryptObject(newPuzzle));
     
     // Reset all component state to start a new game
     setPuzzle(newPuzzle);
@@ -300,7 +376,10 @@ const Letters = ({ casualMode = false, username = '' }) => {
     // Reset stats update flag
     setHasUpdatedStats(false);
     
-    console.log("Game state reset complete");
+    // Force local re-render by incrementing a counter
+    setPuzzleVersion(prev => prev + 1);
+    
+    console.log("Game state reset complete with new puzzle:", puzzleWord);
   };
   
   // Function to verify game state consistency
@@ -379,9 +458,40 @@ const Letters = ({ casualMode = false, username = '' }) => {
     }, 500); // Small delay to ensure state is fully loaded
   }, []);
 
+  // Effect to handle force new puzzle flag
+  useEffect(() => {
+    if (forceNewPuzzleFlag && !freshPuzzleLoadedRef.current) {
+      console.log(`Force loading a new puzzle for ${mode} mode`);
+      
+      // Force reset the puzzle for this mode
+      resetPuzzleWord(mode);
+      
+      // Get a completely fresh puzzle
+      const timestamp = Date.now();
+      const freshPuzzle = getPuzzle(mode, timestamp);
+      const puzzleWord = freshPuzzle.map(l => l.name).join('');
+      console.log(`Forced new puzzle for ${mode}:`, puzzleWord, `(${puzzleWord.length} letters)`);
+      
+      // Update the puzzle state
+      setPuzzle(freshPuzzle);
+      
+      // Reset the flag
+      setForceNewPuzzleFlag(false);
+      
+      // Mark that we've loaded a fresh puzzle
+      freshPuzzleLoadedRef.current = true;
+    }
+  }, [forceNewPuzzleFlag, mode]);
+
   // Critical: Update state when mode changes with improved reliability
   useEffect(() => {
-    console.log(`Mode changed to: ${mode}`);
+    console.log(`Mode effect triggered: ${mode}`);
+    
+    // Skip if we've already loaded a fresh puzzle this render
+    if (freshPuzzleLoadedRef.current) {
+      console.log(`Skipping mode effect because fresh puzzle already loaded`);
+      return;
+    }
     
     // Always force a fresh puzzle when changing modes
     const timestamp = Date.now();
@@ -390,13 +500,13 @@ const Letters = ({ casualMode = false, username = '' }) => {
     console.log(`New puzzle for ${mode}:`, puzzleWord, `(${puzzleWord.length} letters)`);
     
     // Reset other state - be careful about order
-    const newGameState = getLocalStorageGameState(casualMode);
+    const newGameState = getLocalStorageGameState(effectiveMode);
     console.log(`Game state for ${mode}:`, newGameState.status);
     
     // If there's any inconsistency, force everything to a fresh state
     if (newGameState.status !== 'solving') {
       // Check if the puzzle word matches the expected state
-      const storedLetters = getLocalStorageUsedLetters(casualMode);
+      const storedLetters = getLocalStorageUsedLetters(effectiveMode);
       const foundLetterCount = storedLetters.filter(l => 
         newPuzzle.some(pl => pl.name === l)
       ).length;
@@ -424,16 +534,19 @@ const Letters = ({ casualMode = false, username = '' }) => {
     // Update state normally if no inconsistency detected
     setPuzzle(newPuzzle);
     setGameStateCurrent(newGameState);
-    setfinalChosenLetters(getLocalStorageFinalChosenLetters(casualMode));
-    setLetters(getLocalStorageLetters(casualMode));
-    setUsedLetters(getLocalStorageUsedLetters(casualMode));
+    setfinalChosenLetters(getLocalStorageFinalChosenLetters(effectiveMode));
+    setLetters(getLocalStorageLetters(effectiveMode));
+    setUsedLetters(getLocalStorageUsedLetters(effectiveMode));
     setHasUpdatedStats(false);
-  }, [casualMode, mode]);
+    
+    // Mark that we've loaded a fresh puzzle
+    freshPuzzleLoadedRef.current = true;
+  }, [effectiveMode, mode]);
 
   // Effect to load user stats for completed games
   useEffect(() => {
     // Only run for competitive mode and completed games
-    if (!casualMode && 
+    if (!effectiveMode && 
         username !== 'casual_player' && 
         (gameStateCurrent.status === 'victory' || gameStateCurrent.status === 'defeat')) {
       
@@ -443,19 +556,19 @@ const Letters = ({ casualMode = false, username = '' }) => {
         loadUserStats();
       }
     }
-  }, [gameStateCurrent.status, casualMode, username, localStats]);
+  }, [gameStateCurrent.status, effectiveMode, username, localStats]);
 
   // Function to write game results to the database
   async function writeToDatabase(gameResult) {
     // Skip if in casual mode or using casual_player username
-    if (casualMode || username === 'casual_player') {
+    if (effectiveMode || username === 'casual_player') {
       console.log('Skipping database update for casual mode or casual player');
       return;
     }
     
     // Check if this game result has already been logged
-    if (hasGameResultBeenLogged(casualMode)) {
-      console.log(`Game result already logged to database for this ${casualMode ? 'casual' : 'competitive'} game. Skipping update but loading stats.`);
+    if (hasGameResultBeenLogged(effectiveMode)) {
+      console.log(`Game result already logged to database for this ${effectiveMode ? 'casual' : 'competitive'} game. Skipping update but loading stats.`);
       
       // Even if we don't update, make sure we load stats for display
       loadUserStats();
@@ -491,7 +604,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
         setHasUpdatedStats(true);
         
         // Mark this game result as logged to database
-        markGameResultAsLogged(casualMode);
+        markGameResultAsLogged(effectiveMode);
         
         console.log('Successfully updated user stats:', updatedStats);
       }
@@ -503,7 +616,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
   // Game completion tracking effect - this handles database updates
   useEffect(() => {
     // Only run for competitive mode and when status changes to victory or defeat
-    if (!casualMode && username !== 'casual_player' && 
+    if (!effectiveMode && username !== 'casual_player' && 
         (gameStateCurrent.status === 'victory' || gameStateCurrent.status === 'defeat')) {
       
       console.log(`Game completed with status: ${gameStateCurrent.status}`);
@@ -511,23 +624,23 @@ const Letters = ({ casualMode = false, username = '' }) => {
       // Call writeToDatabase with the appropriate result
       writeToDatabase(gameStateCurrent.status);
     }
-  }, [gameStateCurrent.status, casualMode, username]);
+  }, [gameStateCurrent.status, effectiveMode, username]);
 
   // Save letters to mode-specific localStorage
   useEffect(() => {
     if (letters) {
-      const modeKey = casualMode ? 'casualLetters' : 'competitiveLetters';
+      const modeKey = effectiveMode ? 'casualLetters' : 'competitiveLetters';
       localStorage.setItem(modeKey, encryptObject(letters));
     }
-  }, [letters, casualMode]);
+  }, [letters, effectiveMode]);
   
   // Victory/defeat detection and localStorage saving
   useEffect(() => {
     // Save state to localStorage using mode-specific keys
     if (finalChosenLetters && usedLetters && gameStateCurrent) {
-      const finalChosenKey = casualMode ? 'casualFinalChosenLetters' : 'competitiveFinalChosenLetters';
-      const usedLettersKey = casualMode ? 'casualUsedLetters' : 'competitiveUsedLetters';
-      const gameStateKey = casualMode ? 'casualGameStateCurrent' : 'competitiveGameStateCurrent';
+      const finalChosenKey = effectiveMode ? 'casualFinalChosenLetters' : 'competitiveFinalChosenLetters';
+      const usedLettersKey = effectiveMode ? 'casualUsedLetters' : 'competitiveUsedLetters';
+      const gameStateKey = effectiveMode ? 'casualGameStateCurrent' : 'competitiveGameStateCurrent';
       
       localStorage.setItem(finalChosenKey, encryptObject(finalChosenLetters));
       localStorage.setItem('preselected', encryptObject(preselected));
@@ -575,7 +688,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
         // Database write happens in the separate effect
       }
     }
-  }, [gameStateCurrent, usedLetters, preselected, finalChosenLetters, puzzle, casualMode]);
+  }, [gameStateCurrent, usedLetters, preselected, finalChosenLetters, puzzle, effectiveMode]);
 
   const scoreChange = (i) => {
     scoreInc = 0;
@@ -664,7 +777,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
   if (gameStateCurrent.status === 'solving') {
     return (
       <section className="game-container">
-        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} casualMode={casualMode} />
+        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} casualMode={effectiveMode} />
         
         <BatMeter 
           currentSpent={gameStateCurrent.score} 
@@ -678,7 +791,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
           onLetterSelect={changeHover}
           onLetterConfirm={changeUsed}
           preselected={preselected}
-          casualMode={casualMode}
+          casualMode={effectiveMode}
         />
       </section>
     )
@@ -686,8 +799,12 @@ const Letters = ({ casualMode = false, username = '' }) => {
   else if (gameStateCurrent.status === 'victory') {
     return (
       <section className="game-container">
-        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} casualMode={casualMode} />
-        
+        <AnswerLetters 
+          s={gameStateCurrent.status} 
+          u={usedLetters} 
+          casualMode={effectiveMode} 
+          key={`puzzle-${puzzleVersion}`} // Add key with version to force re-render
+        />
         <BatMeter 
           currentSpent={gameStateCurrent.score} 
           maxBudget={gameStateCurrent.maxBudget} 
@@ -697,7 +814,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
         <div className="victory-message">
           <h3>The Hollow is Friendly to Those Who Win</h3>
           
-          {!casualMode && (
+          {!effectiveMode && (
             <div className="stats-summary">
               <p>Games won: {localStats.gamesWon} ({localStats.winningPercentage}%)</p>
               <p>Avg. budget remaining: {localStats.averageBudgetRemaining}</p>
@@ -720,10 +837,11 @@ const Letters = ({ casualMode = false, username = '' }) => {
             localStorage.removeItem(`${mode}Letters`);
             localStorage.removeItem(`${mode}GameLogged`);
             
-            // Use force reset function from puzzle.js
+            // Use force reset function from puzzle.js with cache busting timestamp
+            const resetTimestamp = Date.now() + Math.floor(Math.random() * 10000);
             forceNewPuzzle(mode);
             
-            // Call our reset function
+            // Call our enhanced reset function
             resetAndStartNewGame();
             
             // Add debugging
@@ -754,7 +872,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
   else { // Defeat state
     return (
       <section className="game-container">
-        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} casualMode={casualMode} />
+        <AnswerLetters s={gameStateCurrent.status} u={usedLetters} casualMode={effectiveMode} />
         
         <BatMeter 
           currentSpent={gameStateCurrent.score} 
@@ -764,7 +882,7 @@ const Letters = ({ casualMode = false, username = '' }) => {
         
         <div className="defeat-message">
           <h3>The Hollow Has Claimed Another Victim</h3>
-          {!casualMode && (
+          {!effectiveMode && (
             <div className="stats-summary">
               <p>Games played: {localStats.gamesPlayed}</p>
               <p>Win rate: {localStats.winningPercentage}%</p>
@@ -776,29 +894,43 @@ const Letters = ({ casualMode = false, username = '' }) => {
         </div>
         
         <button
-          className='play-again-btn'
-          onClick={() => {
-            // Completely reset localStorage first
-            localStorage.removeItem(`${mode}PuzzleWord`);
-            localStorage.removeItem(`${mode}PuzzleLetters`);
-            localStorage.removeItem(`${mode}GameStateCurrent`);
-            localStorage.removeItem(`${mode}FinalChosenLetters`);
-            localStorage.removeItem(`${mode}UsedLetters`);
-            localStorage.removeItem(`${mode}Letters`);
-            localStorage.removeItem(`${mode}GameLogged`);
-            
-            // Use force reset function from puzzle.js
-            forceNewPuzzle(mode);
-            
-            // Call our reset function
-            resetAndStartNewGame();
-            
-            // Add debugging
-            console.log("Play Again clicked in defeat state");
-          }}
-        >
-          Play Again
-        </button>
+  className='play-again-btn'
+  onClick={() => {
+    // Generate unique timestamp for cache busting
+    const timestamp = Date.now() + Math.floor(Math.random() * 10000);
+    
+    // Completely reset localStorage first
+    localStorage.removeItem(`${mode}PuzzleWord`);
+    localStorage.removeItem(`${mode}PuzzleLetters`);
+    localStorage.removeItem(`${mode}GameStateCurrent`);
+    localStorage.removeItem(`${mode}FinalChosenLetters`);
+    localStorage.removeItem(`${mode}UsedLetters`);
+    localStorage.removeItem(`${mode}Letters`);
+    localStorage.removeItem(`${mode}GameLogged`);
+    
+    // Force a completely new puzzle by calling forceNewPuzzle with timestamp
+    const newPuzzle = forceNewPuzzle(mode);
+    console.log("Forced new puzzle word:", newPuzzle.map(l => l.name).join(''));
+    
+    // Apply the new puzzle to state immediately
+    setPuzzle(newPuzzle);
+    
+    // Reset game state
+    setGameStateCurrent({...gamestate});
+    setfinalChosenLetters([]);
+    setLetters(JSON.parse(JSON.stringify(data)));
+    setUsedLetters([]);
+    setPreselected({ value: '', status: false, key: '' });
+    
+    // Force AnswerLetters component to re-render with a new key
+    setPuzzleVersion(prev => prev + 1);
+    
+    // Add debugging
+    console.log("Play Again clicked in defeat state");
+  }}
+>
+  Play Again
+</button>
         
         <div>
           <h3>Your Guesses In Order:</h3>
@@ -819,5 +951,4 @@ const Letters = ({ casualMode = false, username = '' }) => {
     )
   }
 }
-
-export default Letters
+export default Letters;
