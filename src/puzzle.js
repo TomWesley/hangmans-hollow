@@ -1,4 +1,5 @@
-// src/puzzle.js with improved cache busting and complete reset
+// Updated puzzle.js with persistence across navigation
+
 import { generate } from 'random-words';
 import { encrypt, decrypt, encryptObject, decryptObject } from './encryption';
 
@@ -7,7 +8,7 @@ let lastCompetitivePuzzle = null;
 let lastCasualPuzzle = null;
 
 // Add a timestamp mechanism to prevent stale puzzles
-const PUZZLE_EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+const PUZZLE_EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
 // Function to generate a new puzzle word
 const generateNewWord = (minLength = 5, maxLength = 8) => {
@@ -16,8 +17,58 @@ const generateNewWord = (minLength = 5, maxLength = 8) => {
   return word.toUpperCase();
 };
 
-// Get or generate a competitive puzzle word with cache busting
+// Check if a game is in progress for a specific mode
+const isGameInProgress = (mode) => {
+  const gameStateKey = mode === 'competitive' ? 'competitiveGameStateCurrent' : 'casualGameStateCurrent';
+  const usedLettersKey = mode === 'competitive' ? 'competitiveUsedLetters' : 'casualUsedLetters';
+  
+  try {
+    // Check if we have a game state
+    const encryptedGameState = localStorage.getItem(gameStateKey);
+    if (!encryptedGameState) return false;
+    
+    const gameState = decryptObject(encryptedGameState);
+    
+    // If the game is in "solving" state, it's in progress
+    if (gameState && gameState.status === 'solving') {
+      // Also check if we have any used letters
+      const encryptedUsedLetters = localStorage.getItem(usedLettersKey);
+      if (encryptedUsedLetters) {
+        const usedLetters = decryptObject(encryptedUsedLetters);
+        // If we have used letters, we consider the game in progress
+        return Array.isArray(usedLetters) && usedLetters.length > 0;
+      }
+    }
+  } catch (e) {
+    console.error(`Error checking if game is in progress for ${mode} mode:`, e);
+  }
+  
+  return false;
+};
+
+// Get or generate a competitive puzzle word with persistence
 const getCompetitivePuzzle = (cacheBuster = null) => {
+  // First check if a game is in progress
+  const gameInProgress = isGameInProgress('competitive');
+  console.log("Competitive game in progress:", gameInProgress);
+  
+  // If a game is in progress and we're not explicitly forcing a new puzzle,
+  // get the existing puzzle word
+  if (gameInProgress && !cacheBuster) {
+    const encryptedPuzzle = localStorage.getItem('competitivePuzzleWord');
+    if (encryptedPuzzle) {
+      try {
+        const decrypted = decrypt(encryptedPuzzle);
+        lastCompetitivePuzzle = decrypted; // Update memory tracker
+        console.log("Retrieved in-progress competitive puzzle:", decrypted);
+        return decrypted;
+      } catch (e) {
+        console.error("Error decrypting in-progress puzzle:", e);
+        // Will fall through to create a new puzzle
+      }
+    }
+  }
+  
   // Check if we need to generate a new puzzle
   const needNewPuzzle = () => {
     // If cacheBuster is provided, always generate new
@@ -26,18 +77,20 @@ const getCompetitivePuzzle = (cacheBuster = null) => {
     // If no puzzle exists in localStorage, generate new
     if (!localStorage.getItem('competitivePuzzleWord')) return true;
     
-    // Check if puzzle has expired
-    const timestamp = localStorage.getItem('competitivePuzzleTimestamp');
-    if (timestamp) {
-      const puzzleTime = parseInt(timestamp, 10);
-      const currentTime = Date.now();
-      if (currentTime - puzzleTime > PUZZLE_EXPIRATION_TIME) {
-        console.log("Competitive puzzle has expired, generating new one");
+    // Check if puzzle has expired (only relevant for completed games)
+    if (!gameInProgress) {
+      const timestamp = localStorage.getItem('competitivePuzzleTimestamp');
+      if (timestamp) {
+        const puzzleTime = parseInt(timestamp, 10);
+        const currentTime = Date.now();
+        if (currentTime - puzzleTime > PUZZLE_EXPIRATION_TIME) {
+          console.log("Competitive puzzle has expired, generating new one");
+          return true;
+        }
+      } else {
+        // If no timestamp exists, force regeneration
         return true;
       }
-    } else {
-      // If no timestamp exists, force regeneration
-      return true;
     }
     
     // Check memory tracker
@@ -110,8 +163,29 @@ const getCompetitivePuzzle = (cacheBuster = null) => {
   return generateNewWord();
 };
 
-// Get or generate a casual puzzle word with cache busting
+// Get or generate a casual puzzle word with persistence
 const getCasualPuzzle = (cacheBuster = null) => {
+  // First check if a game is in progress
+  const gameInProgress = isGameInProgress('casual');
+  console.log("Casual game in progress:", gameInProgress);
+  
+  // If a game is in progress and we're not explicitly forcing a new puzzle,
+  // get the existing puzzle word
+  if (gameInProgress && !cacheBuster) {
+    const encryptedPuzzle = localStorage.getItem('casualPuzzleWord');
+    if (encryptedPuzzle) {
+      try {
+        const decrypted = decrypt(encryptedPuzzle);
+        lastCasualPuzzle = decrypted; // Update memory tracker
+        console.log("Retrieved in-progress casual puzzle:", decrypted);
+        return decrypted;
+      } catch (e) {
+        console.error("Error decrypting in-progress puzzle:", e);
+        // Will fall through to create a new puzzle
+      }
+    }
+  }
+  
   // Check if we need to generate a new puzzle
   const needNewPuzzle = () => {
     // If cacheBuster is provided, always generate new
@@ -120,18 +194,20 @@ const getCasualPuzzle = (cacheBuster = null) => {
     // If no puzzle exists in localStorage, generate new
     if (!localStorage.getItem('casualPuzzleWord')) return true;
     
-    // Check if puzzle has expired
-    const timestamp = localStorage.getItem('casualPuzzleTimestamp');
-    if (timestamp) {
-      const puzzleTime = parseInt(timestamp, 10);
-      const currentTime = Date.now();
-      if (currentTime - puzzleTime > PUZZLE_EXPIRATION_TIME) {
-        console.log("Casual puzzle has expired, generating new one");
+    // Check if puzzle has expired (only relevant for completed games)
+    if (!gameInProgress) {
+      const timestamp = localStorage.getItem('casualPuzzleTimestamp');
+      if (timestamp) {
+        const puzzleTime = parseInt(timestamp, 10);
+        const currentTime = Date.now();
+        if (currentTime - puzzleTime > PUZZLE_EXPIRATION_TIME) {
+          console.log("Casual puzzle has expired, generating new one");
+          return true;
+        }
+      } else {
+        // If no timestamp exists, force regeneration
         return true;
       }
-    } else {
-      // If no timestamp exists, force regeneration
-      return true;
     }
     
     // Check memory tracker
@@ -235,25 +311,61 @@ const createPuzzleArray = (word) => {
   return puzzleArray;
 };
 
-// Helper function to completely reset puzzle on reset
+// Helper function to completely reset puzzle on reset - ONLY on game completion
 export const resetPuzzleWord = (mode = 'both') => {
   if (mode === 'competitive' || mode === 'both') {
-    localStorage.removeItem('competitivePuzzleWord');
-    localStorage.removeItem('competitivePuzzleLetters');
-    localStorage.removeItem('competitivePuzzleTimestamp');
-    // Also reset the memory tracker
-    lastCompetitivePuzzle = null;
+    // Check if the game is completed before resetting
+    const encryptedGameState = localStorage.getItem('competitiveGameStateCurrent');
+    let shouldReset = true;
+    
+    if (encryptedGameState) {
+      try {
+        const gameState = decryptObject(encryptedGameState);
+        // Only reset if game is in victory or defeat state
+        shouldReset = gameState && (gameState.status === 'victory' || gameState.status === 'defeat');
+      } catch (e) {
+        console.error("Error checking game state for reset:", e);
+      }
+    }
+    
+    if (shouldReset) {
+      localStorage.removeItem('competitivePuzzleWord');
+      localStorage.removeItem('competitivePuzzleLetters');
+      localStorage.removeItem('competitivePuzzleTimestamp');
+      // Also reset the memory tracker
+      lastCompetitivePuzzle = null;
+      console.log('Competitive puzzle reset complete');
+    } else {
+      console.log('Skipping competitive puzzle reset - game still in progress');
+    }
   }
   
   if (mode === 'casual' || mode === 'both') {
-    localStorage.removeItem('casualPuzzleWord');
-    localStorage.removeItem('casualPuzzleLetters');
-    localStorage.removeItem('casualPuzzleTimestamp');
-    // Also reset the memory tracker
-    lastCasualPuzzle = null;
+    // Check if the game is completed before resetting
+    const encryptedGameState = localStorage.getItem('casualGameStateCurrent');
+    let shouldReset = true;
+    
+    if (encryptedGameState) {
+      try {
+        const gameState = decryptObject(encryptedGameState);
+        // Only reset if game is in victory or defeat state
+        shouldReset = gameState && (gameState.status === 'victory' || gameState.status === 'defeat');
+      } catch (e) {
+        console.error("Error checking game state for reset:", e);
+      }
+    }
+    
+    if (shouldReset) {
+      localStorage.removeItem('casualPuzzleWord');
+      localStorage.removeItem('casualPuzzleLetters');
+      localStorage.removeItem('casualPuzzleTimestamp');
+      // Also reset the memory tracker
+      lastCasualPuzzle = null;
+      console.log('Casual puzzle reset complete');
+    } else {
+      console.log('Skipping casual puzzle reset - game still in progress');
+    }
   }
-  
-  console.log(`Puzzle words reset for mode: ${mode}`);
 };
 
 // Get the appropriate puzzle based on game mode with optional cache busting
@@ -311,26 +423,50 @@ export const verifyPuzzleMatchesWord = (mode) => {
   }
 };
 
-// Function to force generate a new puzzle
+// Function to FORCE generate a new puzzle - ONLY called after game completion
 export const forceNewPuzzle = (mode) => {
-  // Use current timestamp as cache buster
-  const cacheBuster = Date.now();
+  // Check if the game is completed before resetting
+  const gameStateKey = mode === 'competitive' ? 'competitiveGameStateCurrent' : 'casualGameStateCurrent';
+  const encryptedGameState = localStorage.getItem(gameStateKey);
+  let shouldGenerateNew = true;
   
-  // Reset localStorage for this mode
-  if (mode === 'competitive') {
-    localStorage.removeItem('competitivePuzzleWord');
-    localStorage.removeItem('competitivePuzzleLetters');
-    localStorage.removeItem('competitivePuzzleTimestamp');
-    lastCompetitivePuzzle = null;
-  } else {
-    localStorage.removeItem('casualPuzzleWord');
-    localStorage.removeItem('casualPuzzleLetters');
-    localStorage.removeItem('casualPuzzleTimestamp');
-    lastCasualPuzzle = null;
+  if (encryptedGameState) {
+    try {
+      const gameState = decryptObject(encryptedGameState);
+      // Only generate new if game is in victory or defeat state
+      shouldGenerateNew = gameState && (gameState.status === 'victory' || gameState.status === 'defeat');
+      
+      if (!shouldGenerateNew) {
+        console.log(`Skipping new puzzle generation - ${mode} game still in progress`);
+      }
+    } catch (e) {
+      console.error("Error checking game state for reset:", e);
+    }
   }
   
-  // Generate and return new puzzle
-  return getPuzzle(mode, cacheBuster);
+  if (shouldGenerateNew) {
+    // Use current timestamp as cache buster
+    const cacheBuster = Date.now();
+    
+    // Reset localStorage for this mode
+    if (mode === 'competitive') {
+      localStorage.removeItem('competitivePuzzleWord');
+      localStorage.removeItem('competitivePuzzleLetters');
+      localStorage.removeItem('competitivePuzzleTimestamp');
+      lastCompetitivePuzzle = null;
+    } else {
+      localStorage.removeItem('casualPuzzleWord');
+      localStorage.removeItem('casualPuzzleLetters');
+      localStorage.removeItem('casualPuzzleTimestamp');
+      lastCasualPuzzle = null;
+    }
+    
+    // Generate and return new puzzle
+    return getPuzzle(mode, cacheBuster);
+  } else {
+    // Return the existing puzzle instead
+    return getPuzzle(mode);
+  }
 };
 
 // Export an empty default puzzle (will be replaced by the appropriate puzzle when mode is known)
