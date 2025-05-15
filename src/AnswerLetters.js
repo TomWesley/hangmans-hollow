@@ -1,4 +1,4 @@
-// Updated AnswerLetters.js with forced refresh capability
+// Updated AnswerLetters.js with synchronization fix for refresh
 import React, { useState, useEffect, useRef } from 'react'
 import AnswerLetter from './AnswerLetter'
 import { getPuzzle, verifyPuzzleMatchesWord } from './puzzle'
@@ -11,9 +11,43 @@ const getLocalStoragePuzzleLetters = (casualMode, forceRefresh = false) => {
   const wordKey = casualMode ? 'casualPuzzleWord' : 'competitivePuzzleWord';
   const modeString = casualMode ? 'casual' : 'competitive';
   
+  // First check for casual player state
+  const encryptedCasualState = localStorage.getItem('casualPlayerState');
+  let enforcedCasualMode = casualMode;
+  
+  // If there's a mismatch between mode and casualPlayerState, use casualPlayerState
+  if (encryptedCasualState) {
+    try {
+      const isCasual = decryptObject(encryptedCasualState);
+      if (isCasual === true && !casualMode) {
+        console.log("Enforcing casual mode from casualPlayerState");
+        enforcedCasualMode = true;
+        const casualKey = 'casualPuzzleLetters';
+        
+        // Get puzzle from the correct mode
+        const encryptedCasualPuzzle = localStorage.getItem(casualKey);
+        if (encryptedCasualPuzzle) {
+          try {
+            const decryptedCasual = decryptObject(encryptedCasualPuzzle);
+            if (decryptedCasual && Array.isArray(decryptedCasual) && decryptedCasual.length > 0) {
+              console.log("Using casual puzzle letters from localStorage due to casualPlayerState");
+              return decryptedCasual;
+            }
+          } catch (e) {
+            console.error("Error decrypting casual puzzle letters:", e);
+          }
+        }
+      }
+    } catch (e) {
+      console.error("Error checking casualPlayerState:", e);
+    }
+  }
+  
   // If force refresh is true, skip localStorage and get a new puzzle
+  // This should ONLY be true when Play Again is clicked
   if (forceRefresh) {
     console.log(`Forcing fresh puzzle for ${modeString} mode`);
+    // Use timestamp as cache buster to force new puzzle
     const timestamp = Date.now() + Math.floor(Math.random() * 1000);
     return getPuzzle(modeString, timestamp);
   }
@@ -44,17 +78,35 @@ const getLocalStoragePuzzleLetters = (casualMode, forceRefresh = false) => {
     }
   }
   
-  // If nothing found or invalid, return a new puzzle for the mode
-  console.log(`Generating new puzzle for ${modeString} mode`);
-  // Use timestamp to ensure fresh puzzle
-  const timestamp = Date.now() + Math.floor(Math.random() * 1000);
-  return getPuzzle(modeString, timestamp); 
+  // If nothing found or invalid, return a new puzzle for the mode - WITHOUT TIMESTAMP
+  // to avoid generating new puzzles on refresh
+  console.log(`Getting new puzzle for ${modeString} mode`);
+  return getPuzzle(modeString); 
 };
 
 const AnswerLetters = (props) => {
   const u = props.u;
   const fa = props.s === 'victory';
-  const casualMode = props.casualMode || false;
+  
+  // Ensure we're using the correct mode - check casualPlayerState
+  const casualMode = (() => {
+    if (props.casualMode) return true; // If props say casual, use casual
+    
+    // Otherwise check localStorage
+    const encryptedCasualState = localStorage.getItem('casualPlayerState');
+    if (encryptedCasualState) {
+      try {
+        const isCasual = decryptObject(encryptedCasualState);
+        if (isCasual === true) {
+          console.log("AnswerLetters: Using casual mode from casualPlayerState");
+          return true;
+        }
+      } catch (e) {
+        console.error("Error checking casualPlayerState in AnswerLetters:", e);
+      }
+    }
+    return props.casualMode || false; // Default to prop value
+  })();
   
   // Add last render time ref to detect component remounts
   const lastRenderTimeRef = useRef(Date.now());
@@ -64,8 +116,30 @@ const AnswerLetters = (props) => {
   
   // Use the mode to get the right puzzle
   const [puzzleLetters, setPuzzleLetters] = useState(() => {
-    console.log("AnswerLetters initial state load");
+    console.log("AnswerLetters initial state load with casualMode:", casualMode);
+    
+    // Try to get existing puzzle letters from localStorage first
+    const key = casualMode ? 'casualPuzzleLetters' : 'competitivePuzzleLetters';
+    const encryptedPuzzleLetters = localStorage.getItem(key);
+    
+    if (encryptedPuzzleLetters) {
+      try {
+        const decrypted = decryptObject(encryptedPuzzleLetters);
+        if (decrypted && Array.isArray(decrypted) && decrypted.length > 0) {
+          const puzzleWord = decrypted.map(l => l.name).join('');
+          console.log(`AnswerLetters: Using stored ${casualMode ? 'casual' : 'competitive'} puzzle: ${puzzleWord}`);
+          setFreshPuzzleLoaded(true);
+          return decrypted;
+        }
+      } catch (e) {
+        console.error("Error decrypting stored puzzle letters:", e);
+      }
+    }
+    
+    // If no valid stored puzzle, get a new one
     const letters = getLocalStoragePuzzleLetters(casualMode);
+    const puzzleWord = letters.map(l => l.name).join('');
+    console.log(`AnswerLetters: Created new ${casualMode ? 'casual' : 'competitive'} puzzle: ${puzzleWord}`);
     setFreshPuzzleLoaded(true);
     return letters;
   });

@@ -1,4 +1,4 @@
-// Updated puzzle.js with persistence across navigation
+// Updated puzzle.js with persistence across navigation and refresh
 
 import { generate } from 'random-words';
 import { encrypt, decrypt, encryptObject, decryptObject } from './encryption';
@@ -48,73 +48,27 @@ const isGameInProgress = (mode) => {
 
 // Get or generate a competitive puzzle word with persistence
 const getCompetitivePuzzle = (cacheBuster = null) => {
-  // First check if a game is in progress
-  const gameInProgress = isGameInProgress('competitive');
-  console.log("Competitive game in progress:", gameInProgress);
+  // Check if we already have a stored puzzle
+  const encryptedPuzzle = localStorage.getItem('competitivePuzzleWord');
   
-  // If a game is in progress and we're not explicitly forcing a new puzzle,
-  // get the existing puzzle word
-  if (gameInProgress && !cacheBuster) {
-    const encryptedPuzzle = localStorage.getItem('competitivePuzzleWord');
-    if (encryptedPuzzle) {
-      try {
-        const decrypted = decrypt(encryptedPuzzle);
-        lastCompetitivePuzzle = decrypted; // Update memory tracker
-        console.log("Retrieved in-progress competitive puzzle:", decrypted);
-        return decrypted;
-      } catch (e) {
-        console.error("Error decrypting in-progress puzzle:", e);
-        // Will fall through to create a new puzzle
-      }
+  // If we have a stored puzzle, use it regardless of game state
+  if (encryptedPuzzle) {
+    try {
+      const decrypted = decrypt(encryptedPuzzle);
+      lastCompetitivePuzzle = decrypted; // Update memory tracker
+      console.log("Using existing competitive puzzle:", decrypted);
+      return decrypted;
+    } catch (e) {
+      console.error("Error decrypting puzzle:", e);
+      // Will fall through to create a new puzzle only if decryption failed
     }
   }
   
-  // Check if we need to generate a new puzzle
-  const needNewPuzzle = () => {
-    // If cacheBuster is provided, always generate new
-    if (cacheBuster) return true;
+  // Check if we explicitly need to generate a new puzzle with cacheBuster
+  // ONLY happens when Play Again is clicked or explicit reset
+  if (cacheBuster) {
+    console.log("Force generating new competitive puzzle with cache buster:", cacheBuster);
     
-    // If no puzzle exists in localStorage, generate new
-    if (!localStorage.getItem('competitivePuzzleWord')) return true;
-    
-    // Check if puzzle has expired (only relevant for completed games)
-    if (!gameInProgress) {
-      const timestamp = localStorage.getItem('competitivePuzzleTimestamp');
-      if (timestamp) {
-        const puzzleTime = parseInt(timestamp, 10);
-        const currentTime = Date.now();
-        if (currentTime - puzzleTime > PUZZLE_EXPIRATION_TIME) {
-          console.log("Competitive puzzle has expired, generating new one");
-          return true;
-        }
-      } else {
-        // If no timestamp exists, force regeneration
-        return true;
-      }
-    }
-    
-    // Check memory tracker
-    if (lastCompetitivePuzzle === null) {
-      // Try to load from localStorage first
-      const encryptedPuzzle = localStorage.getItem('competitivePuzzleWord');
-      if (encryptedPuzzle) {
-        try {
-          lastCompetitivePuzzle = decrypt(encryptedPuzzle);
-          console.log("Loaded competitive puzzle from localStorage:", lastCompetitivePuzzle);
-        } catch (e) {
-          console.error("Error decrypting puzzle, will generate new one:", e);
-          return true;
-        }
-      } else {
-        return true;
-      }
-    }
-    
-    // No need for a new puzzle
-    return false;
-  };
-  
-  if (needNewPuzzle()) {
     // Generate a new word - make sure it's different from the last one
     let newWord;
     let attempts = 0;
@@ -144,94 +98,46 @@ const getCompetitivePuzzle = (cacheBuster = null) => {
     return newWord;
   }
   
-  // Otherwise, retrieve the existing puzzle
-  const encryptedPuzzle = localStorage.getItem('competitivePuzzleWord');
-  if (encryptedPuzzle) {
-    try {
-      const decrypted = decrypt(encryptedPuzzle);
-      lastCompetitivePuzzle = decrypted; // Update memory tracker
-      console.log("Loaded existing competitive puzzle:", decrypted);
-      return decrypted;
-    } catch (e) {
-      console.error("Error decrypting puzzle, generating new one:", e);
-      return getCompetitivePuzzle(Date.now()); // Force generate with timestamp as cache buster
-    }
-  }
+  // If we don't have a stored puzzle, we need to create a first one
+  // This should only happen on first visit ever
+  console.log("No existing competitive puzzle found, generating initial puzzle");
+  const newWord = generateNewWord();
+  lastCompetitivePuzzle = newWord;
   
-  // Fallback - should never reach here
-  console.warn("Fallback puzzle generation needed for competitive mode");
-  return generateNewWord();
+  // Encrypt and save to localStorage
+  const encrypted = encrypt(newWord);
+  localStorage.setItem('competitivePuzzleWord', encrypted);
+  
+  // Add a timestamp to mark this as a fresh puzzle
+  localStorage.setItem('competitivePuzzleTimestamp', Date.now().toString());
+  
+  console.log("Generated initial competitive puzzle word:", newWord);
+  return newWord;
 };
 
 // Get or generate a casual puzzle word with persistence
 const getCasualPuzzle = (cacheBuster = null) => {
-  // First check if a game is in progress
-  const gameInProgress = isGameInProgress('casual');
-  console.log("Casual game in progress:", gameInProgress);
+  // Check if we already have a stored puzzle
+  const encryptedPuzzle = localStorage.getItem('casualPuzzleWord');
   
-  // If a game is in progress and we're not explicitly forcing a new puzzle,
-  // get the existing puzzle word
-  if (gameInProgress && !cacheBuster) {
-    const encryptedPuzzle = localStorage.getItem('casualPuzzleWord');
-    if (encryptedPuzzle) {
-      try {
-        const decrypted = decrypt(encryptedPuzzle);
-        lastCasualPuzzle = decrypted; // Update memory tracker
-        console.log("Retrieved in-progress casual puzzle:", decrypted);
-        return decrypted;
-      } catch (e) {
-        console.error("Error decrypting in-progress puzzle:", e);
-        // Will fall through to create a new puzzle
-      }
+  // If we have a stored puzzle, use it regardless of game state
+  if (encryptedPuzzle) {
+    try {
+      const decrypted = decrypt(encryptedPuzzle);
+      lastCasualPuzzle = decrypted; // Update memory tracker
+      console.log("Using existing casual puzzle:", decrypted);
+      return decrypted;
+    } catch (e) {
+      console.error("Error decrypting puzzle:", e);
+      // Will fall through to create a new puzzle only if decryption failed
     }
   }
   
-  // Check if we need to generate a new puzzle
-  const needNewPuzzle = () => {
-    // If cacheBuster is provided, always generate new
-    if (cacheBuster) return true;
+  // Check if we explicitly need to generate a new puzzle with cacheBuster
+  // ONLY happens when Play Again is clicked or explicit reset
+  if (cacheBuster) {
+    console.log("Force generating new casual puzzle with cache buster:", cacheBuster);
     
-    // If no puzzle exists in localStorage, generate new
-    if (!localStorage.getItem('casualPuzzleWord')) return true;
-    
-    // Check if puzzle has expired (only relevant for completed games)
-    if (!gameInProgress) {
-      const timestamp = localStorage.getItem('casualPuzzleTimestamp');
-      if (timestamp) {
-        const puzzleTime = parseInt(timestamp, 10);
-        const currentTime = Date.now();
-        if (currentTime - puzzleTime > PUZZLE_EXPIRATION_TIME) {
-          console.log("Casual puzzle has expired, generating new one");
-          return true;
-        }
-      } else {
-        // If no timestamp exists, force regeneration
-        return true;
-      }
-    }
-    
-    // Check memory tracker
-    if (lastCasualPuzzle === null) {
-      // Try to load from localStorage first
-      const encryptedPuzzle = localStorage.getItem('casualPuzzleWord');
-      if (encryptedPuzzle) {
-        try {
-          lastCasualPuzzle = decrypt(encryptedPuzzle);
-          console.log("Loaded casual puzzle from localStorage:", lastCasualPuzzle);
-        } catch (e) {
-          console.error("Error decrypting puzzle, will generate new one:", e);
-          return true;
-        }
-      } else {
-        return true;
-      }
-    }
-    
-    // No need for a new puzzle
-    return false;
-  };
-  
-  if (needNewPuzzle()) {
     // Generate a new word - make sure it's different from the last one
     let newWord;
     let attempts = 0;
@@ -261,23 +167,21 @@ const getCasualPuzzle = (cacheBuster = null) => {
     return newWord;
   }
   
-  // Otherwise, retrieve the existing puzzle
-  const encryptedPuzzle = localStorage.getItem('casualPuzzleWord');
-  if (encryptedPuzzle) {
-    try {
-      const decrypted = decrypt(encryptedPuzzle);
-      lastCasualPuzzle = decrypted; // Update memory tracker
-      console.log("Loaded existing casual puzzle:", decrypted);
-      return decrypted;
-    } catch (e) {
-      console.error("Error decrypting puzzle, generating new one:", e);
-      return getCasualPuzzle(Date.now()); // Force generate with timestamp as cache buster
-    }
-  }
+  // If we don't have a stored puzzle, we need to create a first one
+  // This should only happen on first visit ever
+  console.log("No existing casual puzzle found, generating initial puzzle");
+  const newWord = generateNewWord();
+  lastCasualPuzzle = newWord;
   
-  // Fallback - should never reach here
-  console.warn("Fallback puzzle generation needed for casual mode");
-  return generateNewWord();
+  // Encrypt and save to localStorage
+  const encrypted = encrypt(newWord);
+  localStorage.setItem('casualPuzzleWord', encrypted);
+  
+  // Add a timestamp to mark this as a fresh puzzle
+  localStorage.setItem('casualPuzzleTimestamp', Date.now().toString());
+  
+  console.log("Generated initial casual puzzle word:", newWord);
+  return newWord;
 };
 
 // Create puzzle array based on the selected word
@@ -370,13 +274,17 @@ export const resetPuzzleWord = (mode = 'both') => {
 
 // Get the appropriate puzzle based on game mode with optional cache busting
 export const getPuzzle = (mode, cacheBuster = null) => {
+  // IMPORTANT: Only use cacheBuster if explicitly passed by "Play Again" buttons
+  // Normal refreshes should never regenerate puzzles
+  const forceCacheBuster = cacheBuster ? cacheBuster : null;
+  
   // Get the right word based on play mode
   const word = mode === 'competitive' 
-    ? getCompetitivePuzzle(cacheBuster) 
-    : getCasualPuzzle(cacheBuster);
+    ? getCompetitivePuzzle(forceCacheBuster) 
+    : getCasualPuzzle(forceCacheBuster);
   
   // For debugging
-  console.log(`${mode} puzzle word:`, word);
+  console.log(`${mode} puzzle word:`, word, forceCacheBuster ? "(forced new puzzle)" : "(using stored puzzle)");
   
   // Create and return puzzle array
   const puzzleArray = createPuzzleArray(word);
@@ -415,6 +323,15 @@ export const verifyPuzzleMatchesWord = (mode) => {
     console.log(`Puzzle verification for ${mode}: ${matches ? 'MATCH' : 'MISMATCH'}`);
     console.log(`- Stored word: ${word}`);
     console.log(`- Puzzle word: ${puzzleWord}`);
+    
+    if (!matches) {
+      // If there's a mismatch, update the stored word to match the puzzle array
+      // This ensures the game uses a consistent word
+      console.log(`Fixing mismatch by updating stored word to ${puzzleWord}`);
+      const encrypted = encrypt(puzzleWord);
+      localStorage.setItem(wordKey, encrypted);
+      return true; // Return true because we've fixed the mismatch
+    }
     
     return matches;
   } catch (e) {

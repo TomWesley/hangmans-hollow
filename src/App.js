@@ -1,62 +1,142 @@
-// Updated App.js with improved login flow and separate puzzles for casual/competitive play
-import React from 'react'
-import Letters from './Letters'
-import { useState, useEffect } from 'react'
+// Updated App.js with persistent navigation state
+import React from 'react';
+import Letters from './Letters';
+import { useState, useEffect } from 'react';
 import {
   GiAbstract009,
-} from 'react-icons/gi'
-import { FiLogOut } from 'react-icons/fi' // Using Feather icons for logout
-import ResetButton from './ResetButton'
-import DebugButtons from './DebugButtons'
-import NavigationMenu from './NavigationMenu'
-import RulesPage from './RulesPage'
-import PrizesPage from './PrizesPage'
-import LeaderboardPage from './LeaderboardPage'
-import { initializeUser, verifyUserEmail } from './userManagement'
-import { resetPuzzleWord } from './puzzle' // Import the resetPuzzleWord function
+} from 'react-icons/gi';
+import { FiLogOut } from 'react-icons/fi'; // Using Feather icons for logout
+import ResetButton from './ResetButton';
+import DebugButtons from './DebugButtons';
+import NavigationMenu from './NavigationMenu';
+import RulesPage from './RulesPage';
+import PrizesPage from './PrizesPage';
+import LeaderboardPage from './LeaderboardPage';
+import { initializeUser, verifyUserEmail } from './userManagement';
+import { resetPuzzleWord } from './puzzle'; // Import the resetPuzzleWord function
 import logo from './HangmansHollowLogo.png';
+import { encryptObject, decryptObject } from './encryption';
+
+// Add app version constant - update this when deploying new versions
+const APP_VERSION = '1.0.2'; // Increment this whenever you deploy new code
 
 // Helper function to get username from localStorage
 const getLocalStorageUsername = () => {
-  let userName = localStorage.getItem('userName')
+  let userName = localStorage.getItem('userName');
   if (userName === 'temp') {
-    localStorage.removeItem('userName')
-    window.location.reload(true)
+    localStorage.removeItem('userName');
+    window.location.reload(true);
   }
   if (userName) {
-    return JSON.parse(localStorage.getItem('userName'))
+    return JSON.parse(localStorage.getItem('userName'));
   } else {
-    return ''
+    return '';
   }
-}
+};
 
 // Helper function to get stored user email
 const getLocalStorageEmail = () => {
-  let userEmail = localStorage.getItem('userEmail')
+  let userEmail = localStorage.getItem('userEmail');
   if (userEmail) {
-    return JSON.parse(localStorage.getItem('userEmail'))
+    return JSON.parse(localStorage.getItem('userEmail'));
   } else {
-    return ''
+    return '';
   }
-}
+};
+
+// New helper function to get current view from localStorage
+const getLocalStorageCurrentView = () => {
+  const encryptedView = localStorage.getItem('currentView');
+  if (encryptedView) {
+    try {
+      return decryptObject(encryptedView);
+    } catch (e) {
+      console.error("Error decrypting current view:", e);
+      return 'game';
+    }
+  } else {
+    return 'game';
+  }
+};
+
+// New helper function to get casual player state from localStorage
+const getLocalStorageCasualState = () => {
+  const encryptedState = localStorage.getItem('casualPlayerState');
+  if (encryptedState) {
+    try {
+      return decryptObject(encryptedState);
+    } catch (e) {
+      console.error("Error decrypting casual player state:", e);
+      return false;
+    }
+  } else {
+    return false;
+  }
+};
 
 function App() {
+  // Check for app version mismatch to force refresh with new code
+  useEffect(() => {
+    const storedVersion = localStorage.getItem('appVersion');
+    
+    // If version doesn't match or doesn't exist, update it and refresh
+    if (storedVersion !== APP_VERSION) {
+      console.log(`Version mismatch: stored ${storedVersion}, current ${APP_VERSION}`);
+      localStorage.setItem('appVersion', APP_VERSION);
+      
+      // Only force refresh if there's an actual version mismatch (not first visit)
+      if (storedVersion) {
+        console.log("Forcing cache-busting reload");
+        const cacheBuster = Date.now();
+        window.location.href = window.location.pathname + '?v=' + cacheBuster;
+        return;
+      }
+    }
+  }, []);
+  
   // Existing state variables
-  const [userName, setUserName] = useState(getLocalStorageUsername())
-  const [userEmail, setUserEmail] = useState(getLocalStorageEmail())
-  const [currentView, setCurrentView] = useState('game') // 'game', 'rules', 'prizes', or 'leaderboard'
-  const [playMode, setPlayMode] = useState('')
-  const [userStats, setUserStats] = useState(null)
+  const [userName, setUserName] = useState(() => {
+    // Check for casual player state first
+    const wasCasualPlayer = getLocalStorageCasualState();
+    if (wasCasualPlayer) {
+      return 'casual_player';
+    }
+    return getLocalStorageUsername();
+  });
+  
+  const [userEmail, setUserEmail] = useState(getLocalStorageEmail());
+  const [currentView, setCurrentView] = useState(getLocalStorageCurrentView()); // Initialize from localStorage
+  const [userStats, setUserStats] = useState(null);
+  const [playMode, setPlayMode] = useState(() => {
+    // If we have a casual player, set mode to casual
+    const wasCasualPlayer = getLocalStorageCasualState();
+    if (wasCasualPlayer) {
+      return 'casual';
+    }
+    
+    // Otherwise, check stored play mode
+    const encryptedMode = localStorage.getItem('playMode');
+    if (encryptedMode) {
+      try {
+        return decryptObject(encryptedMode);
+      } catch (e) {
+        console.error("Error decrypting play mode:", e);
+        return '';
+      }
+    } else {
+      return '';
+    }
+  });
   
   // Login flow state
-  const [loginStep, setLoginStep] = useState('username')
-  const [inputValue, setInputValue] = useState('')
-  const [pendingUsername, setPendingUsername] = useState('')
-  const [loginError, setLoginError] = useState('')
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+  const [loginStep, setLoginStep] = useState('username');
+  const [inputValue, setInputValue] = useState('');
+  const [pendingUsername, setPendingUsername] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   
   // Derived state - is the current user in casual mode?
-  const isCasualMode = userName === 'casual_player'
+  const isCasualMode = userName === 'casual_player';
 
   // Save username to localStorage ONLY for competitive players
   useEffect(() => {
@@ -95,6 +175,37 @@ function App() {
     }
   }, [userEmail]);
   
+  // New effect to save currentView to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('currentView', encryptObject(currentView));
+  }, [currentView]);
+  
+  // New effect to track if we're in casual mode
+  useEffect(() => {
+    if (userName === 'casual_player') {
+      // Store that we're in casual mode
+      localStorage.setItem('casualPlayerState', encryptObject(true));
+      
+      // Add casual mode class to body
+      document.body.classList.remove('competitive-mode');
+      document.body.classList.add('casual-mode');
+    } else {
+      // Clear casual mode flag
+      localStorage.removeItem('casualPlayerState');
+      
+      // Add competitive mode class to body if in competitive mode
+      if (playMode === 'competitive') {
+        document.body.classList.remove('casual-mode');
+        document.body.classList.add('competitive-mode');
+      }
+    }
+  }, [userName, playMode]);
+  
+  // Save playMode to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('playMode', encryptObject(playMode));
+  }, [playMode]);
+  
   // Navigation handlers
   const handleMainMenu = () => {
     console.log("handleMainMenu called");
@@ -102,11 +213,21 @@ function App() {
     // Different behavior based on play mode
     if (userName === 'casual_player') {
       console.log("Casual player returning to main menu");
-      // For casual player, clear the casual username from state
-      setUserName('');
       
-      // Remove casual mode class from body
+      // Check if there's a real username stored in localStorage
+      const storedUsername = getLocalStorageUsername();
+      if (storedUsername && storedUsername !== 'casual_player') {
+        // If there's a real user logged in, restore their username
+        console.log("Restoring logged-in user:", storedUsername);
+        setUserName(storedUsername);
+      } else {
+        // Otherwise clear username
+        setUserName('');
+      }
+      
+      // Remove casual mode class from body and clear localStorage flag
       document.body.classList.remove('casual-mode');
+      localStorage.removeItem('casualPlayerState');
     } else if (userName) {
       // For competitive players who are logged in, we keep userName intact
       // but we need to reset the game mode
@@ -124,6 +245,15 @@ function App() {
     setPendingUsername('');
     setLoginError('');
     setShowLogoutConfirm(false);
+    
+    // Force reload with cache busting to ensure latest version
+    // Only do this occasionally (1 in 5 chance) to avoid too many reloads
+    if (Math.random() < 0.2) {
+      console.log("Performing cache-busting reload");
+      const cacheBuster = Date.now();
+      window.location.href = window.location.pathname + '?v=' + cacheBuster;
+      return; // Exit early as we're reloading
+    }
   };
 
   const handleShowRules = () => {
@@ -211,25 +341,38 @@ function App() {
   };
 
   // Handle play mode selection with skip login for existing users
-  // Add this to your App.js file in the handlePlayModeSelection function
-
   const handlePlayModeSelection = (mode) => {
     console.log(`Selecting play mode: ${mode}`);
     
     // Clear any existing preselected state to avoid state leak between modes
     localStorage.removeItem('preselected');
     
+    // Set the mode in localStorage before the refresh
+    localStorage.setItem('playMode', encryptObject(mode));
+    
+    // Add a version check to localStorage to force update on refresh
+    localStorage.setItem('appVersion', '1.0.2'); // Increment this whenever you deploy
+    
     // Set body classes for current mode
     if (mode === 'casual') {
       document.body.classList.remove('competitive-mode');
       document.body.classList.add('casual-mode');
       
-      // Set temporary username for casual play, but DON'T store in localStorage
+      // Set temporary username for casual play
       setUserName('casual_player');
+      
+      // Store the casual player state
+      localStorage.setItem('casualPlayerState', encryptObject(true));
+      
+      // Do a light refresh to ensure puzzles are correctly synchronized
+      window.location.reload();
     } 
     else if (mode === 'competitive') {
       document.body.classList.remove('casual-mode');
       document.body.classList.add('competitive-mode');
+      
+      // Clear casual player state immediately
+      localStorage.removeItem('casualPlayerState');
       
       // Check if user is already logged in (has username in localStorage)
       const storedUsername = getLocalStorageUsername();
@@ -255,6 +398,9 @@ function App() {
           fetchUserStats();
         }
       }
+      
+      // Do a light refresh to ensure puzzles are correctly synchronized
+      window.location.reload();
     }
     
     // Set the play mode last, after other state updates
@@ -386,10 +532,10 @@ function App() {
         <div>
           <section>
           <Letters 
-  casualMode={isCasualMode} 
-  username={userName}
-  key={isCasualMode ? 'casual' : 'competitive'} // Add this key prop
-/>
+            casualMode={isCasualMode} 
+            username={userName}
+            key={isCasualMode ? 'casual' : 'competitive'} // Add this key prop
+          />
           </section>
         </div>
         <>
@@ -422,7 +568,7 @@ function App() {
           </div>
           {/* <ResetButton /> */}
         </div>
-      )
+      );
     }
     // Competitive mode login flow - only shown for new users
     else if (playMode === 'competitive') {
@@ -508,8 +654,8 @@ function App() {
           onPrizes={handleShowPrizes}
         />
       </div>
-    )
+    );
   }
 }
 
-export default App
+export default App;

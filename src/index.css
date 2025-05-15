@@ -1762,7 +1762,7 @@ Play Mode Selection
   position: fixed;
   font-family: Copperplate, 'Copperplate Gothic Light', fantasy;
   font-size: 3rem;
-  margin-bottom: 0rem;
+  bottom: 330px;
   color: rgb(255, 255, 255);
   text-align: center;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
@@ -1772,7 +1772,7 @@ Play Mode Selection
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  bottom: 50px;
+  bottom: 30px;
   position: fixed;
 }
 
@@ -3505,15 +3505,17 @@ Victory and Defeat Styles
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  width: 90%;
+  width: 80%;
+  /* height: 17%; */
   max-width: 400px;
+  
 }
 
 .play-option-btn {
-  padding: 1.5rem 2rem;
+  /* padding: 1.5rem 2rem; */
   font-size: 1.5rem;
   cursor: pointer;
-  border-radius: 15px;
+  border-radius: 20px;
   border: none;
   min-width: 240px;
   transition: all 0.3s ease;
@@ -3580,22 +3582,33 @@ Victory and Defeat Styles
 
 /* Logged in status display */
 .logged-in-status {
-  margin-top: 160px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 0px;
+  
+  
   background-color: rgba(255, 255, 255, 0.1);
-  padding: 15px 25px;
+  height: 7vh;
   border-radius: 10px;
   min-width: 240px;
+  display: flex;
+  align-items: center;
+  
+  flex-direction: column;
+  
+  bottom: 250px;
+  position: absolute;
+  position: fixed;
+  
 }
 
 .logged-in-status p {
-  margin: 0 0 10px 0;
+  /* margin: 0 0 10px 0; */
+  
+  /* align-items: center; */
+  
   color: white;
   font-size: 1rem;
   text-align: center;
+  
+  padding-bottom: 20px;
 }
 
 .username-display {
@@ -3606,12 +3619,12 @@ Victory and Defeat Styles
 
 /* Logout button */
 .logout-button {
-  bottom: 30%;
-  position: absolute;
+  /* bottom: 30%; */
+  
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 4px 12px;
   background-color: rgba(251, 174, 7, 0.731);
   border: 1px solid rgb(255, 255, 255);
   color: white;
@@ -3619,6 +3632,9 @@ Victory and Defeat Styles
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.3s ease;
+  bottom: 200px;
+  
+  position: fixed;
 }
 
 .logout-button:hover {
