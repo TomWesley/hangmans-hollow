@@ -286,57 +286,35 @@ export const getPuzzle = (mode, cacheBuster = null) => {
   // For debugging
   console.log(`${mode} puzzle word:`, word, forceCacheBuster ? "(forced new puzzle)" : "(using stored puzzle)");
   
-  // Create and return puzzle array
+  // Create puzzle array but DO NOT STORE IT in localStorage
+  // We'll generate it on-demand from the word instead
   const puzzleArray = createPuzzleArray(word);
-  
-  // Save the puzzle array for this mode
-  const storageKey = mode === 'competitive' ? 'competitivePuzzleLetters' : 'casualPuzzleLetters';
-  localStorage.setItem(storageKey, encryptObject(puzzleArray));
   
   return puzzleArray;
 };
 
-// Function to verify an existing puzzle matches the word in localStorage
-export const verifyPuzzleMatchesWord = (mode) => {
-  const storageKey = mode === 'competitive' ? 'competitivePuzzleLetters' : 'casualPuzzleLetters';
+// Function to get puzzle array from word - use this instead of localStorage for puzzle letters
+export const getPuzzleArrayFromWord = (mode) => {
+  // Get the correct key for this mode
   const wordKey = mode === 'competitive' ? 'competitivePuzzleWord' : 'casualPuzzleWord';
   
-  // Get existing puzzle array
-  const encryptedPuzzleArray = localStorage.getItem(storageKey);
+  // Get the encrypted word
   const encryptedWord = localStorage.getItem(wordKey);
-  
-  if (!encryptedPuzzleArray || !encryptedWord) {
-    console.log(`No existing puzzle or word found for ${mode} mode`);
-    return false;
+  if (!encryptedWord) {
+    console.log(`No word found for ${mode} mode, generating new one`);
+    // Get a new puzzle - this also stores the word
+    return getPuzzle(mode);
   }
   
   try {
-    // Decrypt both
-    const puzzleArray = decryptObject(encryptedPuzzleArray);
+    // Decrypt the word
     const word = decrypt(encryptedWord);
     
-    // Extract word from puzzle array
-    const puzzleWord = puzzleArray.map(letter => letter.name).join('');
-    
-    // Compare
-    const matches = puzzleWord === word;
-    console.log(`Puzzle verification for ${mode}: ${matches ? 'MATCH' : 'MISMATCH'}`);
-    console.log(`- Stored word: ${word}`);
-    console.log(`- Puzzle word: ${puzzleWord}`);
-    
-    if (!matches) {
-      // If there's a mismatch, update the stored word to match the puzzle array
-      // This ensures the game uses a consistent word
-      console.log(`Fixing mismatch by updating stored word to ${puzzleWord}`);
-      const encrypted = encrypt(puzzleWord);
-      localStorage.setItem(wordKey, encrypted);
-      return true; // Return true because we've fixed the mismatch
-    }
-    
-    return matches;
+    // Create puzzle array from the word
+    return createPuzzleArray(word);
   } catch (e) {
-    console.error(`Error verifying puzzle for ${mode} mode:`, e);
-    return false;
+    console.error(`Error getting puzzle array for ${mode} mode:`, e);
+    return getPuzzle(mode); // Fallback
   }
 };
 

@@ -94,6 +94,23 @@ function App() {
     }
   }, []);
   
+  // New effect to cleanup redundant storage and ensure consistency
+  useEffect(() => {
+    // Import the cleanup function from puzzle.js
+    const cleanupPuzzleStorage = () => {
+      // Remove the redundant puzzle letters storage
+      localStorage.removeItem('casualPuzzleLetters');
+      localStorage.removeItem('competitivePuzzleLetters');
+      localStorage.removeItem('puzzleLetters'); // Legacy item
+      
+      // Log cleanup
+      console.log("Cleaned up redundant puzzle storage items");
+    };
+    
+    // Run the cleanup once on app load
+    cleanupPuzzleStorage();
+  }, []);
+  
   // Existing state variables
   const [userName, setUserName] = useState(() => {
     // Check for casual player state first

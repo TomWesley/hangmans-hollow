@@ -4,7 +4,7 @@ import Letter from './Letter'
 import { useState, useEffect, useRef } from 'react'
 import data from './data'
 import AnswerLetters from './AnswerLetters'
-import { getPuzzle, resetPuzzleWord, forceNewPuzzle } from './puzzle';
+import { getPuzzle, resetPuzzleWord, forceNewPuzzle,getPuzzleArrayFromWord } from './puzzle';
 import gamestate from './gamestate'
 import BatMeter from './BatMeter'
 import LetterCarousel from './LetterCarousel'
@@ -269,8 +269,8 @@ const Letters = ({ casualMode = false, username = '' }) => {
       const modeString = forcedCasualMode ? 'casual' : 'competitive';
       console.log(`Loading puzzle for new mode: ${modeString}`);
       
-      // Get the puzzle for the new mode without timestamp (to avoid generating new puzzle)
-      const newPuzzle = getPuzzle(modeString);
+      // Get the puzzle array directly from the stored word
+      const newPuzzle = getPuzzleArrayFromWord(modeString);
       setPuzzle(newPuzzle);
       
       // Reset game state to ensure it's using the correct puzzle
@@ -292,43 +292,31 @@ const Letters = ({ casualMode = false, username = '' }) => {
   // Initialize puzzle state with a function to ensure it's always the latest
   // This is critical for syncing with the correct mode
   const [puzzle, setPuzzle] = useState(() => {
-    // Force a new puzzle when first rendering if needed
-    const storedMode = getCurrentGameMode();
-    
     // Make sure we use the correct mode for initialization
-    const initMode = storedMode !== undefined ? storedMode : forcedCasualMode;
+    const initMode = forcedCasualMode;
     const modeString = initMode ? 'casual' : 'competitive';
     
     // Add debugging for puzzle initialization
     console.log(`Initializing puzzle for ${modeString} mode (forced casual: ${forcedCasualMode})`);
     
-    // Check if we have an existing puzzle stored
-    const puzzleKey = initMode ? 'casualPuzzleLetters' : 'competitivePuzzleLetters';
-    const encryptedStoredPuzzle = localStorage.getItem(puzzleKey);
-    
-    if (encryptedStoredPuzzle) {
-      try {
-        const decryptedPuzzle = decryptObject(encryptedStoredPuzzle);
-        if (decryptedPuzzle && Array.isArray(decryptedPuzzle) && decryptedPuzzle.length > 0) {
-          const puzzleWord = decryptedPuzzle.map(l => l.name).join('');
-          console.log(`Using stored ${modeString} puzzle: ${puzzleWord}`);
-          freshPuzzleLoadedRef.current = true;
-          return decryptedPuzzle;
-        }
-      } catch (e) {
-        console.error(`Error decrypting stored ${modeString} puzzle:`, e);
-      }
+    // Always generate fresh from the word - simplify by using single source of truth
+    try {
+      // Get puzzle array directly from the stored word
+      const puzzleArray = getPuzzleArrayFromWord(modeString);
+      const puzzleWord = puzzleArray.map(l => l.name).join('');
+      console.log(`Using ${modeString} puzzle from stored word: ${puzzleWord}`);
+      freshPuzzleLoadedRef.current = true;
+      return puzzleArray;
+    } catch (e) {
+      console.error(`Error loading puzzle for ${modeString} mode:`, e);
+      
+      // Fallback to getting a new puzzle
+      const newPuzzle = getPuzzle(modeString);
+      const puzzleWord = newPuzzle.map(l => l.name).join('');
+      console.log(`Created new puzzle for ${modeString} mode:`, puzzleWord);
+      freshPuzzleLoadedRef.current = true;
+      return newPuzzle;
     }
-    
-    // If we don't have a valid stored puzzle, get a new one
-    // DO NOT pass a timestamp here to avoid generating new puzzles on refresh
-    const newPuzzle = getPuzzle(modeString);
-    const puzzleWord = newPuzzle.map(l => l.name).join('');
-    
-    console.log(`Created new puzzle for ${modeString} mode:`, puzzleWord, `(${puzzleWord.length} letters)`);
-    freshPuzzleLoadedRef.current = true;
-    
-    return newPuzzle;
   });
   
   // Use mode-specific localStorage

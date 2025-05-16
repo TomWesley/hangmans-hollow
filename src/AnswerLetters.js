@@ -1,16 +1,11 @@
 // Updated AnswerLetters.js with synchronization fix for refresh
 import React, { useState, useEffect, useRef } from 'react'
 import AnswerLetter from './AnswerLetter'
-import { getPuzzle, verifyPuzzleMatchesWord } from './puzzle'
+import { getPuzzle, verifyPuzzleMatchesWord,getPuzzleArrayFromWord } from './puzzle'
 import { encryptObject, decryptObject } from './encryption'
 
-// Add timestamp parameter for cache busting
+// Add timestamp parameter for cache busting - SIMPLIFIED VERSION
 const getLocalStoragePuzzleLetters = (casualMode, forceRefresh = false) => {
-  // Use mode-specific key
-  const key = casualMode ? 'casualPuzzleLetters' : 'competitivePuzzleLetters';
-  const wordKey = casualMode ? 'casualPuzzleWord' : 'competitivePuzzleWord';
-  const modeString = casualMode ? 'casual' : 'competitive';
-  
   // First check for casual player state
   const encryptedCasualState = localStorage.getItem('casualPlayerState');
   let enforcedCasualMode = casualMode;
@@ -22,26 +17,14 @@ const getLocalStoragePuzzleLetters = (casualMode, forceRefresh = false) => {
       if (isCasual === true && !casualMode) {
         console.log("Enforcing casual mode from casualPlayerState");
         enforcedCasualMode = true;
-        const casualKey = 'casualPuzzleLetters';
-        
-        // Get puzzle from the correct mode
-        const encryptedCasualPuzzle = localStorage.getItem(casualKey);
-        if (encryptedCasualPuzzle) {
-          try {
-            const decryptedCasual = decryptObject(encryptedCasualPuzzle);
-            if (decryptedCasual && Array.isArray(decryptedCasual) && decryptedCasual.length > 0) {
-              console.log("Using casual puzzle letters from localStorage due to casualPlayerState");
-              return decryptedCasual;
-            }
-          } catch (e) {
-            console.error("Error decrypting casual puzzle letters:", e);
-          }
-        }
       }
     } catch (e) {
       console.error("Error checking casualPlayerState:", e);
     }
   }
+  
+  // Choose the correct mode string
+  const modeString = enforcedCasualMode ? 'casual' : 'competitive';
   
   // If force refresh is true, skip localStorage and get a new puzzle
   // This should ONLY be true when Play Again is clicked
@@ -52,36 +35,18 @@ const getLocalStoragePuzzleLetters = (casualMode, forceRefresh = false) => {
     return getPuzzle(modeString, timestamp);
   }
   
-  const encryptedPuzzleLetters = localStorage.getItem(key);
-  
-  if (encryptedPuzzleLetters) {
-    try {
-      // Decrypt the puzzle letters from localStorage
-      const decrypted = decryptObject(encryptedPuzzleLetters);
-      
-      if (decrypted && Array.isArray(decrypted) && decrypted.length > 0) {
-        // Verify this puzzle matches the stored word
-        const isValid = verifyPuzzleMatchesWord(modeString);
-        
-        if (isValid) {
-          console.log(`Using valid stored puzzle for ${modeString} mode:`, 
-                      decrypted.map(l => l.name).join(''));
-          return decrypted;
-        } else {
-          console.warn(`Stored puzzle doesn't match word for ${modeString} mode, generating new one`);
-        }
-      } else {
-        console.warn("Decrypted puzzle is invalid:", decrypted);
-      }
-    } catch (e) {
-      console.error("Error decrypting puzzle letters:", e);
-    }
+  // Always generate fresh from the word - no need to store puzzle letters
+  try {
+    // Get word and create puzzle
+    const puzzleArray = getPuzzleArrayFromWord(modeString);
+    console.log(`Created puzzle array for ${modeString} mode from word:`, 
+              puzzleArray.map(l => l.name).join(''));
+    return puzzleArray;
+  } catch (e) {
+    console.error(`Error creating puzzle array for ${modeString} mode:`, e);
+    // Fallback to generating new puzzle
+    return getPuzzle(modeString);
   }
-  
-  // If nothing found or invalid, return a new puzzle for the mode - WITHOUT TIMESTAMP
-  // to avoid generating new puzzles on refresh
-  console.log(`Getting new puzzle for ${modeString} mode`);
-  return getPuzzle(modeString); 
 };
 
 const AnswerLetters = (props) => {
