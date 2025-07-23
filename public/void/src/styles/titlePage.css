@@ -1,0 +1,48 @@
+.title-page {
+  font-family: 'Courier New', monospace;
+  background-color: black;
+  color: mintcream;
+  padding: 4rem 2rem;
+  text-align: center;
+  border: 2px solid mintcream;
+  margin: 2rem auto;
+  width: 80%;
+  box-shadow: 0 0 30px rgba(0, 255, 150, 0.3);
+}
+
+.void-title {
+  font-size: 5rem;
+  font-weight: 900;
+  letter-spacing: 0.5rem;
+  color: mintcream;
+  text-shadow: 0 0 20px rgba(0, 255, 150, 0.7);
+}
+
+.tagline {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.section-divider {
+  margin: 2rem auto;
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, mintcream, transparent);
+}
+
+.manifesto h2 {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+
+.manifesto ul {
+  list-style-type: square;
+  margin: 0.5rem auto;
+  padding-left: 1rem;
+  text-align: left;
+  display: inline-block;
+}

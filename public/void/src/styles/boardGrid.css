@@ -1,0 +1,95 @@
+.grid-section {
+  font-family: 'Courier New', monospace;
+  background-color: black;
+  color: mintcream;
+  padding: 4rem 2rem;
+  margin: 2rem auto;
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grid-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 20px rgba(0, 255, 150, 0.7);
+  animation: glowPulse 3s infinite ease-in-out;
+}
+
+.board-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.icon-wrapper {
+  color: white;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 2px var(--outline)) drop-shadow(0 0 5px var(--outline));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-grid {
+  display: inline-block;
+  border: 2px solid mintcream;
+}
+
+.row {
+  display: flex;
+}
+
+.tile {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border: 1px solid #222;
+}
+
+.tile-light {
+  background-color: #2b2b2b;
+}
+
+.tile-colored {
+  background-color: transparent;
+}
+
+.selected {
+  outline: 2px solid white;
+  box-shadow: 0 0 10px #ffffffaa;
+}
+
+.icon {
+  animation: pulseGlow 2s infinite;
+  color: white;
+  stroke-width: 2;
+  stroke: currentColor;
+}
+
+.glowing {
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(0, 255, 150, 0.7);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(0, 255, 200, 1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px white);
+  }
+  50% {
+    filter: drop-shadow(0 0 6px #00ffee);
+  }
+}
