@@ -4,7 +4,15 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
-        "source": "!(void)**",
+        "source": "/HangmansHollow/**",
+        "destination": "/HangmansHollow/index.html"
+      },
+      {
+        "source": "/void/**",
+        "destination": "/void/index.html"
+      },
+      {
+        "source": "**",
         "destination": "/index.html"
       }
     ]
